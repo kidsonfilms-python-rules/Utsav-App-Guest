@@ -56,28 +56,29 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  Widget _currentPage = TicketsPage();
+  // Initialize _currentPage with a placeholder widget
+  Widget _currentPage = Container(); // Placeholder until the page is set
+
   int _selectedTab = 2;
 
+  @override
+  void initState() {
+    super.initState();
+    // After the state is initialized, assign the actual HomePage
+    _currentPage = HomePage(navigateToPage: _navigateToPage);
+  }
+
   void _navigateToPage(int index) {
-    HapticFeedback.selectionClick();
+    HapticFeedback.lightImpact();
     setState(() {
       if (index == 0) {
-        setState(() {
-          _currentPage = TicketsPage();
-        });
+        _currentPage = TicketsPage();
       } else if (index == 1) {
-        setState(() {
-          _currentPage = AnnouncementsPage();
-        });
+        _currentPage = AnnouncementsPage();
       } else if (index == 2) {
-        setState(() {
-          _currentPage = HomePage(navigateToPage: _navigateToPage);
-        });
+        _currentPage = HomePage(navigateToPage: _navigateToPage);
       } else if (index == 3) {
-        setState(() {
-          _currentPage = SchedulePage();
-        });
+        _currentPage = SchedulePage();
       }
       _selectedTab = index;
     });

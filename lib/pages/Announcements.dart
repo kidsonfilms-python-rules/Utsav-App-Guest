@@ -156,7 +156,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     width: 200,
                     child: Text(
                       "Come see the new artists directly from India!",
@@ -171,7 +171,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: Text(
                       "5:00 PM",
                       style: GoogleFonts.getFont(
@@ -201,7 +201,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     width: 200,
                     child: Text(
                       "This is a really long announcement about someone not parking right!",
@@ -216,7 +216,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: Text(
                       "3:32 PM",
                       style: GoogleFonts.getFont(
@@ -246,7 +246,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     width: 200,
                     child: Text(
                       "Lunch is currently being served!",
@@ -261,7 +261,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: Text(
                       "11:52 AM",
                       style: GoogleFonts.getFont(

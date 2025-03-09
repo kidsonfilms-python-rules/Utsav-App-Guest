@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:utsav_app/pages/Announcements.dart';
-import 'package:utsav_app/pages/Schedule.dart';
-import 'package:utsav_app/pages/Tickets.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
