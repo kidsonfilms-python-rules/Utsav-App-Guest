@@ -15,28 +15,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        // colorScheme: ColorScheme.fromSeed(seedColor: DesignConstants().BACKGROUND_COLOR),
         colorScheme: ColorScheme.fromSwatch(
           backgroundColor: DesignConstants.BACKGROUND_COLOR,
         ),
@@ -56,117 +39,91 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  // Initialize _currentPage with a placeholder widget
-  Widget _currentPage = Container(); // Placeholder until the page is set
-
+  late Widget _currentPage;
   int _selectedTab = 2;
+  final List<Widget> _pageStack = [];
+  final List<int> _navigationHistory = [];
 
   @override
   void initState() {
     super.initState();
-    // After the state is initialized, assign the actual HomePage
+    // Initialize with HomePage
     _currentPage = HomePage(navigateToPage: _navigateToPage);
+    _pageStack.add(_currentPage);
+    _navigationHistory.add(2); // HomePage corresponds to index 2
   }
 
   void _navigateToPage(int index) {
     HapticFeedback.lightImpact();
+    Widget newPage;
+
+    // Determine which page to navigate to based on the index
+    switch (index) {
+      case 0:
+        newPage = TicketsPage();
+        break;
+      case 1:
+        newPage = AnnouncementsPage();
+        break;
+      case 2:
+        newPage = HomePage(navigateToPage: _navigateToPage);
+        break;
+      case 3:
+        newPage = SchedulePage();
+        break;
+      default:
+        newPage = HomePage(navigateToPage: _navigateToPage);
+        break;
+    }
+
     setState(() {
-      if (index == 0) {
-        _currentPage = TicketsPage();
-      } else if (index == 1) {
-        _currentPage = AnnouncementsPage();
-      } else if (index == 2) {
-        _currentPage = HomePage(navigateToPage: _navigateToPage);
-      } else if (index == 3) {
-        _currentPage = SchedulePage();
-      }
       _selectedTab = index;
+      _pageStack.add(newPage); // Add new page to the stack
+      _navigationHistory.add(index); // Record the navigation index
+      _currentPage = newPage;
     });
+  }
+
+  Future<bool> _onWillPop() async {
+    // If the stack has more than one page, pop the last page
+    if (_pageStack.length > 1) {
+      setState(() {
+        _pageStack.removeLast(); // Remove the last page
+        _navigationHistory.removeLast(); // Remove the last navigation index
+        int lastIndex = _navigationHistory.last;
+        _selectedTab = lastIndex; // Update the selected tab index
+        _currentPage = _pageStack.last; // Set the current page to the last one
+      });
+      return false; // Prevent the default back button behavior
+    }
+    return true; // If only one page, exit the app
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: DesignConstants.BACKGROUND_COLOR,
-      extendBody: false,
-      // appBar: AppBar(
-      //   backgroundColor: DesignConstants.BACKGROUND_COLOR,
-      //   title: Text(widget.title, style: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),),
-      // ),
-      bottomNavigationBar: GNav(
-        selectedIndex: _selectedTab,
-        // rippleColor: Colors.grey, // tab button ripple color when pressed
-        // hoverColor: Colors.grey, // tab button hover color
-        haptic: true, // haptic feedback
-        // tabBorderRadius: 15,
-        // tabActiveBorder: Border.all(
-        //   color: Colors.black,
-        //   width: 1,
-        // ), // tab button border
-        // tabBorder: Border.all(
-        //   color: Colors.grey,
-        //   width: 1,
-        // ), // tab button border
-        // tabShadow: [
-        //   BoxShadow(color: Colors.grey.withValues(alpha: 0.5), blurRadius: 8),
-        // ], // tab button shadow
-        // curve: Curves.easeOutExpo, // tab animation curves
-        // duration: Duration(milliseconds: 900), // tab animation duration
-        // gap: 8, // the tab button gap between icon and text
-        color: const Color.fromARGB(
-          255,
-          120,
-          120,
-          120,
-        ), // unselected icon color
-        activeColor: Colors.white,
-        // activeColor: Colors.purple, // selected icon and text color
-        iconSize: 22, // tab button icon size
-        // tabBackgroundColor: Colors.deepOrange,
-        backgroundColor: DesignConstants.PRIMARY_CARD_COLOR,
-        //   alpha: 0.1,
-        // ), // selected tab background color
-        // tabMargin: EdgeInsets.all(10),
-        // padding: EdgeInsets.symmetric(
-        //   horizontal: 10,
-        //   vertical: 10,
-        // ), // navigation bar padding
-        onTabChange:
-            (index) => {
-              if (index == 0)
-                {
-                  setState(() {
-                    _currentPage = TicketsPage();
-                  }),
-                }
-              else if (index == 1)
-                {
-                  setState(() {
-                    _currentPage = AnnouncementsPage();
-                  }),
-                }
-              else if (index == 2)
-                {
-                  setState(() {
-                    _currentPage = HomePage(navigateToPage: _navigateToPage);
-                  }),
-                }
-              else if (index == 3)
-                {
-                  setState(() {
-                    _currentPage = SchedulePage();
-                  }),
-                },
-            },
-        tabs: [
-          GButton(icon: FontAwesomeIcons.ticket),
-          GButton(icon: FontAwesomeIcons.bullhorn),
-          GButton(icon: FontAwesomeIcons.house),
-          GButton(icon: FontAwesomeIcons.clock),
-          GButton(icon: FontAwesomeIcons.compass),
-        ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: DesignConstants.BACKGROUND_COLOR,
+        bottomNavigationBar: GNav(
+          key: PageStorageKey('bottom_nav_bar'), // Persist the navigation bar state
+          selectedIndex: _selectedTab,
+          haptic: true,
+          color: const Color.fromARGB(255, 120, 120, 120),
+          activeColor: Colors.white,
+          iconSize: 22,
+          backgroundColor: DesignConstants.PRIMARY_CARD_COLOR,
+          onTabChange: _navigateToPage,
+          tabs: const [
+            GButton(icon: FontAwesomeIcons.ticket),
+            GButton(icon: FontAwesomeIcons.bullhorn),
+            GButton(icon: FontAwesomeIcons.house),
+            GButton(icon: FontAwesomeIcons.clock),
+            GButton(icon: FontAwesomeIcons.compass),
+          ],
+        ),
+        body: _currentPage,
       ),
-      body: _currentPage,
     );
   }
 }
