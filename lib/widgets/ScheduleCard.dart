@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
 
@@ -68,10 +69,179 @@ class _ExpandableCardState extends State<ExpandableCard>
     });
   }
 
+  void _showOptionsModal(BuildContext context) {
+    HapticFeedback.lightImpact();
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Stack(
+          clipBehavior: Clip.none, // Prevent clipping
+          children: [
+            GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: Container(color: Colors.black54),
+            ),
+            DraggableScrollableSheet(
+              initialChildSize: 0.4,
+              minChildSize: 0.2,
+              maxChildSize: 0.8,
+              builder: (
+                BuildContext context,
+                ScrollController scrollController,
+              ) {
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    // double sheetHeight = constraints.maxHeight;
+                    double sheetHeight =
+                        MediaQuery.sizeOf(context).height * 0.25;
+                    double cardHeight = 80.0; // Adjust as needed
+                    double topPosition =
+                        sheetHeight -
+                        cardHeight -
+                        230.0; // 20.0 is the desired margin
+                    return Stack(
+                      clipBehavior: Clip.none, // Prevent clipping
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: DesignConstants.BACKGROUND_COLOR,
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0),
+                            ),
+                          ),
+                          width: MediaQuery.sizeOf(context).width * 0.95,
+                          margin: EdgeInsets.fromLTRB(
+                            MediaQuery.sizeOf(context).width * 0.025,
+                            0,
+                            MediaQuery.sizeOf(context).width * 0.025,
+                            0,
+                          ),
+                          child: ListView(
+                            controller: scrollController,
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ), // Space for the floating card
+                              ListTile(
+                                leading: Icon(
+                                  FontAwesomeIcons.solidBell,
+                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                ),
+                                title: Text(
+                                  'Subscribe to notifications',
+                                  style: GoogleFonts.getFont(
+                                    "Roboto Condensed",
+                                    textStyle: TextStyle(
+                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      fontSize: 14.5,
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  // Handle edit action
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(
+                                  FontAwesomeIcons.mapLocationDot,
+                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                ),
+                                title: Text(
+                                  'Open in Map',
+                                  style: GoogleFonts.getFont(
+                                    "Roboto Condensed",
+                                    textStyle: TextStyle(
+                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      fontSize: 14.5,
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  // Handle delete action
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(
+                                  FontAwesomeIcons.share,
+                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                ),
+                                title: Text(
+                                  'Share',
+                                  style: GoogleFonts.getFont(
+                                    "Roboto Condensed",
+                                    textStyle: TextStyle(
+                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      fontSize: 14.5,
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  // Handle delete action
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(
+                                  FontAwesomeIcons.solidCopy,
+                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                ),
+                                title: Text(
+                                  'Copy details',
+                                  style: GoogleFonts.getFont(
+                                    "Roboto Condensed",
+                                    textStyle: TextStyle(
+                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      fontSize: 14.5,
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  // Handle delete action
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: topPosition,
+                          left: MediaQuery.of(context).size.width * 0.01,
+                          right: MediaQuery.of(context).size.width * 0.01,
+                          child: Material(
+                            color: Colors.transparent,
+                            elevation: 8.0,
+                            borderRadius: BorderRadius.circular(25.0),
+                            child: ExpandableCard(
+                              title: widget.title,
+                              time: widget.time,
+                              location: widget.location,
+                              description: widget.description,
+                              isNow: widget.isNow,
+                              animationController: widget.animationController,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _handleTap,
+      onLongPress: () => _showOptionsModal(context),
       child: Card(
         clipBehavior: Clip.hardEdge,
         shape: RoundedRectangleBorder(
@@ -208,10 +378,7 @@ class BlinkingDot extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
       ),
     );
   }
