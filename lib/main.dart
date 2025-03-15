@@ -48,17 +48,14 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize with HomePage
     _currentPage = HomePage(navigateToPage: _navigateToPage);
     _pageStack.add(_currentPage);
     _navigationHistory.add(2); // HomePage corresponds to index 2
   }
 
-  void _navigateToPage(int index) {
+  void _navigateToPage(int index, {String? markerId}) {
     HapticFeedback.lightImpact();
     Widget newPage;
-
-    // Determine which page to navigate to based on the index
     switch (index) {
       case 0:
         newPage = TicketsPage();
@@ -70,34 +67,37 @@ class _MainPageState extends State<MainPage> {
         newPage = HomePage(navigateToPage: _navigateToPage);
         break;
       case 3:
-        newPage = SchedulePage();
+        newPage = SchedulePage(navigateToPage: _navigateToPage);
+        break;
+      case 4:
+        // When navigating to MapPage, optionally pass a marker id
+        newPage = MapPage(autoSelectMarkerId: markerId);
+
         break;
       default:
         newPage = MapPage();
         break;
     }
-
     setState(() {
       _selectedTab = index;
-      _pageStack.add(newPage); // Add new page to the stack
-      _navigationHistory.add(index); // Record the navigation index
+      _pageStack.add(newPage);
+      _navigationHistory.add(index);
       _currentPage = newPage;
     });
   }
 
   Future<bool> _onWillPop() async {
-    // If the stack has more than one page, pop the last page
     if (_pageStack.length > 1) {
       setState(() {
-        _pageStack.removeLast(); // Remove the last page
-        _navigationHistory.removeLast(); // Remove the last navigation index
+        _pageStack.removeLast();
+        _navigationHistory.removeLast();
         int lastIndex = _navigationHistory.last;
-        _selectedTab = lastIndex; // Update the selected tab index
-        _currentPage = _pageStack.last; // Set the current page to the last one
+        _selectedTab = lastIndex;
+        _currentPage = _pageStack.last;
       });
-      return false; // Prevent the default back button behavior
+      return false;
     }
-    return true; // If only one page, exit the app
+    return true;
   }
 
   @override
@@ -107,14 +107,19 @@ class _MainPageState extends State<MainPage> {
       child: Scaffold(
         backgroundColor: DesignConstants.BACKGROUND_COLOR,
         bottomNavigationBar: GNav(
-          key: PageStorageKey('bottom_nav_bar'), // Persist the navigation bar state
+          key: const PageStorageKey('bottom_nav_bar'),
           selectedIndex: _selectedTab,
           haptic: true,
           color: const Color.fromARGB(255, 120, 120, 120),
           activeColor: Colors.white,
           iconSize: 22,
           backgroundColor: DesignConstants.PRIMARY_CARD_COLOR,
-          onTabChange: _navigateToPage,
+          onTabChange: (index) {
+            // For example, if you want to auto-select marker1 when MapPage is selected,
+            // pass the marker id:
+
+            _navigateToPage(index);
+          },
           tabs: const [
             GButton(icon: FontAwesomeIcons.ticket),
             GButton(icon: FontAwesomeIcons.bullhorn),

@@ -6,7 +6,8 @@ import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+  final String? autoSelectMarkerId;
+  const MapPage({Key? key, this.autoSelectMarkerId}) : super(key: key);
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -18,6 +19,8 @@ class _MapPageState extends State<MapPage> {
   Location? _selectedLocation;
   late PanelController _panelController;
   GoogleMapController? _mapController;
+  // We'll store the list of locations so we can reference them.
+  final List<Location> _locations = [];
 
   @override
   void initState() {
@@ -32,53 +35,111 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _setMarkers() {
+    // Define a list of locations with full attributes.
     final List<Location> locations = [
       Location(
-        name: 'Patel\'s Phuchka',
-        buildingName: 'Cafeteria',
+        name: "Cafeteria",
+        buildingName: 'MAIN BUILDING',
         locationType: 'Food',
-        description: 'A beautiful city in California with iconic landmarks.',
+        description:
+            'A delicious treat available on campus like the really great mutton.',
         position: const LatLng(38.69023475780903, -121.2241666435147),
+      ),
+      Location(
+        name: "Patel's Phuchka",
+        buildingName: 'LOBBY',
+        locationType: 'Food',
+        description:
+            'A delicious treat available on campus and also get the delicious samosas.',
+        position: const LatLng(38.69040278065333, -121.22425229254445),
       ),
       Location(
         name: 'Stage #1',
         buildingName: 'MAIN BUILDING',
         locationType: 'Stage',
         description:
-            'The entertainment capital of the world with famous attractions.',
+            'The main stage for events and natoks. Come watch the show of your life!',
         position: const LatLng(38.690483782353056, -121.2243186340391),
       ),
       Location(
-        name: 'Chess',
-        buildingName: 'CLASSROOM',
+        name: 'Classroom',
+        buildingName: 'MAIN BUILDING',
         locationType: 'Alternate',
         description:
-            'The entertainment capital of the world with famous attractions.',
+            'A quiet place to relax and play chess or hangout when you need a break from the festivities.',
         position: const LatLng(38.69040063973745, -121.22447240884625),
       ),
     ];
 
+    // Store the locations in our state variable.
+    _locations.clear();
+    _locations.addAll(locations);
+
+    // Create markers from the locations.
+    for (var location in locations) {
+      final Marker marker = Marker(
+        markerId: MarkerId(location.name),
+        position: location.position,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        // Disable default info window
+        infoWindow: const InfoWindow(title: '', snippet: ''),
+        onTap: () {
+          _onMarkerTapped(location);
+        },
+      );
+      _markers.add(marker);
+    }
+
+    setState(() {});
+
+    // If an auto-select marker id is provided, try to auto-select it.
+    if (widget.autoSelectMarkerId != null) {
+      final Location? autoLocation = _locations.firstWhere(
+        (loc) =>
+            loc.name.toLowerCase() == widget.autoSelectMarkerId!.toLowerCase(),
+        // orElse: () => null,
+      );
+      if (autoLocation != null) {
+        // Delay a little to ensure the map is rendered
+        Future.delayed(const Duration(milliseconds: 300), () {
+          _onMarkerTapped(autoLocation);
+        });
+      }
+    }
+  }
+
+  late var currentGreenMarker = null;
+  void _onMarkerTapped(Location location) {
     setState(() {
-      for (var location in locations) {
+      // Reset all markers to blue
+      if (currentGreenMarker != null) {
         _markers.add(
           Marker(
-            markerId: MarkerId(location.name),
-            position: location.position,
+            markerId: currentGreenMarker!.markerId,
+            position: currentGreenMarker!.position,
             icon: BitmapDescriptor.defaultMarkerWithHue(
               BitmapDescriptor.hueBlue,
             ),
-            infoWindow: InfoWindow(title: '', snippet: ''),
-            onTap: () {
-              _onMarkerTapped(location);
-            },
+            infoWindow: currentGreenMarker!.infoWindow,
+            onTap: currentGreenMarker!.onTap,
           ),
         );
+        _markers.remove(currentGreenMarker);
       }
-    });
-  }
-
-  void _onMarkerTapped(Location location) {
-    setState(() {
+      // Set the tapped marker to green
+      currentGreenMarker = Marker(
+        markerId: MarkerId(location.name),
+        position: location.position,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+        // infoWindow: InfoWindow(
+        //   title: location.name,
+        //   snippet: location.description,
+        // ),
+        onTap: () {
+          _onMarkerTapped(location);
+        },
+      );
+      _markers.add(currentGreenMarker);
       _selectedLocation = location;
     });
     _panelController.open();
@@ -99,7 +160,7 @@ class _MapPageState extends State<MapPage> {
       snapPoint: 0.4,
       panelSnapping: true,
       panelBuilder: () => _buildPanel(),
-      borderRadius: BorderRadius.only(
+      borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(25.0),
         topRight: Radius.circular(25.0),
       ),
@@ -109,6 +170,14 @@ class _MapPageState extends State<MapPage> {
         onMapCreated: (controller) {
           _mapController = controller;
           _mapController?.setMapStyle(_mapStyle);
+          // Optionally, you can animate the camera to the selected location if autoSelect is enabled.
+          if (widget.autoSelectMarkerId != null && _selectedLocation != null) {
+            _mapController?.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(target: _selectedLocation!.position, zoom: 19.0),
+              ),
+            );
+          }
         },
         initialCameraPosition: const CameraPosition(
           target: LatLng(38.690377656961, -121.22430823733487),
@@ -120,7 +189,6 @@ class _MapPageState extends State<MapPage> {
         zoomControlsEnabled: false,
         compassEnabled: false,
         markers: _markers,
-        // cloudMapId: '2f5fd67bccd50830',
       ),
     );
   }
@@ -146,11 +214,11 @@ class _MapPageState extends State<MapPage> {
               width: 75,
               height: 10,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(25)),
+                borderRadius: const BorderRadius.all(Radius.circular(25)),
                 color: DesignConstants.TEXT_SECONDARY_COLOR,
               ),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             SingleChildScrollView(
               child: Column(
                 children: [
@@ -160,7 +228,7 @@ class _MapPageState extends State<MapPage> {
                     children: [
                       Container(
                         // color: Colors.amber,
-                        width: MediaQuery.sizeOf(context).width * 0.45,
+                        width: MediaQuery.sizeOf(context).width * 0.5,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -191,7 +259,7 @@ class _MapPageState extends State<MapPage> {
                       ),
                       Container(
                         // color: Colors.amber,
-                        width: MediaQuery.sizeOf(context).width * 0.45,
+                        width: MediaQuery.sizeOf(context).width * 0.4,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -203,7 +271,8 @@ class _MapPageState extends State<MapPage> {
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color:
+                                          DesignConstants.TEXT_SECONDARY_COLOR,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -231,7 +300,8 @@ class _MapPageState extends State<MapPage> {
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color:
+                                          DesignConstants.TEXT_SECONDARY_COLOR,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -272,16 +342,16 @@ class _MapPageState extends State<MapPage> {
                         ),
                       ),
                       const SizedBox(height: 2),
-                  Text(
-                    _selectedLocation!.description,
-                    style: GoogleFonts.getFont(
-                      'Roboto Condensed',
-                      textStyle: TextStyle(
-                        color: DesignConstants.TEXT_PRIMARY_COLOR,
-                        fontSize: 16,
+                      Text(
+                        _selectedLocation!.description,
+                        style: GoogleFonts.getFont(
+                          'Roboto Condensed',
+                          textStyle: TextStyle(
+                            color: DesignConstants.TEXT_PRIMARY_COLOR,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
                     ],
                   ),
                 ],

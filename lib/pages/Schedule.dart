@@ -4,7 +4,8 @@ import 'package:utsav_app/util/DesignConstants.dart';
 import 'package:utsav_app/widgets/ScheduleCard.dart';
 
 class SchedulePage extends StatefulWidget {
-  const SchedulePage({super.key});
+  final Function(int, {String? markerId}) navigateToPage;
+  const SchedulePage({required this.navigateToPage, super.key});
 
   @override
   State<SchedulePage> createState() => _SchedulePageState();
@@ -90,9 +91,9 @@ class _SchedulePageState extends State<SchedulePage>
               ],
             ),
           ),
-          ExpandableCard(title: "Check-in", time: "8:00 AM", location: "Building G", description: "This is a description of the event that you see by clicking on the card.", isNow: false, animationController: _controller,),
-          ExpandableCard(title: "Dinner", time: "7:00 PM", location: "Cafeteria", description: "This is a description of the event that you see by clicking on the card.", isNow: true, animationController: _controller),
-          ExpandableCard(title: "Natok #1", time: "7:10 PM", location: "Building F", description: "This is a description of the event that you see by clicking on the card.", isNow: true, animationController: _controller),
+          ExpandableCard(title: "Check-in", time: "8:00 AM", location: "Classroom", description: "This is a description of the event that you see by clicking on the card.", isNow: false, animationController: _controller, navigateToPage: widget.navigateToPage,),
+          ExpandableCard(title: "Dinner", time: "7:00 PM", location: "Cafeteria", description: "This is a description of the event that you see by clicking on the card.", isNow: true, animationController: _controller, navigateToPage: widget.navigateToPage,),
+          ExpandableCard(title: "Natok #1", time: "7:10 PM", location: "Stage #1", description: "This is a description of the event that you see by clicking on the card.", isNow: true, animationController: _controller, navigateToPage: widget.navigateToPage,),
           // Card(
           //   clipBehavior: Clip.hardEdge,
           //   shape: RoundedRectangleBorder(

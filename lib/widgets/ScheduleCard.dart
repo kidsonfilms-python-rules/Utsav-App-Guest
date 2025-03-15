@@ -13,6 +13,7 @@ class ExpandableCard extends StatefulWidget {
   final String description;
   final bool isNow;
   final AnimationController? animationController;
+  final Function(int, {String? markerId}) navigateToPage;
 
   const ExpandableCard({
     Key? key,
@@ -22,6 +23,7 @@ class ExpandableCard extends StatefulWidget {
     required this.description,
     this.isNow = false,
     this.animationController,
+    required this.navigateToPage,
   }) : super(key: key);
 
   @override
@@ -169,6 +171,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                                 onTap: () {
                                   // Handle delete action
                                   Navigator.of(context).pop();
+                                  widget.navigateToPage(4, markerId: widget.location);
                                 },
                               ),
                               ListTile(
@@ -188,7 +191,9 @@ class _ExpandableCardState extends State<ExpandableCard>
                                 ),
                                 onTap: () async {
                                   // Handle delete action
-                                  Share.share("Come with me to check out Utsav's ${widget.title} which starts at ${widget.time} at ${widget.location}!\n\nAbout Utsav's ${widget.title}: ${widget.description}");
+                                  Share.share(
+                                    "Come with me to check out Utsav's ${widget.title} which starts at ${widget.time} at ${widget.location}!\n\nAbout Utsav's ${widget.title}: ${widget.description}",
+                                  );
                                   Navigator.of(context).pop();
                                 },
                               ),
@@ -208,7 +213,12 @@ class _ExpandableCardState extends State<ExpandableCard>
                                   ),
                                 ),
                                 onTap: () async {
-                                  await Clipboard.setData(ClipboardData(text: "${widget.title} starts at ${widget.time} at ${widget.location}. About ${widget.title}: ${widget.description}"));
+                                  await Clipboard.setData(
+                                    ClipboardData(
+                                      text:
+                                          "${widget.title} starts at ${widget.time} at ${widget.location}. About ${widget.title}: ${widget.description}",
+                                    ),
+                                  );
                                   // Handle delete action
                                   MainSnackbar(
                                     message: 'Copied!',
@@ -239,6 +249,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                               description: widget.description,
                               isNow: widget.isNow,
                               animationController: widget.animationController,
+                              navigateToPage: widget.navigateToPage,
                             ),
                           ),
                         ),
