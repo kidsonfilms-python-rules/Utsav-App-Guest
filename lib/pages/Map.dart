@@ -147,6 +147,17 @@ class _MapPageState extends State<MapPage> {
 
   void _onPanelClosed() {
     setState(() {
+      _markers.add(
+        Marker(
+          markerId: currentGreenMarker!.markerId,
+          position: currentGreenMarker!.position,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          infoWindow: currentGreenMarker!.infoWindow,
+          onTap: currentGreenMarker!.onTap,
+        ),
+      );
+      _markers.remove(currentGreenMarker);
+      currentGreenMarker = null;
       _selectedLocation = null;
     });
   }
