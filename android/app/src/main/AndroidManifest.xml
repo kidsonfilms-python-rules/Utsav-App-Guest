@@ -3,6 +3,8 @@
         android:label="utsav_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyC2NOf99JwLr6V9gq_VFfr_Qg5qFQdizZo"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

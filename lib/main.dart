@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:utsav_app/pages/Announcements.dart';
 import 'package:utsav_app/pages/Home.dart';
+import 'package:utsav_app/pages/Map.dart';
 import 'package:utsav_app/pages/Schedule.dart';
 import 'package:utsav_app/pages/Tickets.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
@@ -72,7 +73,7 @@ class _MainPageState extends State<MainPage> {
         newPage = SchedulePage();
         break;
       default:
-        newPage = HomePage(navigateToPage: _navigateToPage);
+        newPage = MapPage();
         break;
     }
 
