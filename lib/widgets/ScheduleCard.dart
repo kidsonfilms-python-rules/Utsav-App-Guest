@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
 import 'package:utsav_app/widgets/Snackbar.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ExpandableCard extends StatefulWidget {
   final String title;
@@ -185,8 +186,9 @@ class _ExpandableCardState extends State<ExpandableCard>
                                     ),
                                   ),
                                 ),
-                                onTap: () {
+                                onTap: () async {
                                   // Handle delete action
+                                  Share.share("Come with me to check out Utsav's ${widget.title} which starts at ${widget.time} at ${widget.location}!\n\nAbout Utsav's ${widget.title}: ${widget.description}");
                                   Navigator.of(context).pop();
                                 },
                               ),
