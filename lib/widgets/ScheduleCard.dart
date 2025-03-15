@@ -143,7 +143,8 @@ class _ExpandableCardState extends State<ExpandableCard>
                                 onTap: () {
                                   // Handle edit action
                                   MainSnackbar(
-                                    message: 'Subscribed to event notifications!',
+                                    message:
+                                        'Subscribed to event notifications!',
                                     // showNewIndicator: true
                                   ).show(context);
                                   Navigator.of(context).pop();
@@ -204,11 +205,15 @@ class _ExpandableCardState extends State<ExpandableCard>
                                     ),
                                   ),
                                 ),
-                                onTap: () {
+                                onTap: () async {
+                                  await Clipboard.setData(ClipboardData(text: "${widget.title} starts at ${widget.time} at ${widget.location}. About ${widget.title}: ${widget.description}"));
                                   // Handle delete action
                                   MainSnackbar(
                                     message: 'Copied!',
-                                    icon: Icon(FontAwesomeIcons.check, color: DesignConstants.GREEN,)
+                                    icon: Icon(
+                                      FontAwesomeIcons.check,
+                                      color: DesignConstants.GREEN,
+                                    ),
                                     // showNewIndicator: true
                                   ).show(context);
                                   Navigator.of(context).pop();
