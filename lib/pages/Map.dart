@@ -185,13 +185,14 @@ class _MapPageState extends State<MapPage> {
           if (widget.autoSelectMarkerId != null && _selectedLocation != null) {
             _mapController?.animateCamera(
               CameraUpdate.newCameraPosition(
-                CameraPosition(target: _selectedLocation!.position, zoom: 19.0),
+                CameraPosition(target: _selectedLocation!.position, zoom: 19.0, tilt: 45),
               ),
             );
           }
         },
         initialCameraPosition: const CameraPosition(
           target: LatLng(38.690377656961, -121.22430823733487),
+          tilt: 45,
           zoom: 19.0,
         ),
         myLocationEnabled: true,
