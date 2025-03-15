@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/widgets/Snackbar.dart';
 
 class ExpandableCard extends StatefulWidget {
   final String title;
@@ -141,6 +142,10 @@ class _ExpandableCardState extends State<ExpandableCard>
                                 ),
                                 onTap: () {
                                   // Handle edit action
+                                  MainSnackbar(
+                                    message: 'Subscribed to event notifications!',
+                                    // showNewIndicator: true
+                                  ).show(context);
                                   Navigator.of(context).pop();
                                 },
                               ),
@@ -201,6 +206,11 @@ class _ExpandableCardState extends State<ExpandableCard>
                                 ),
                                 onTap: () {
                                   // Handle delete action
+                                  MainSnackbar(
+                                    message: 'Copied!',
+                                    icon: Icon(FontAwesomeIcons.check, color: DesignConstants.GREEN,)
+                                    // showNewIndicator: true
+                                  ).show(context);
                                   Navigator.of(context).pop();
                                 },
                               ),
