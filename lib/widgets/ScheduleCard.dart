@@ -171,7 +171,10 @@ class _ExpandableCardState extends State<ExpandableCard>
                                 onTap: () {
                                   // Handle delete action
                                   Navigator.of(context).pop();
-                                  widget.navigateToPage(4, markerId: widget.location);
+                                  widget.navigateToPage(
+                                    4,
+                                    markerId: widget.location,
+                                  );
                                 },
                               ),
                               ListTile(
@@ -270,6 +273,12 @@ class _ExpandableCardState extends State<ExpandableCard>
     return GestureDetector(
       onTap: _handleTap,
       onLongPress: () => _showOptionsModal(context),
+      onDoubleTap: () {
+        MainSnackbar(
+          message: 'Subscribed to event notifications!',
+          // showNewIndicator: true
+        ).show(context);
+      },
       child: Card(
         clipBehavior: Clip.hardEdge,
         shape: RoundedRectangleBorder(

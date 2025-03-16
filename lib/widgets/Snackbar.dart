@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
 
@@ -82,73 +83,81 @@ class MainSnackbar {
     );
 
     overlayEntry = OverlayEntry(
-  builder: (BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        double currentWidth = widthAnimation.value;
-        double currentHeight = heightAnimation.value;
-        double left = (MediaQuery.of(context).size.width - currentWidth) / 2;
-        return Positioned(
-          top: topPositionAnimation.value,
-          left: left,
-          child: Material(
-            color: Colors.transparent,
-            child: CustomPaint(
-              painter: GradientBorderPainter(),
-              child: Container(
-                width: currentWidth,
-                height: currentHeight,
-                padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      DesignConstants.PRIMARY_CARD_COLOR,
-                      DesignConstants.PRIMARY_CARD_COLOR_LIGHT,
-                    ],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                  ),
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: Opacity(
-                  opacity: textOpacityAnimation.value,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (icon != null) ...[
-                        icon!,
-                        SizedBox(width: 8.0), // Small gap between icon and text
-                      ],
-                      Flexible(
-                        child: Text(
-                          message,
-                          style: GoogleFonts.getFont(
-                            "Roboto Condensed",
-                            textStyle: TextStyle(
-                              color: DesignConstants.TEXT_PRIMARY_COLOR,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
+      builder: (BuildContext context) {
+        return AnimatedBuilder(
+          animation: controller,
+          builder: (context, child) {
+            double currentWidth = widthAnimation.value;
+            double currentHeight = heightAnimation.value;
+            double left =
+                (MediaQuery.of(context).size.width - currentWidth) / 2;
+            return Positioned(
+              top: topPositionAnimation.value,
+              left: left,
+              child: Material(
+                color: Colors.transparent,
+                child: CustomPaint(
+                  painter: GradientBorderPainter(),
+                  child: Container(
+                    width: currentWidth,
+                    height: currentHeight,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 0.0,
+                      vertical: 0.0,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          DesignConstants.PRIMARY_CARD_COLOR,
+                          DesignConstants.PRIMARY_CARD_COLOR_LIGHT,
+                        ],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                      ),
+                      borderRadius: BorderRadius.circular(40.0),
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: Opacity(
+                      opacity: textOpacityAnimation.value,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (icon != null) ...[
+                            icon!,
+                            SizedBox(
+                              width: 8.0,
+                            ), // Small gap between icon and text
+                          ],
+                          Flexible(
+                            child: Text(
+                              message,
+                              style: GoogleFonts.getFont(
+                                "Roboto Condensed",
+                                textStyle: TextStyle(
+                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              textAlign: TextAlign.center,
+                              overflow:
+                                  TextOverflow
+                                      .ellipsis, // Ensure overflow is clipped
                             ),
                           ),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis, // Ensure overflow is clipped
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
-  },
-);
 
-
+    HapticFeedback.vibrate();
     overlayState.insert(overlayEntry);
     controller.forward();
 

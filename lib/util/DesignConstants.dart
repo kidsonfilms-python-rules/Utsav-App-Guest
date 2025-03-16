@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DesignConstants {
   static var BACKGROUND_COLOR = Color.fromARGB(255, 22, 21, 56);
@@ -146,4 +147,6 @@ class DesignConstants {
         ]
     }
 ]''';
+static MapType MAP_TYPE = MapType.normal;
+
 }
