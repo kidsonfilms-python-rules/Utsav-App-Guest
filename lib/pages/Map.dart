@@ -111,7 +111,7 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  late var currentGreenMarker = null;
+  Marker? currentGreenMarker;
   void _onMarkerTapped(Location location) {
     setState(() {
       // Reset all markers to blue
@@ -142,7 +142,7 @@ class _MapPageState extends State<MapPage> {
           _onMarkerTapped(location);
         },
       );
-      _markers.add(currentGreenMarker);
+      _markers.add(currentGreenMarker!);
       _selectedLocation = location;
     });
     _panelController.open();
@@ -183,9 +183,9 @@ class _MapPageState extends State<MapPage> {
       body: Stack(
         children: [
           GoogleMap(
+            style: _mapStyle,
             onMapCreated: (controller) {
               _mapController = controller;
-              _mapController?.setMapStyle(_mapStyle);
               // Optionally, you can animate the camera to the selected location if autoSelect is enabled.
               if (widget.autoSelectMarkerId != null &&
                   _selectedLocation != null) {
@@ -267,7 +267,6 @@ class _MapPageState extends State<MapPage> {
                                 position: LatLng(0, 0),
                               ),
                         );
-                        print("name");
                         if (searchLocation.name == "NF") {
                           searchLocation = _locations.firstWhere(
                             (loc) =>
@@ -283,7 +282,6 @@ class _MapPageState extends State<MapPage> {
                                   position: LatLng(0, 0),
                                 ),
                           );
-                          print("building");
                         }
                         if (searchLocation.name == "NF") {
                           searchLocation = _locations.firstWhere(
@@ -300,7 +298,6 @@ class _MapPageState extends State<MapPage> {
                                   position: LatLng(0, 0),
                                 ),
                           );
-                          print("type");
                         }
                         if (searchLocation.name == "NF") {
                           searchLocation = _locations.firstWhere(
@@ -317,7 +314,6 @@ class _MapPageState extends State<MapPage> {
                                   position: LatLng(0, 0),
                                 ),
                           );
-                          print("current");
                         }
                         if (searchLocation.name == "NF") {
                           searchLocation = _locations.firstWhere(
@@ -334,11 +330,8 @@ class _MapPageState extends State<MapPage> {
                                   position: LatLng(0, 0),
                                 ),
                           );
-                          print("description");
                         }
-                        print(searchLocation.name);
-                        print(value);
-                        print(_locations.map((e) => e.name));
+                        
                         if (searchLocation.name != "NF") {
                           _onMarkerTapped(searchLocation);
                         }
@@ -436,7 +429,7 @@ class _MapPageState extends State<MapPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         // color: Colors.amber,
                         width: MediaQuery.sizeOf(context).width * 0.5,
                         child: Column(
@@ -467,7 +460,7 @@ class _MapPageState extends State<MapPage> {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         // color: Colors.amber,
                         width: MediaQuery.sizeOf(context).width * 0.4,
                         child: Column(

@@ -22,7 +22,6 @@ class MainSnackbar {
     late AnimationController controller;
     late Animation<double> widthAnimation;
     late Animation<double> heightAnimation;
-    late Animation<BorderRadius?> borderRadiusAnimation;
     late Animation<double> topPositionAnimation;
     late Animation<double> textOpacityAnimation;
 
@@ -69,10 +68,6 @@ class MainSnackbar {
     ]).animate(controller);
 
     // Border radius animation: adjust dynamically based on width
-    borderRadiusAnimation = BorderRadiusTween(
-      begin: BorderRadius.circular(40.0),
-      end: BorderRadius.circular(40.0),
-    ).animate(controller);
 
     // Text opacity: 0 until 25% of the animation, then fades in
     textOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(

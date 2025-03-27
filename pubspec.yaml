@@ -43,6 +43,7 @@ dependencies:
   google_maps_flutter: ^2.10.1
   google_maps_flutter_android: ^2.14.14
   sliding_up_panel2: ^3.3.0+1
+  mapbox_maps_flutter: ^2.6.1
 
 dev_dependencies:
   flutter_test:
