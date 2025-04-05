@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
 
 class AnimatedCarouselIndicator extends StatelessWidget {
@@ -31,33 +32,18 @@ class AnimatedCarouselIndicator extends StatelessWidget {
                     .PRIMARY_CARD_COLOR, // Replace with your primary card color if needed
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(itemCount, (index) {
-              double width = 10.0;
-              double height = 10.0;
-              Color color = inactiveIndicatorColor;
-
-              if (index == activeIndex) {
-                width = 20.0; // Active indicator width
-                height = 10.0; // Active indicator height (elongated)
-                color = activeIndicatorColor;
-              }
-
-              return GestureDetector(
-                onTap: () => onDotTapped(index),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: width,
-                  height: height,
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
-            }),
+          alignment: Alignment.center,
+          child: AnimatedSmoothIndicator(
+            activeIndex: activeIndex,
+            count: itemCount,
+            effect: ScrollingDotsEffect(
+              activeDotColor: activeIndicatorColor,
+              dotColor: inactiveIndicatorColor,
+              dotHeight: 10,
+              dotWidth: 10,
+              activeStrokeWidth: 3,
+            ),
+            onDotClicked: (index) => onDotTapped(index),
           ),
         );
       },

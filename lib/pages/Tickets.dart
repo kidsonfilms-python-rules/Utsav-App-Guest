@@ -290,9 +290,27 @@ class _TicketsPageState extends State<TicketsPage> {
           ],
         ),
       Column(children: [
-        Text("data"),
-        Text("data"),
-        Text("data")
+        SizedBox(height: 50,),
+        Text(
+              "TICKET OPTIONS",
+              style: GoogleFonts.getFont(
+                "Roboto Condensed",
+                textStyle: TextStyle(
+                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                  fontSize: 30,
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Card(
+              color: DesignConstants.PRIMARY_CARD_COLOR,
+              child: ListBody(
+                children: [
+                  ListTile(title: Text("About Event"),)
+                ],
+              ),
+            )
       ],)
       ]
     );
