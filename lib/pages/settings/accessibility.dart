@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class AccessibilityPage extends StatefulWidget {
   const AccessibilityPage({super.key});
 
   @override
-  _AccessibilityPageState createState() => _AccessibilityPageState();
+  State<AccessibilityPage> createState() => _AccessibilityPageState();
 }
 
 class _AccessibilityPageState extends State<AccessibilityPage> {
@@ -18,18 +18,18 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: DesignConstants.BACKGROUND_COLOR,
+        backgroundColor: DesignConstants.backgroundColor,
         title: Text(
           "ACCESSIBILITY",
           style: GoogleFonts.getFont(
             'Roboto Condensed',
             fontWeight: FontWeight.w200,
-            textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+            textStyle: TextStyle(color: DesignConstants.primaryTextColor),
           ),
         ),
-        foregroundColor: DesignConstants.TEXT_PRIMARY_COLOR,
+        foregroundColor: DesignConstants.primaryTextColor,
       ),
-      backgroundColor: DesignConstants.BACKGROUND_COLOR,
+      backgroundColor: DesignConstants.backgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(
           top: 8.0,
@@ -51,7 +51,9 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
                     ),
                   ),
                 ),
@@ -66,7 +68,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                 ),
@@ -78,7 +80,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -86,7 +88,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     width: 1.0,
                   ),
                 ),
@@ -102,7 +104,9 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
                     ),
                   ),
                 ),
@@ -117,7 +121,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                 ),
@@ -129,7 +133,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -137,7 +141,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     width: 1.0,
                   ),
                 ),
@@ -153,7 +157,9 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
                     ),
                   ),
                 ),
@@ -168,7 +174,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                 ),
@@ -180,7 +186,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -188,7 +194,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     width: 1.0,
                   ),
                 ),

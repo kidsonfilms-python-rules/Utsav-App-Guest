@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class AboutAppPage extends StatefulWidget {
-  const AboutAppPage({Key? key}) : super(key: key);
+  const AboutAppPage({super.key});
 
   @override
-  _AboutAppPageState createState() => _AboutAppPageState();
+  State<AboutAppPage> createState() => _AboutAppPageState();
 }
 
 class _AboutAppPageState extends State<AboutAppPage> {
@@ -18,18 +18,18 @@ class _AboutAppPageState extends State<AboutAppPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: DesignConstants.BACKGROUND_COLOR,
+        backgroundColor: DesignConstants.backgroundColor,
         title: Text(
           "ABOUT APP",
           style: GoogleFonts.getFont(
             'Roboto Condensed',
             fontWeight: FontWeight.w200,
-            textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+            textStyle: TextStyle(color: DesignConstants.primaryTextColor),
           ),
         ),
-        foregroundColor: DesignConstants.TEXT_PRIMARY_COLOR,
+        foregroundColor: DesignConstants.primaryTextColor,
       ),
-      backgroundColor: DesignConstants.BACKGROUND_COLOR,
+      backgroundColor: DesignConstants.backgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(
           top: 8.0,
@@ -52,7 +52,11 @@ class _AboutAppPageState extends State<AboutAppPage> {
                   ),
                   SizedBox(height: 10),
                   Image.asset(
-                    DesignConstants.themeOptions[DesignConstants.chosenTheme].isDark ? "assets/logos/Ray Enterprises White.png" : "assets/logos/Ray Enterprises Black.png",
+                    DesignConstants
+                            .themeOptions[DesignConstants.chosenTheme]
+                            .isDark
+                        ? "assets/logos/Ray Enterprises White.png"
+                        : "assets/logos/Ray Enterprises Black.png",
                     width: MediaQuery.of(context).size.width - 70,
                   ),
                 ],
@@ -68,7 +72,9 @@ class _AboutAppPageState extends State<AboutAppPage> {
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
                     ),
                   ),
                 ),
@@ -80,7 +86,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -88,7 +94,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     width: 1.0,
                   ),
                 ),
@@ -104,7 +110,9 @@ class _AboutAppPageState extends State<AboutAppPage> {
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
                     ),
                   ),
                 ),
@@ -139,7 +147,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                 ),
@@ -151,7 +159,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -159,7 +167,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     width: 1.0,
                   ),
                 ),
@@ -175,7 +183,9 @@ class _AboutAppPageState extends State<AboutAppPage> {
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
                     ),
                   ),
                 ),
@@ -188,7 +198,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -196,7 +206,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     width: 1.0,
                   ),
                 ),

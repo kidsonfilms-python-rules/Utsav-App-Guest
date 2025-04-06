@@ -3,13 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class GeneralSettingsPage extends StatefulWidget {
-  const GeneralSettingsPage({Key? key}) : super(key: key);
+  const GeneralSettingsPage({super.key});
 
   @override
-  _GeneralSettingsPageState createState() => _GeneralSettingsPageState();
+  State<GeneralSettingsPage> createState() => _GeneralSettingsPageState();
 }
 
 class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
@@ -20,18 +20,18 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: DesignConstants.BACKGROUND_COLOR,
+        backgroundColor: DesignConstants.backgroundColor,
         title: Text(
           "GENERAL",
           style: GoogleFonts.getFont(
             'Roboto Condensed',
             fontWeight: FontWeight.w200,
-            textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+            textStyle: TextStyle(color: DesignConstants.primaryTextColor),
           ),
         ),
-        foregroundColor: DesignConstants.TEXT_PRIMARY_COLOR,
+        foregroundColor: DesignConstants.primaryTextColor,
       ),
-      backgroundColor: DesignConstants.BACKGROUND_COLOR,
+      backgroundColor: DesignConstants.backgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(
           top: 8.0,
@@ -51,7 +51,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                       width: 2,
                     ),
                     color:
@@ -117,7 +117,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                                             textStyle: TextStyle(
                                               color:
                                                   DesignConstants
-                                                      .TEXT_PRIMARY_COLOR,
+                                                      .primaryTextColor,
                                               fontSize: 20,
                                             ),
                                           ),
@@ -165,7 +165,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                                                             ? Border.all(
                                                               color:
                                                                   DesignConstants
-                                                                      .GREEN,
+                                                                      .green,
                                                               width: 3,
                                                             )
                                                             : null,
@@ -236,7 +236,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                 ),
@@ -249,7 +249,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -274,7 +274,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                       textStyle: TextStyle(
-                        color: DesignConstants.TEXT_PRIMARY_COLOR,
+                        color: DesignConstants.primaryTextColor,
                       ),
                     ),
                   ),
@@ -290,7 +290,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                 ),
@@ -302,7 +302,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -327,7 +327,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                       textStyle: TextStyle(
-                        color: DesignConstants.TEXT_PRIMARY_COLOR,
+                        color: DesignConstants.primaryTextColor,
                       ),
                     ),
                   ),
@@ -343,7 +343,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                 ),
@@ -355,7 +355,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -376,12 +376,16 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 onPressed: () => {},
                 style: ButtonStyle(
                   enableFeedback: true,
-                  foregroundColor: WidgetStateProperty.all(DesignConstants.RED),
-                  side: WidgetStateProperty.all(BorderSide(
-                    color: const Color.fromRGBO(255, 63, 63, 1),
-                    width: 2
-                  )),
-                  padding: WidgetStatePropertyAll(EdgeInsets.fromLTRB(55, 10, 55, 10))
+                  foregroundColor: WidgetStateProperty.all(DesignConstants.red),
+                  side: WidgetStateProperty.all(
+                    BorderSide(
+                      color: const Color.fromRGBO(255, 63, 63, 1),
+                      width: 2,
+                    ),
+                  ),
+                  padding: WidgetStatePropertyAll(
+                    EdgeInsets.fromLTRB(55, 10, 55, 10),
+                  ),
                 ),
                 child: Text(
                   "SIGN OUT",
@@ -389,7 +393,9 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     'Roboto Condensed',
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
-                    textStyle: TextStyle(color: const Color.fromRGBO(255, 63, 63, 1)),
+                    textStyle: TextStyle(
+                      color: const Color.fromRGBO(255, 63, 63, 1),
+                    ),
                   ),
                 ),
               ),

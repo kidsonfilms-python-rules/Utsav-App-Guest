@@ -3,16 +3,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DesignConstants {
-  static var BACKGROUND_COLOR = Color.fromARGB(255, 22, 21, 56);
-  static var PRIMARY_CARD_COLOR = Color.fromARGB(255, 9, 12, 41);
-  static var PRIMARY_CARD_COLOR_LIGHT = Color.fromARGB(255, 58, 60, 82);
-  static var TEXT_PRIMARY_COLOR = Colors.white;
-  static var TEXT_SECONDARY_COLOR = Color.fromARGB(255, 89, 89, 109);
-  static var GREEN = Color.fromARGB(255, 69, 186, 105);
-  static var DARK_GREEN = Color.fromARGB(255, 8, 134, 47);
-  static var RED = Color.fromARGB(255, 240, 85, 55);
+  static var backgroundColor = Color.fromARGB(255, 22, 21, 56);
+  static var primaryCardColor = Color.fromARGB(255, 9, 12, 41);
+  static var primaryCardColorLight = Color.fromARGB(255, 58, 60, 82);
+  static var primaryTextColor = Colors.white;
+  static var secondaryTextColor = Color.fromARGB(255, 89, 89, 109);
+  static var green = Color.fromARGB(255, 69, 186, 105);
+  static var darkGreen = Color.fromARGB(255, 8, 134, 47);
+  static var red = Color.fromARGB(255, 240, 85, 55);
 
-  static var MAP_STYLE = '''[
+  static var mapStyle = '''[
     {
         "featureType": "all",
         "elementType": "geometry",
@@ -149,7 +149,7 @@ class DesignConstants {
         ]
     }
 ]''';
-  static MapType MAP_TYPE = MapType.normal;
+  static MapType mapType = MapType.normal;
 
   static List<Theme> themeOptions = [
     const Theme(
@@ -193,14 +193,13 @@ class DesignConstants {
   static int chosenTheme = 0;
 
   static void updateTheme() async {
-    BACKGROUND_COLOR = themeOptions[chosenTheme].BACKGROUND_COLOR;
-    PRIMARY_CARD_COLOR = themeOptions[chosenTheme].PRIMARY_CARD_COLOR;
-    PRIMARY_CARD_COLOR_LIGHT =
-        themeOptions[chosenTheme].PRIMARY_CARD_COLOR_LIGHT;
-    TEXT_PRIMARY_COLOR = themeOptions[chosenTheme].TEXT_PRIMARY_COLOR;
-    TEXT_SECONDARY_COLOR = themeOptions[chosenTheme].TEXT_SECONDARY_COLOR;
-    GREEN = themeOptions[chosenTheme].GREEN;
-    DARK_GREEN = themeOptions[chosenTheme].DARK_GREEN;
+    backgroundColor = themeOptions[chosenTheme].backgroundColor;
+    primaryCardColor = themeOptions[chosenTheme].primaryCardColor;
+    primaryCardColorLight = themeOptions[chosenTheme].primaryCardColorLight;
+    primaryTextColor = themeOptions[chosenTheme].primaryTextColor;
+    secondaryTextColor = themeOptions[chosenTheme].secondaryTextColor;
+    green = themeOptions[chosenTheme].green;
+    darkGreen = themeOptions[chosenTheme].darkGreen;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt("THEME", chosenTheme);
   }
@@ -210,23 +209,23 @@ class Theme {
   final String name;
   final bool isDark;
   final Color previewColor;
-  final Color BACKGROUND_COLOR;
-  final Color PRIMARY_CARD_COLOR;
-  final Color PRIMARY_CARD_COLOR_LIGHT;
-  final Color TEXT_PRIMARY_COLOR;
-  final Color TEXT_SECONDARY_COLOR;
-  final Color GREEN;
-  final Color DARK_GREEN;
+  final Color backgroundColor;
+  final Color primaryCardColor;
+  final Color primaryCardColorLight;
+  final Color primaryTextColor;
+  final Color secondaryTextColor;
+  final Color green;
+  final Color darkGreen;
   const Theme(
     this.name,
     this.isDark,
     this.previewColor,
-    this.BACKGROUND_COLOR,
-    this.PRIMARY_CARD_COLOR,
-    this.PRIMARY_CARD_COLOR_LIGHT,
-    this.TEXT_PRIMARY_COLOR,
-    this.TEXT_SECONDARY_COLOR,
-    this.GREEN,
-    this.DARK_GREEN,
+    this.backgroundColor,
+    this.primaryCardColor,
+    this.primaryCardColorLight,
+    this.primaryTextColor,
+    this.secondaryTextColor,
+    this.green,
+    this.darkGreen,
   );
 }

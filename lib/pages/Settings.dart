@@ -8,7 +8,7 @@ import 'package:utsav_app/pages/settings/general_settings.dart';
 import 'package:utsav_app/pages/settings/help.dart';
 import 'package:utsav_app/pages/settings/legal.dart';
 import 'package:utsav_app/pages/settings/profile.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -26,16 +26,16 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DesignConstants.BACKGROUND_COLOR,
+      backgroundColor: DesignConstants.backgroundColor,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: DesignConstants.BACKGROUND_COLOR,
-        foregroundColor: DesignConstants.TEXT_PRIMARY_COLOR,
+        backgroundColor: DesignConstants.backgroundColor,
+        foregroundColor: DesignConstants.primaryTextColor,
         title: Text(
           "SETTINGS",
           style: GoogleFonts.getFont('Roboto Condensed',
               // fontWeight: FontWeight.w200,
-              textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR)),
+              textStyle: TextStyle(color: DesignConstants.primaryTextColor)),
         ),
       ),
       body: SingleChildScrollView(
@@ -50,7 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(19.0),
                 ),
-                color: DesignConstants.PRIMARY_CARD_COLOR,
+                color: DesignConstants.primaryCardColor,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 16.0,
@@ -78,7 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 width: 32,
                                 height: 32,
-                                child: Icon(FontAwesomeIcons.gear, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                                child: Icon(FontAwesomeIcons.gear, color: DesignConstants.primaryTextColor,)
                               ),
                               const SizedBox(width: 35),
                               Column(
@@ -91,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                     ),
                                   ),
                                   Text(
@@ -100,7 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color: DesignConstants.secondaryTextColor,
                                     ),
                                   ),
                                 ],
@@ -143,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 width: 32,
                                 height: 32,
-                                child: Icon(FontAwesomeIcons.userGear, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                                child: Icon(FontAwesomeIcons.userGear, color: DesignConstants.primaryTextColor,)
                               ),
                               const SizedBox(width: 35),
                               Column(
@@ -156,7 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                     ),
                                   ),
                                   Text(
@@ -165,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 11.5,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color: DesignConstants.secondaryTextColor,
                                     ),
                                   ),
                                 ],
@@ -207,7 +207,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 width: 32,
                                 height: 32,
-                                child: Icon(FontAwesomeIcons.universalAccess, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                                child: Icon(FontAwesomeIcons.universalAccess, color: DesignConstants.primaryTextColor,)
                               ),
                               const SizedBox(width: 35),
                               Column(
@@ -220,7 +220,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                     ),
                                   ),
                                   Text(
@@ -229,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color: DesignConstants.secondaryTextColor,
                                     ),
                                   ),
                                 ],
@@ -247,7 +247,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(19.0),
                 ),
-                color: DesignConstants.PRIMARY_CARD_COLOR,
+                color: DesignConstants.primaryCardColor,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 16.0, top: 16.0, bottom: 16.0),
@@ -260,7 +260,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             SizedBox(
                               width: 32,
                               height: 32,
-                              child: Icon(FontAwesomeIcons.solidBell, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                              child: Icon(FontAwesomeIcons.solidBell, color: DesignConstants.primaryTextColor,)
                             ),
                             const SizedBox(
                               width: 35,
@@ -274,14 +274,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                   style: GoogleFonts.getFont("Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR),
+                                      color: DesignConstants.primaryTextColor),
                                 ),
                                 Text(
                                   "Events · Announcements",
                                   style: GoogleFonts.getFont("Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR),
+                                      color: DesignConstants.secondaryTextColor),
                                 ),
                               ],
                             )
@@ -306,7 +306,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             SizedBox(
                               width: 32,
                               height: 32,
-                              child: Icon(FontAwesomeIcons.utensils, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                              child: Icon(FontAwesomeIcons.utensils, color: DesignConstants.primaryTextColor,)
                             ),
                             const SizedBox(
                               width: 35,
@@ -320,14 +320,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                   style: GoogleFonts.getFont("Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR),
+                                      color: DesignConstants.primaryTextColor),
                                 ),
                                 Text(
                                   "Vegetarian · Allergies · Children",
                                   style: GoogleFonts.getFont("Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 11.75,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR),
+                                      color: DesignConstants.secondaryTextColor),
                                 ),
                               ],
                             )
@@ -352,7 +352,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             SizedBox(
                               width: 32,
                               height: 32,
-                              child: Icon(FontAwesomeIcons.moneyCheckDollar, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                              child: Icon(FontAwesomeIcons.moneyCheckDollar, color: DesignConstants.primaryTextColor,)
                             ),
                             const SizedBox(
                               width: 35,
@@ -366,14 +366,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                   style: GoogleFonts.getFont("Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR),
+                                      color: DesignConstants.primaryTextColor),
                                 ),
                                 Text(
                                   "Set payment method · Reciepts",
                                   style: GoogleFonts.getFont("Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR),
+                                      color: DesignConstants.secondaryTextColor),
                                 ),
                               ],
                             )
@@ -391,7 +391,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(19.0),
                 ),
-                color: DesignConstants.PRIMARY_CARD_COLOR,
+                color: DesignConstants.primaryCardColor,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 16.0,
@@ -422,14 +422,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       //             style: GoogleFonts.getFont("Roboto Condensed",
                       //                 fontWeight: FontWeight.w600,
                       //                 fontSize: 20,
-                      //                 color: DesignConstants.TEXT_PRIMARY_COLOR),
+                      //                 color: DesignConstants.primaryTextColor),
                       //           ),
                       //           Text(
                       //             "Accessibility · Display · Animations",
                       //             style: GoogleFonts.getFont("Roboto Condensed",
                       //                 fontWeight: FontWeight.w400,
                       //                 fontSize: 12,
-                      //                 color: DesignConstants.TEXT_SECONDARY_COLOR),
+                      //                 color: DesignConstants.secondaryTextColor),
                       //           ),
                       //         ],
                       //       )
@@ -464,7 +464,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 width: 32,
                                 height: 32,
-                                child: Icon(FontAwesomeIcons.solidCircleQuestion, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                                child: Icon(FontAwesomeIcons.solidCircleQuestion, color: DesignConstants.primaryTextColor,)
                               ),
                               const SizedBox(width: 35),
                               Column(
@@ -477,7 +477,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                     ),
                                   ),
                                   Text(
@@ -486,7 +486,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color: DesignConstants.secondaryTextColor,
                                     ),
                                   ),
                                 ],
@@ -527,7 +527,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 width: 32,
                                 height: 32,
-                                child: Icon(FontAwesomeIcons.scaleBalanced, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                                child: Icon(FontAwesomeIcons.scaleBalanced, color: DesignConstants.primaryTextColor,)
                               ),
                               const SizedBox(width: 35),
                               Column(
@@ -540,7 +540,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                     ),
                                   ),
                                   Text(
@@ -549,7 +549,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color: DesignConstants.secondaryTextColor,
                                     ),
                                   ),
                                 ],
@@ -590,7 +590,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 width: 32,
                                 height: 32,
-                                child: Icon(FontAwesomeIcons.circleInfo, color: DesignConstants.TEXT_PRIMARY_COLOR,)
+                                child: Icon(FontAwesomeIcons.circleInfo, color: DesignConstants.primaryTextColor,)
                               ),
                               const SizedBox(width: 35),
                               Column(
@@ -603,7 +603,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                     ),
                                   ),
                                   Text(
@@ -612,7 +612,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       "Roboto Condensed",
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color: DesignConstants.secondaryTextColor,
                                     ),
                                   ),
                                 ],

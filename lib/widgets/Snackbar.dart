@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class MainSnackbar {
   final String message;
@@ -16,8 +16,6 @@ class MainSnackbar {
 
   void show(BuildContext context) {
     OverlayState? overlayState = Overlay.of(context);
-    if (overlayState == null) return;
-
     late OverlayEntry overlayEntry;
     late AnimationController controller;
     late Animation<double> widthAnimation;
@@ -103,8 +101,8 @@ class MainSnackbar {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          DesignConstants.PRIMARY_CARD_COLOR,
-                          DesignConstants.PRIMARY_CARD_COLOR_LIGHT,
+                          DesignConstants.primaryCardColor,
+                          DesignConstants.primaryCardColorLight,
                         ],
                         begin: Alignment.bottomLeft,
                         end: Alignment.topRight,
@@ -129,7 +127,7 @@ class MainSnackbar {
                               style: GoogleFonts.getFont(
                                 "Roboto Condensed",
                                 textStyle: TextStyle(
-                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                  color: DesignConstants.primaryTextColor,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16,
                                 ),
@@ -170,7 +168,7 @@ class GradientBorderPainter extends CustomPainter {
     final Paint paint =
         Paint()
           ..shader = LinearGradient(
-            colors: [DesignConstants.GREEN, DesignConstants.DARK_GREEN],
+            colors: [DesignConstants.green, DesignConstants.darkGreen],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             stops: [0.75, 1.0],

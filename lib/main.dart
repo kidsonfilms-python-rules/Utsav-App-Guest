@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:utsav_app/pages/Announcements.dart';
-import 'package:utsav_app/pages/Home.dart';
-import 'package:utsav_app/pages/Map.dart';
-import 'package:utsav_app/pages/Schedule.dart';
-import 'package:utsav_app/pages/Tickets.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/pages/announcements.dart';
+import 'package:utsav_app/pages/home.dart';
+import 'package:utsav_app/pages/map.dart';
+import 'package:utsav_app/pages/schedule.dart';
+import 'package:utsav_app/pages/tickets.dart';
+import 'package:utsav_app/util/design_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 Future<void> main() async {
@@ -28,12 +28,12 @@ class MyApp extends StatelessWidget {
       DesignConstants.chosenTheme = theme;
       DesignConstants.updateTheme();
     }
-    
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
-          backgroundColor: DesignConstants.BACKGROUND_COLOR,
+          backgroundColor: DesignConstants.backgroundColor,
         ),
       ),
       home: const MainPage(title: 'Flutter Demo Home Page'),
@@ -116,7 +116,7 @@ class _MainPageState extends State<MainPage> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        backgroundColor: DesignConstants.BACKGROUND_COLOR,
+        backgroundColor: DesignConstants.backgroundColor,
         bottomNavigationBar: GNav(
           key: const PageStorageKey('bottom_nav_bar'),
           selectedIndex: _selectedTab,
@@ -124,7 +124,7 @@ class _MainPageState extends State<MainPage> {
           color: const Color.fromARGB(255, 120, 120, 120),
           activeColor: Colors.white,
           iconSize: 22,
-          backgroundColor: DesignConstants.PRIMARY_CARD_COLOR,
+          backgroundColor: DesignConstants.primaryCardColor,
           onTabChange: (index) {
             // For example, if you want to auto-select marker1 when MapPage is selected,
             // pass the marker id:

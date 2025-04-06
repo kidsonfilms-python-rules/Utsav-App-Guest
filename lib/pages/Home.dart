@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:utsav_app/pages/Settings.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
             style: GoogleFonts.getFont(
               "Roboto Condensed",
               textStyle: TextStyle(
-                color: DesignConstants.TEXT_PRIMARY_COLOR,
+                color: DesignConstants.primaryTextColor,
                 fontSize: 54,
                 fontFamily: "Roboto",
                 fontStyle: FontStyle.normal,
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
                       textStyle: TextStyle(
-                        color: DesignConstants.TEXT_PRIMARY_COLOR,
+                        color: DesignConstants.primaryTextColor,
                         fontSize: 18,
                         fontWeight: FontWeight.w600
                       ),
@@ -67,10 +67,10 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(FontAwesomeIcons.gear),
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(
-                      DesignConstants.PRIMARY_CARD_COLOR,
+                      DesignConstants.primaryCardColor,
                     ),
                     iconColor: WidgetStateProperty.all(
-                      DesignConstants.TEXT_PRIMARY_COLOR,
+                      DesignConstants.primaryTextColor,
                     ),
                     iconSize: WidgetStateProperty.all(25),
                   ),
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
                       textStyle: TextStyle(
-                        color: DesignConstants.TEXT_PRIMARY_COLOR,
+                        color: DesignConstants.primaryTextColor,
                         fontSize: 18,
                         fontWeight: FontWeight.w600
                       ),
@@ -100,10 +100,10 @@ class _HomePageState extends State<HomePage> {
                   style: ButtonStyle(
                     
                     backgroundColor: WidgetStateProperty.all(
-                      DesignConstants.PRIMARY_CARD_COLOR,
+                      DesignConstants.primaryCardColor,
                     ),
                     iconColor: WidgetStateProperty.all(
-                      DesignConstants.TEXT_PRIMARY_COLOR,
+                      DesignConstants.primaryTextColor,
                     ),
                     iconSize: WidgetStateProperty.all(25),
                   ),
@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
           GestureDetector(
             onTap: () => widget.navigateToPage(3),
             child: Card(
-              color: DesignConstants.PRIMARY_CARD_COLOR,
+              color: DesignConstants.primaryCardColor,
               margin: EdgeInsets.all(20),
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_SECONDARY_COLOR,
+                          color: DesignConstants.secondaryTextColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                           fontSize: 15,
                           fontWeight: FontWeight.w300,
                         ),
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
           GestureDetector(
             onTap: () => widget.navigateToPage(1),
             child: Card(
-              color: DesignConstants.PRIMARY_CARD_COLOR,
+              color: DesignConstants.primaryCardColor,
               margin: EdgeInsets.all(20),
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_SECONDARY_COLOR,
+                          color: DesignConstants.secondaryTextColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
           GestureDetector(
             onTap: () => widget.navigateToPage(0),
             child: Card(
-              color: DesignConstants.PRIMARY_CARD_COLOR,
+              color: DesignConstants.primaryCardColor,
               margin: EdgeInsets.all(20),
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_SECONDARY_COLOR,
+                          color: DesignConstants.secondaryTextColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),

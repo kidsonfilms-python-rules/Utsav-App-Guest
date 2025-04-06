@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class AnimatedCarouselIndicator extends StatelessWidget {
   final int itemCount;
@@ -10,13 +10,13 @@ class AnimatedCarouselIndicator extends StatelessWidget {
   final ValueChanged<int> onDotTapped;
 
   const AnimatedCarouselIndicator({
-    Key? key,
+    super.key,
     required this.itemCount,
     required this.activeIndex,
     required this.activeIndicatorColor,
     required this.inactiveIndicatorColor,
     required this.onDotTapped,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class AnimatedCarouselIndicator extends StatelessWidget {
           decoration: BoxDecoration(
             color:
                 DesignConstants
-                    .PRIMARY_CARD_COLOR, // Replace with your primary card color if needed
+                    .primaryCardColor, // Replace with your primary card color if needed
             borderRadius: BorderRadius.circular(25),
           ),
           alignment: Alignment.center,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
-import 'package:utsav_app/widgets/Snackbar.dart';
+import 'package:utsav_app/util/design_constants.dart';
+import 'package:utsav_app/widgets/snackbar.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ExpandableCard extends StatefulWidget {
@@ -16,7 +16,7 @@ class ExpandableCard extends StatefulWidget {
   final Function(int, {String? markerId}) navigateToPage;
 
   const ExpandableCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.time,
     required this.location,
@@ -24,10 +24,10 @@ class ExpandableCard extends StatefulWidget {
     this.isNow = false,
     this.animationController,
     required this.navigateToPage,
-  }) : super(key: key);
+  });
 
   @override
-  _ExpandableCardState createState() => _ExpandableCardState();
+  State<ExpandableCard> createState() => _ExpandableCardState();
 }
 
 class _ExpandableCardState extends State<ExpandableCard>
@@ -110,7 +110,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: DesignConstants.BACKGROUND_COLOR,
+                            color: DesignConstants.backgroundColor,
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(25.0),
                             ),
@@ -131,14 +131,14 @@ class _ExpandableCardState extends State<ExpandableCard>
                               ListTile(
                                 leading: Icon(
                                   FontAwesomeIcons.solidBell,
-                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                  color: DesignConstants.primaryTextColor,
                                 ),
                                 title: Text(
                                   'Subscribe to notifications',
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                       fontSize: 14.5,
                                     ),
                                   ),
@@ -156,14 +156,14 @@ class _ExpandableCardState extends State<ExpandableCard>
                               ListTile(
                                 leading: Icon(
                                   FontAwesomeIcons.mapLocationDot,
-                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                  color: DesignConstants.primaryTextColor,
                                 ),
                                 title: Text(
                                   'Open in Map',
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                       fontSize: 14.5,
                                     ),
                                   ),
@@ -180,14 +180,14 @@ class _ExpandableCardState extends State<ExpandableCard>
                               ListTile(
                                 leading: Icon(
                                   FontAwesomeIcons.share,
-                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                  color: DesignConstants.primaryTextColor,
                                 ),
                                 title: Text(
                                   'Share',
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                       fontSize: 14.5,
                                     ),
                                   ),
@@ -203,14 +203,14 @@ class _ExpandableCardState extends State<ExpandableCard>
                               ListTile(
                                 leading: Icon(
                                   FontAwesomeIcons.solidCopy,
-                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                  color: DesignConstants.primaryTextColor,
                                 ),
                                 title: Text(
                                   'Copy details',
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                       fontSize: 14.5,
                                     ),
                                   ),
@@ -227,7 +227,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                                     message: 'Copied!',
                                     icon: Icon(
                                       FontAwesomeIcons.check,
-                                      color: DesignConstants.GREEN,
+                                      color: DesignConstants.green,
                                     ),
                                     // showNewIndicator: true
                                   ).show(context);
@@ -285,7 +285,7 @@ class _ExpandableCardState extends State<ExpandableCard>
           borderRadius: BorderRadius.circular(25.0),
         ),
         margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-        color: DesignConstants.PRIMARY_CARD_COLOR,
+        color: DesignConstants.primaryCardColor,
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -300,13 +300,13 @@ class _ExpandableCardState extends State<ExpandableCard>
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.GREEN,
+                          color: DesignConstants.green,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     BlinkingDot(
-                      color: DesignConstants.GREEN,
+                      color: DesignConstants.green,
                       size: 8.0,
                       animation: widget.animationController,
                     ),
@@ -323,7 +323,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                           fontSize: 20,
                           overflow: TextOverflow.fade,
                         ),
@@ -335,7 +335,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
                       textStyle: TextStyle(
-                        color: DesignConstants.TEXT_SECONDARY_COLOR,
+                        color: DesignConstants.secondaryTextColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -357,7 +357,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                             style: GoogleFonts.getFont(
                               "Roboto Condensed",
                               textStyle: TextStyle(
-                                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                color: DesignConstants.secondaryTextColor,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -367,7 +367,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                             style: GoogleFonts.getFont(
                               "Roboto Condensed",
                               textStyle: TextStyle(
-                                color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                color: DesignConstants.primaryTextColor,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -380,7 +380,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                         style: GoogleFonts.getFont(
                           "Roboto Condensed",
                           textStyle: TextStyle(
-                            color: DesignConstants.TEXT_PRIMARY_COLOR,
+                            color: DesignConstants.primaryTextColor,
                           ),
                         ),
                       ),
@@ -402,11 +402,11 @@ class BlinkingDot extends StatelessWidget {
   final AnimationController? animation;
 
   const BlinkingDot({
-    Key? key,
+    super.key,
     required this.color,
     required this.size,
     this.animation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

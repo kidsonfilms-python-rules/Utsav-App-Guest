@@ -1,15 +1,13 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class AccountSettingsPage extends StatefulWidget {
-  const AccountSettingsPage({Key? key}) : super(key: key);
+  const AccountSettingsPage({super.key});
 
   @override
-  _AccountSettingsPageState createState() => _AccountSettingsPageState();
+  State<AccountSettingsPage> createState() => _AccountSettingsPageState();
 }
 
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
@@ -20,18 +18,18 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: DesignConstants.BACKGROUND_COLOR,
+        backgroundColor: DesignConstants.backgroundColor,
         title: Text(
           "ACCOUNT",
           style: GoogleFonts.getFont(
             'Roboto Condensed',
             fontWeight: FontWeight.w200,
-            textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+            textStyle: TextStyle(color: DesignConstants.primaryTextColor),
           ),
         ),
-        foregroundColor: DesignConstants.TEXT_PRIMARY_COLOR,
+        foregroundColor: DesignConstants.primaryTextColor,
       ),
-      backgroundColor: DesignConstants.BACKGROUND_COLOR,
+      backgroundColor: DesignConstants.backgroundColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -55,20 +53,21 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                   TextField(
-                    controller: TextEditingController()..text = 'john.smith@gmail.com',
+                    controller:
+                        TextEditingController()..text = 'john.smith@gmail.com',
                     decoration: InputDecoration(
                       isDense: true,
                       hintText: "Your email...",
                       hintStyle: GoogleFonts.getFont(
-                      "Roboto Condensed",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
-                    ),
+                        "Roboto Condensed",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: DesignConstants.secondaryTextColor,
+                      ),
                     ),
                     autofocus: false,
                     keyboardType: TextInputType.emailAddress,
@@ -77,7 +76,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                      color: DesignConstants.primaryTextColor,
                     ),
                   ),
                   SizedBox(height: 15),
@@ -94,7 +93,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                   TextField(
@@ -104,11 +103,11 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       isDense: true,
                       hintText: "Your email...",
                       hintStyle: GoogleFonts.getFont(
-                      "Roboto Condensed",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
-                    ),
+                        "Roboto Condensed",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: DesignConstants.secondaryTextColor,
+                      ),
                     ),
                     controller: TextEditingController()..text = '053467',
                     autofocus: false,
@@ -118,7 +117,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                      color: DesignConstants.primaryTextColor,
                     ),
                   ),
                   SizedBox(height: 15),
@@ -135,7 +134,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                   TextField(
@@ -143,11 +142,11 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       isDense: true,
                       hintText: "Your name...",
                       hintStyle: GoogleFonts.getFont(
-                      "Roboto Condensed",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
-                    ),
+                        "Roboto Condensed",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: DesignConstants.secondaryTextColor,
+                      ),
                     ),
                     controller: TextEditingController()..text = 'Smith',
                     autofocus: false,
@@ -158,7 +157,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                      color: DesignConstants.primaryTextColor,
                     ),
                   ),
                   SizedBox(height: 25),
@@ -175,7 +174,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                         ),
                       ),
                     ),
@@ -191,7 +190,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         "Roboto Condensed",
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
-                        color: DesignConstants.TEXT_SECONDARY_COLOR,
+                        color: DesignConstants.secondaryTextColor,
                       ),
                     ),
                   ),
@@ -203,7 +202,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   "Roboto Condensed",
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: DesignConstants.TEXT_SECONDARY_COLOR,
+                  color: DesignConstants.secondaryTextColor,
                 ),
               ),
               Container(
@@ -228,7 +227,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                         ),
                       ),
                     ),
@@ -244,7 +243,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         "Roboto Condensed",
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
-                        color: DesignConstants.TEXT_SECONDARY_COLOR,
+                        color: DesignConstants.secondaryTextColor,
                       ),
                     ),
                   ),
@@ -256,7 +255,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   "Roboto Condensed",
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: DesignConstants.TEXT_SECONDARY_COLOR,
+                  color: DesignConstants.secondaryTextColor,
                 ),
               ),
               Container(
@@ -281,7 +280,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                         ),
                       ),
                     ),
@@ -297,7 +296,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                         "Roboto Condensed",
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
-                        color: DesignConstants.TEXT_SECONDARY_COLOR,
+                        color: DesignConstants.secondaryTextColor,
                       ),
                     ),
                   ),
@@ -309,7 +308,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   "Roboto Condensed",
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: DesignConstants.TEXT_SECONDARY_COLOR,
+                  color: DesignConstants.secondaryTextColor,
                 ),
               ),
               Container(
@@ -330,9 +329,11 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   onPressed: () => {},
                   style: ButtonStyle(
                     enableFeedback: true,
-                    foregroundColor: WidgetStateProperty.all(DesignConstants.RED),
+                    foregroundColor: WidgetStateProperty.all(
+                      DesignConstants.red,
+                    ),
                     side: WidgetStateProperty.all(
-                      BorderSide(color: DesignConstants.RED, width: 2),
+                      BorderSide(color: DesignConstants.red, width: 2),
                     ),
                     padding: WidgetStatePropertyAll(
                       EdgeInsets.fromLTRB(55, 10, 55, 10),
@@ -344,7 +345,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       'Roboto Condensed',
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.RED),
+                      textStyle: TextStyle(color: DesignConstants.red),
                     ),
                   ),
                 ),

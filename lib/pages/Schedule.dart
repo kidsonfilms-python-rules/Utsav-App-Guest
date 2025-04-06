@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
-import 'package:utsav_app/widgets/ScheduleCard.dart';
+import 'package:utsav_app/util/design_constants.dart';
+import 'package:utsav_app/widgets/schedule_card.dart';
 
 class SchedulePage extends StatefulWidget {
   final Function(int, {String? markerId}) navigateToPage;
@@ -48,7 +48,7 @@ class _SchedulePageState extends State<SchedulePage>
             style: GoogleFonts.getFont(
               "Roboto Condensed",
               textStyle: TextStyle(
-                color: DesignConstants.TEXT_PRIMARY_COLOR,
+                color: DesignConstants.primaryTextColor,
                 fontSize: 30,
                 fontFamily: "Roboto",
                 fontStyle: FontStyle.normal,
@@ -65,7 +65,7 @@ class _SchedulePageState extends State<SchedulePage>
               children: [
                 Expanded(
                   child: Divider(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     thickness: 2,
                   ),
                 ),
@@ -76,7 +76,7 @@ class _SchedulePageState extends State<SchedulePage>
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
                       textStyle: TextStyle(
-                        color: DesignConstants.TEXT_SECONDARY_COLOR,
+                        color: DesignConstants.secondaryTextColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -84,7 +84,7 @@ class _SchedulePageState extends State<SchedulePage>
                 ),
                 Expanded(
                   child: Divider(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     thickness: 2,
                   ),
                 ),
@@ -100,7 +100,7 @@ class _SchedulePageState extends State<SchedulePage>
           //     borderRadius: BorderRadius.circular(25.0),
           //   ),
           //   margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-          //   color: DesignConstants.PRIMARY_CARD_COLOR,
+          //   color: DesignConstants.primaryCardColor,
           //   child: Container(
           //     padding: EdgeInsets.all(15),
           //     child: Row(
@@ -115,7 +115,7 @@ class _SchedulePageState extends State<SchedulePage>
           //             style: GoogleFonts.getFont(
           //               "Roboto Condensed",
           //               textStyle: TextStyle(
-          //                 color: DesignConstants.TEXT_PRIMARY_COLOR,
+          //                 color: DesignConstants.primaryTextColor,
           //                 fontSize: 20,
           //                 overflow: TextOverflow.fade,
           //               ),
@@ -129,7 +129,7 @@ class _SchedulePageState extends State<SchedulePage>
           //             style: GoogleFonts.getFont(
           //               "Roboto Condensed",
           //               textStyle: TextStyle(
-          //                 color: DesignConstants.TEXT_SECONDARY_COLOR,
+          //                 color: DesignConstants.secondaryTextColor,
           //                 fontWeight: FontWeight.bold,
           //               ),
           //             ),
@@ -145,7 +145,7 @@ class _SchedulePageState extends State<SchedulePage>
           //     borderRadius: BorderRadius.circular(25.0),
           //   ),
           //   margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-          //   color: DesignConstants.PRIMARY_CARD_COLOR,
+          //   color: DesignConstants.primaryCardColor,
           //   child: Container(
           //     padding: EdgeInsets.all(15),
           //     child: Column(
@@ -158,13 +158,13 @@ class _SchedulePageState extends State<SchedulePage>
           //               style: GoogleFonts.getFont(
           //                 "Roboto Condensed",
           //                 textStyle: TextStyle(
-          //                   color: DesignConstants.GREEN,
+          //                   color: DesignConstants.green,
           //                   fontWeight: FontWeight.bold,
           //                 ),
           //               ),
           //             ),
           //             BlinkingDot(
-          //               color: DesignConstants.GREEN,
+          //               color: DesignConstants.green,
           //               size: 8.0,
           //               animation: _animation,
           //             ),
@@ -183,7 +183,7 @@ class _SchedulePageState extends State<SchedulePage>
           //                 style: GoogleFonts.getFont(
           //                   "Roboto Condensed",
           //                   textStyle: TextStyle(
-          //                     color: DesignConstants.TEXT_PRIMARY_COLOR,
+          //                     color: DesignConstants.primaryTextColor,
           //                     fontSize: 20,
           //                     overflow: TextOverflow.fade,
           //                   ),
@@ -197,7 +197,7 @@ class _SchedulePageState extends State<SchedulePage>
           //                 style: GoogleFonts.getFont(
           //                   "Roboto Condensed",
           //                   textStyle: TextStyle(
-          //                     color: DesignConstants.TEXT_SECONDARY_COLOR,
+          //                     color: DesignConstants.secondaryTextColor,
           //                     fontWeight: FontWeight.bold,
           //                   ),
           //                 ),
@@ -215,7 +215,7 @@ class _SchedulePageState extends State<SchedulePage>
           //     borderRadius: BorderRadius.circular(25.0),
           //   ),
           //   margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-          //   color: DesignConstants.PRIMARY_CARD_COLOR,
+          //   color: DesignConstants.primaryCardColor,
           //   child: Container(
           //     padding: EdgeInsets.all(15),
           //     child: Column(
@@ -228,13 +228,13 @@ class _SchedulePageState extends State<SchedulePage>
           //               style: GoogleFonts.getFont(
           //                 "Roboto Condensed",
           //                 textStyle: TextStyle(
-          //                   color: DesignConstants.GREEN,
+          //                   color: DesignConstants.green,
           //                   fontWeight: FontWeight.bold,
           //                 ),
           //               ),
           //             ),
           //             BlinkingDot(
-          //               color: DesignConstants.GREEN,
+          //               color: DesignConstants.green,
           //               size: 8.0,
           //               animation: _animation,
           //             ),
@@ -253,7 +253,7 @@ class _SchedulePageState extends State<SchedulePage>
           //                 style: GoogleFonts.getFont(
           //                   "Roboto Condensed",
           //                   textStyle: TextStyle(
-          //                     color: DesignConstants.TEXT_PRIMARY_COLOR,
+          //                     color: DesignConstants.primaryTextColor,
           //                     fontSize: 20,
           //                     overflow: TextOverflow.fade,
           //                   ),
@@ -267,7 +267,7 @@ class _SchedulePageState extends State<SchedulePage>
           //                 style: GoogleFonts.getFont(
           //                   "Roboto Condensed",
           //                   textStyle: TextStyle(
-          //                     color: DesignConstants.TEXT_SECONDARY_COLOR,
+          //                     color: DesignConstants.secondaryTextColor,
           //                     fontWeight: FontWeight.bold,
           //                   ),
           //                 ),

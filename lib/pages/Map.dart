@@ -4,11 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class MapPage extends StatefulWidget {
   final String? autoSelectMarkerId;
-  const MapPage({Key? key, this.autoSelectMarkerId}) : super(key: key);
+  const MapPage({super.key, this.autoSelectMarkerId});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -32,7 +32,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _loadMapStyle() {
-    _mapStyle = DesignConstants.MAP_STYLE;
+    _mapStyle = DesignConstants.mapStyle;
   }
 
   void _setMarkers() {
@@ -97,6 +97,7 @@ class _MapPageState extends State<MapPage> {
 
     // If an auto-select marker id is provided, try to auto-select it.
     if (widget.autoSelectMarkerId != null) {
+      // ignore: unnecessary_nullable_for_final_variable_declarations
       final Location? autoLocation = _locations.firstWhere(
         (loc) =>
             loc.name.toLowerCase() == widget.autoSelectMarkerId!.toLowerCase(),
@@ -179,7 +180,7 @@ class _MapPageState extends State<MapPage> {
         topRight: Radius.circular(25.0),
       ),
       onPanelClosed: _onPanelClosed,
-      color: DesignConstants.BACKGROUND_COLOR,
+      color: DesignConstants.backgroundColor,
       body: Stack(
         children: [
           GoogleMap(
@@ -207,7 +208,7 @@ class _MapPageState extends State<MapPage> {
             ),
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
-            mapType: DesignConstants.MAP_TYPE,
+            mapType: DesignConstants.mapType,
             zoomControlsEnabled: false,
             compassEnabled: false,
             markers: _markers,
@@ -225,18 +226,18 @@ class _MapPageState extends State<MapPage> {
                       padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
                       child: Icon(
                         FontAwesomeIcons.magnifyingGlass,
-                        color: DesignConstants.TEXT_PRIMARY_COLOR,
+                        color: DesignConstants.primaryTextColor,
                         size: 20,
                       ),
                     ),
                     backgroundColor: WidgetStateProperty.all(
-                      DesignConstants.BACKGROUND_COLOR,
+                      DesignConstants.backgroundColor,
                     ),
                     hintStyle: WidgetStateProperty.all(
                       GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_SECONDARY_COLOR,
+                          color: DesignConstants.secondaryTextColor,
                         ),
                       ),
                     ),
@@ -244,7 +245,7 @@ class _MapPageState extends State<MapPage> {
                       GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
-                          color: DesignConstants.TEXT_PRIMARY_COLOR,
+                          color: DesignConstants.primaryTextColor,
                         ),
                       ),
                     ),
@@ -254,10 +255,9 @@ class _MapPageState extends State<MapPage> {
                     onSubmitted: (value) {
                       if (value != "") {
                         Location? searchLocation = _locations.firstWhere(
-                          (loc) =>
-                              loc.name.toLowerCase().contains(
-                                value.toLowerCase(),
-                              ),
+                          (loc) => loc.name.toLowerCase().contains(
+                            value.toLowerCase(),
+                          ),
                           orElse:
                               () => Location(
                                 buildingName: "NF",
@@ -269,10 +269,9 @@ class _MapPageState extends State<MapPage> {
                         );
                         if (searchLocation.name == "NF") {
                           searchLocation = _locations.firstWhere(
-                            (loc) =>
-                                loc.buildingName.toLowerCase().contains(
-                                  value.toLowerCase(),
-                                ),
+                            (loc) => loc.buildingName.toLowerCase().contains(
+                              value.toLowerCase(),
+                            ),
                             orElse:
                                 () => Location(
                                   buildingName: "NF",
@@ -285,10 +284,9 @@ class _MapPageState extends State<MapPage> {
                         }
                         if (searchLocation.name == "NF") {
                           searchLocation = _locations.firstWhere(
-                            (loc) =>
-                                loc.locationType.toLowerCase().contains(
-                                  value.toLowerCase(),
-                                ),
+                            (loc) => loc.locationType.toLowerCase().contains(
+                              value.toLowerCase(),
+                            ),
                             orElse:
                                 () => Location(
                                   buildingName: "NF",
@@ -301,10 +299,9 @@ class _MapPageState extends State<MapPage> {
                         }
                         if (searchLocation.name == "NF") {
                           searchLocation = _locations.firstWhere(
-                            (loc) =>
-                                loc.currentEvent.toLowerCase().contains(
-                                  value.toLowerCase(),
-                                ),
+                            (loc) => loc.currentEvent.toLowerCase().contains(
+                              value.toLowerCase(),
+                            ),
                             orElse:
                                 () => Location(
                                   buildingName: "NF",
@@ -317,10 +314,9 @@ class _MapPageState extends State<MapPage> {
                         }
                         if (searchLocation.name == "NF") {
                           searchLocation = _locations.firstWhere(
-                            (loc) =>
-                                loc.description.toLowerCase().contains(
-                                  value.toLowerCase(),
-                                ),
+                            (loc) => loc.description.toLowerCase().contains(
+                              value.toLowerCase(),
+                            ),
                             orElse:
                                 () => Location(
                                   buildingName: "NF",
@@ -331,7 +327,7 @@ class _MapPageState extends State<MapPage> {
                                 ),
                           );
                         }
-                        
+
                         if (searchLocation.name != "NF") {
                           _onMarkerTapped(searchLocation);
                         }
@@ -344,10 +340,10 @@ class _MapPageState extends State<MapPage> {
                   child: IconButton(
                     onPressed: () {
                       setState(() {
-                        if (DesignConstants.MAP_TYPE != MapType.hybrid) {
-                          DesignConstants.MAP_TYPE = MapType.hybrid;
+                        if (DesignConstants.mapType != MapType.hybrid) {
+                          DesignConstants.mapType = MapType.hybrid;
                         } else {
-                          DesignConstants.MAP_TYPE = MapType.normal;
+                          DesignConstants.mapType = MapType.normal;
                         }
                       });
                     },
@@ -357,14 +353,14 @@ class _MapPageState extends State<MapPage> {
                     ),
                     padding: EdgeInsets.all(16),
                     color:
-                        DesignConstants.MAP_TYPE == MapType.hybrid
-                            ? DesignConstants.BACKGROUND_COLOR
-                            : DesignConstants.TEXT_PRIMARY_COLOR,
+                        DesignConstants.mapType == MapType.hybrid
+                            ? DesignConstants.backgroundColor
+                            : DesignConstants.primaryTextColor,
                     style: IconButton.styleFrom(
                       backgroundColor:
-                          DesignConstants.MAP_TYPE != MapType.hybrid
-                              ? DesignConstants.BACKGROUND_COLOR
-                              : DesignConstants.TEXT_PRIMARY_COLOR,
+                          DesignConstants.mapType != MapType.hybrid
+                              ? DesignConstants.backgroundColor
+                              : DesignConstants.primaryTextColor,
                       padding: EdgeInsets.all(4),
                     ),
                   ),
@@ -381,9 +377,9 @@ class _MapPageState extends State<MapPage> {
                       ),
                     ),
                     padding: EdgeInsets.all(16),
-                    color: DesignConstants.TEXT_PRIMARY_COLOR,
+                    color: DesignConstants.primaryTextColor,
                     style: IconButton.styleFrom(
-                      backgroundColor: DesignConstants.BACKGROUND_COLOR,
+                      backgroundColor: DesignConstants.backgroundColor,
                       padding: EdgeInsets.all(4),
                     ),
                   ),
@@ -418,7 +414,7 @@ class _MapPageState extends State<MapPage> {
               height: 10,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(25)),
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             const SizedBox(height: 25),
@@ -440,7 +436,7 @@ class _MapPageState extends State<MapPage> {
                               style: GoogleFonts.getFont(
                                 'Roboto Condensed',
                                 textStyle: TextStyle(
-                                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                  color: DesignConstants.primaryTextColor,
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -451,7 +447,7 @@ class _MapPageState extends State<MapPage> {
                               style: GoogleFonts.getFont(
                                 "Roboto Condensed",
                                 textStyle: TextStyle(
-                                  color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                  color: DesignConstants.secondaryTextColor,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -475,8 +471,7 @@ class _MapPageState extends State<MapPage> {
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color:
-                                          DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color: DesignConstants.secondaryTextColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -488,7 +483,7 @@ class _MapPageState extends State<MapPage> {
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -504,8 +499,7 @@ class _MapPageState extends State<MapPage> {
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color:
-                                          DesignConstants.TEXT_SECONDARY_COLOR,
+                                      color: DesignConstants.secondaryTextColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -517,7 +511,7 @@ class _MapPageState extends State<MapPage> {
                                   style: GoogleFonts.getFont(
                                     "Roboto Condensed",
                                     textStyle: TextStyle(
-                                      color: DesignConstants.TEXT_PRIMARY_COLOR,
+                                      color: DesignConstants.primaryTextColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -536,8 +530,7 @@ class _MapPageState extends State<MapPage> {
                                       "Roboto Condensed",
                                       textStyle: TextStyle(
                                         color:
-                                            DesignConstants
-                                                .TEXT_SECONDARY_COLOR,
+                                            DesignConstants.secondaryTextColor,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -548,8 +541,7 @@ class _MapPageState extends State<MapPage> {
                                     style: GoogleFonts.getFont(
                                       "Roboto Condensed",
                                       textStyle: TextStyle(
-                                        color:
-                                            DesignConstants.TEXT_PRIMARY_COLOR,
+                                        color: DesignConstants.primaryTextColor,
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -571,7 +563,7 @@ class _MapPageState extends State<MapPage> {
                         style: GoogleFonts.getFont(
                           "Roboto Condensed",
                           textStyle: TextStyle(
-                            color: DesignConstants.TEXT_SECONDARY_COLOR,
+                            color: DesignConstants.secondaryTextColor,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
@@ -583,7 +575,7 @@ class _MapPageState extends State<MapPage> {
                         style: GoogleFonts.getFont(
                           'Roboto Condensed',
                           textStyle: TextStyle(
-                            color: DesignConstants.TEXT_PRIMARY_COLOR,
+                            color: DesignConstants.primaryTextColor,
                             fontSize: 16,
                           ),
                         ),

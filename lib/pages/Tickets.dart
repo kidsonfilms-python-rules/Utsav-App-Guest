@@ -2,9 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:utsav_app/widgets/AnimatedCarouselIndicator.dart';
+import 'package:utsav_app/widgets/animated_carousel_indicator.dart';
 
 class TicketsPage extends StatefulWidget {
   const TicketsPage({super.key});
@@ -35,7 +35,7 @@ class _TicketsPageState extends State<TicketsPage> {
               style: GoogleFonts.getFont(
                 "Roboto Condensed",
                 textStyle: TextStyle(
-                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                  color: DesignConstants.primaryTextColor,
                   fontSize: 30,
                   fontStyle: FontStyle.normal,
                 ),
@@ -74,7 +74,7 @@ class _TicketsPageState extends State<TicketsPage> {
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                        color: DesignConstants.PRIMARY_CARD_COLOR,
+                        color: DesignConstants.primaryCardColor,
                         child: Container(
                           padding: EdgeInsets.all(10),
                           child: Column(
@@ -84,7 +84,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                 style: GoogleFonts.getFont(
                                   "Roboto Condensed",
                                   textStyle: TextStyle(
-                                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                                    color: DesignConstants.secondaryTextColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -105,7 +105,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                           Center(child: Text(error)),
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.sizeOf(context).width - 100,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                         textStyle: TextStyle(
                                           color:
                                               DesignConstants
-                                                  .TEXT_SECONDARY_COLOR,
+                                                  .secondaryTextColor,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
@@ -128,7 +128,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                         "Roboto Condensed",
                                         textStyle: TextStyle(
                                           color:
-                                              DesignConstants.TEXT_PRIMARY_COLOR,
+                                              DesignConstants.primaryTextColor,
                                           fontWeight: FontWeight.w800,
                                           fontSize: 30,
                                         ),
@@ -138,7 +138,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                 ),
                               ),
                               SizedBox(height: 20),
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.sizeOf(context).width - 100,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +155,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                             textStyle: TextStyle(
                                               color:
                                                   DesignConstants
-                                                      .TEXT_SECONDARY_COLOR,
+                                                      .secondaryTextColor,
                                               fontWeight: FontWeight.w800,
                                             ),
                                           ),
@@ -167,7 +167,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                             textStyle: TextStyle(
                                               color:
                                                   DesignConstants
-                                                      .TEXT_PRIMARY_COLOR,
+                                                      .primaryTextColor,
                                               fontWeight: FontWeight.w800,
                                             ),
                                           ),
@@ -185,7 +185,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                             textStyle: TextStyle(
                                               color:
                                                   DesignConstants
-                                                      .TEXT_SECONDARY_COLOR,
+                                                      .secondaryTextColor,
                                               fontWeight: FontWeight.w800,
                                             ),
                                           ),
@@ -197,7 +197,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                             textStyle: TextStyle(
                                               color:
                                                   DesignConstants
-                                                      .TEXT_PRIMARY_COLOR,
+                                                      .primaryTextColor,
                                               fontWeight: FontWeight.w800,
                                             ),
                                           ),
@@ -208,7 +208,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                 ),
                               ),
                               SizedBox(height: 20),
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.sizeOf(context).width - 100,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +220,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                         textStyle: TextStyle(
                                           color:
                                               DesignConstants
-                                                  .TEXT_SECONDARY_COLOR,
+                                                  .secondaryTextColor,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
@@ -231,7 +231,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                         "Roboto Condensed",
                                         textStyle: TextStyle(
                                           color:
-                                              DesignConstants.TEXT_PRIMARY_COLOR,
+                                              DesignConstants.primaryTextColor,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
@@ -240,7 +240,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                 ),
                               ),
                               SizedBox(height: 20),
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.sizeOf(context).width - 100,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,7 +252,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                         textStyle: TextStyle(
                                           color:
                                               DesignConstants
-                                                  .TEXT_SECONDARY_COLOR,
+                                                  .secondaryTextColor,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
@@ -263,7 +263,7 @@ class _TicketsPageState extends State<TicketsPage> {
                                         "Roboto Condensed",
                                         textStyle: TextStyle(
                                           color:
-                                              DesignConstants.TEXT_PRIMARY_COLOR,
+                                              DesignConstants.primaryTextColor,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -283,20 +283,21 @@ class _TicketsPageState extends State<TicketsPage> {
             AnimatedCarouselIndicator(
               itemCount: 4,
               activeIndex: _activeTicketView,
-              activeIndicatorColor: DesignConstants.TEXT_PRIMARY_COLOR,
-              inactiveIndicatorColor: DesignConstants.TEXT_SECONDARY_COLOR,
+              activeIndicatorColor: DesignConstants.primaryTextColor,
+              inactiveIndicatorColor: DesignConstants.secondaryTextColor,
               onDotTapped: _onDotTapped,
-            )
+            ),
           ],
         ),
-      Column(children: [
-        SizedBox(height: 50,),
-        Text(
+        Column(
+          children: [
+            SizedBox(height: 50),
+            Text(
               "TICKET OPTIONS",
               style: GoogleFonts.getFont(
                 "Roboto Condensed",
                 textStyle: TextStyle(
-                  color: DesignConstants.TEXT_PRIMARY_COLOR,
+                  color: DesignConstants.primaryTextColor,
                   fontSize: 30,
                   fontStyle: FontStyle.normal,
                 ),
@@ -304,15 +305,12 @@ class _TicketsPageState extends State<TicketsPage> {
               textAlign: TextAlign.center,
             ),
             Card(
-              color: DesignConstants.PRIMARY_CARD_COLOR,
-              child: ListBody(
-                children: [
-                  ListTile(title: Text("About Event"),)
-                ],
-              ),
-            )
-      ],)
-      ]
+              color: DesignConstants.primaryCardColor,
+              child: ListBody(children: [ListTile(title: Text("About Event"))]),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

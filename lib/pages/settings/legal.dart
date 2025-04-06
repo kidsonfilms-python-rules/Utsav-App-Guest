@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import 'package:markdown_widget/widget/markdown_block.dart';
-import 'package:utsav_app/util/DesignConstants.dart';
+import 'package:utsav_app/util/design_constants.dart';
 
 class AppLegalPage extends StatefulWidget {
-  const AppLegalPage({Key? key}) : super(key: key);
+  const AppLegalPage({super.key});
 
   @override
-  _AppLegalPageState createState() => _AppLegalPageState();
+  State<AppLegalPage> createState() => _AppLegalPageState();
 }
 
 class _AppLegalPageState extends State<AppLegalPage> {
@@ -133,184 +132,231 @@ If you have any questions regarding privacy while using the Application, or have
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: DesignConstants.BACKGROUND_COLOR,
+        backgroundColor: DesignConstants.backgroundColor,
         title: Text(
           "LEGAL",
-          style: GoogleFonts.getFont('Roboto Condensed',
-              fontWeight: FontWeight.w200,
-              textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR)),
+          style: GoogleFonts.getFont(
+            'Roboto Condensed',
+            fontWeight: FontWeight.w200,
+            textStyle: TextStyle(color: DesignConstants.primaryTextColor),
+          ),
         ),
-        foregroundColor: DesignConstants.TEXT_PRIMARY_COLOR,
+        foregroundColor: DesignConstants.primaryTextColor,
       ),
-      backgroundColor: DesignConstants.BACKGROUND_COLOR,
+      backgroundColor: DesignConstants.backgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(
-            top: 8.0, bottom: 8.0, left: 20.0, right: 20.0),
+          top: 8.0,
+          bottom: 8.0,
+          left: 20.0,
+          right: 20.0,
+        ),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  SizedBox(
-                    width: 250,
-                    child: Text(
-                      "By using the Utsav app, you agree to our Terms of Service",
-                      style: GoogleFonts.getFont('Roboto Condensed',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR)),
-                    ),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      HapticFeedback.heavyImpact();
-                      showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16.0),
-                                topRight: Radius.circular(16.0)),
-                          ),
-                          // backgroundColor: const Color.fromRGBO(29, 29, 29, 1),
-                          backgroundColor: Colors.transparent,
-                          barrierColor: Colors.transparent,
-                          context: context,
-                          builder: (context) {
-                            return ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20)),
-                                child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                      sigmaX: 20.0,
-                                      sigmaY: 20.0,
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: DesignConstants.TEXT_PRIMARY_COLOR,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                        border: Border.all(
-                                          color: Colors.black26,
-                                          width: 0.5,
-                                        ),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: MarkdownBlock(
-                                              selectable: true,
-                                              data: termsOfService,
-                                              config: MarkdownConfig.darkConfig,
-                                              ),
-                                        ),
-                                      ),
-                                    )));
-                          });
-                    },
-                    child: Text("VIEW >",
-                        style: GoogleFonts.getFont("Roboto Condensed",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: DesignConstants.TEXT_SECONDARY_COLOR)),
-                  ),
-                ],
-              ),
-              Text("TERMS OF SERVICE",
-                  style: GoogleFonts.getFont("Roboto Condensed",
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 250,
+                  child: Text(
+                    "By using the Utsav app, you agree to our Terms of Service",
+                    style: GoogleFonts.getFont(
+                      'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR)),
-              Container(
-                margin: const EdgeInsets.only(bottom: 15, top: 5),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                        color: Color.fromRGBO(155, 155, 155, 0.5), width: 1.0),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.heavyImpact();
+                    showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0),
+                        ),
+                      ),
+                      // backgroundColor: const Color.fromRGBO(29, 29, 29, 1),
+                      backgroundColor: Colors.transparent,
+                      barrierColor: Colors.transparent,
+                      context: context,
+                      builder: (context) {
+                        return ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 20.0,
+                              sigmaY: 20.0,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: DesignConstants.primaryTextColor,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                                border: Border.all(
+                                  color: Colors.black26,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: SingleChildScrollView(
+                                child: Container(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: MarkdownBlock(
+                                    selectable: true,
+                                    data: termsOfService,
+                                    config: MarkdownConfig.darkConfig,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    "VIEW >",
+                    style: GoogleFonts.getFont(
+                      "Roboto Condensed",
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: DesignConstants.secondaryTextColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              "TERMS OF SERVICE",
+              style: GoogleFonts.getFont(
+                "Roboto Condensed",
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: DesignConstants.secondaryTextColor,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 15, top: 5),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color.fromRGBO(155, 155, 155, 0.5),
+                    width: 1.0,
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 250,
-                    child: Text(
-                      "By using the Utsav app, you agree to our Privacy Policy",
-                      style: GoogleFonts.getFont('Roboto Condensed',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR)),
-                    ),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      HapticFeedback.heavyImpact();
-                      showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16.0),
-                                topRight: Radius.circular(16.0)),
-                          ),
-                          // backgroundColor: const Color.fromRGBO(29, 29, 29, 1),
-                          backgroundColor: Colors.transparent,
-                          barrierColor: Colors.transparent,
-                          context: context,
-                          builder: (context) {
-                            return ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20)),
-                                child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                      sigmaX: 20.0,
-                                      sigmaY: 20.0,
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: DesignConstants.TEXT_PRIMARY_COLOR,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                        border: Border.all(
-                                          color: Colors.black26,
-                                          width: 0.5,
-                                        ),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: MarkdownBlock(
-                                              selectable: true,
-                                              data: privacyPolicy),
-                                        ),
-                                      ),
-                                    )));
-                          });
-                    },
-                    child: Text("VIEW >",
-                        style: GoogleFonts.getFont("Roboto Condensed",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: DesignConstants.TEXT_SECONDARY_COLOR)),
-                  ),
-                ],
-              ),
-              Text("PRIVACY POLICY",
-                  style: GoogleFonts.getFont("Roboto Condensed",
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 250,
+                  child: Text(
+                    "By using the Utsav app, you agree to our Privacy Policy",
+                    style: GoogleFonts.getFont(
+                      'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR)),
-              Container(
-                margin: const EdgeInsets.only(bottom: 15, top: 5),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                        color: Color.fromRGBO(155, 155, 155, 0.5), width: 1.0),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.heavyImpact();
+                    showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0),
+                        ),
+                      ),
+                      // backgroundColor: const Color.fromRGBO(29, 29, 29, 1),
+                      backgroundColor: Colors.transparent,
+                      barrierColor: Colors.transparent,
+                      context: context,
+                      builder: (context) {
+                        return ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 20.0,
+                              sigmaY: 20.0,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: DesignConstants.primaryTextColor,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                                border: Border.all(
+                                  color: Colors.black26,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: SingleChildScrollView(
+                                child: Container(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: MarkdownBlock(
+                                    selectable: true,
+                                    data: privacyPolicy,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    "VIEW >",
+                    style: GoogleFonts.getFont(
+                      "Roboto Condensed",
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: DesignConstants.secondaryTextColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              "PRIVACY POLICY",
+              style: GoogleFonts.getFont(
+                "Roboto Condensed",
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: DesignConstants.secondaryTextColor,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 15, top: 5),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color.fromRGBO(155, 155, 155, 0.5),
+                    width: 1.0,
                   ),
                 ),
               ),
-              Row(
+            ),
+            Row(
               children: [
                 SizedBox(
                   width: 250,
@@ -320,7 +366,9 @@ If you have any questions regarding privacy while using the Application, or have
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
                     ),
                   ),
                 ),
@@ -355,7 +403,7 @@ If you have any questions regarding privacy while using the Application, or have
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.secondaryTextColor,
                     ),
                   ),
                 ),
@@ -367,7 +415,7 @@ If you have any questions regarding privacy while using the Application, or have
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
+                color: DesignConstants.secondaryTextColor,
               ),
             ),
             Container(
@@ -375,13 +423,14 @@ If you have any questions regarding privacy while using the Application, or have
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    color: DesignConstants.secondaryTextColor,
                     width: 1.0,
                   ),
                 ),
               ),
             ),
-            ]),
+          ],
+        ),
       ),
     );
   }

@@ -6,14 +6,14 @@ class BlinkingDot extends StatefulWidget {
   final Animation<double>? animation; // Optional external animation
 
   const BlinkingDot({
-    Key? key,
+    super.key,
     this.color = Colors.green,
     this.size = 8.0,
     this.animation,
-  }) : super(key: key);
+  });
 
   @override
-  _BlinkingDotState createState() => _BlinkingDotState();
+  State<BlinkingDot> createState() => _BlinkingDotState();
 }
 
 class _BlinkingDotState extends State<BlinkingDot>
