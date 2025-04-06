@@ -209,7 +209,7 @@ If you have any questions regarding privacy while using the Application, or have
                                     )));
                           });
                     },
-                    child: Text("SEE >",
+                    child: Text("VIEW >",
                         style: GoogleFonts.getFont("Roboto Condensed",
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
@@ -288,7 +288,7 @@ If you have any questions regarding privacy while using the Application, or have
                                     )));
                           });
                     },
-                    child: Text("SEE >",
+                    child: Text("VIEW >",
                         style: GoogleFonts.getFont("Roboto Condensed",
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
@@ -350,7 +350,7 @@ If you have any questions regarding privacy while using the Application, or have
                     );
                   },
                   child: Text(
-                    "SEE >",
+                    "VIEW >",
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,

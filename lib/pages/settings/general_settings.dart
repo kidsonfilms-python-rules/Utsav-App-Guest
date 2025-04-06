@@ -50,6 +50,10 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                   width: 25,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      width: 2,
+                    ),
                     color:
                         DesignConstants
                             .themeOptions[DesignConstants.chosenTheme]
@@ -119,7 +123,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                                           ),
                                         ),
                                         const SizedBox(height: 40),
-                                        Expanded(
+                                        Flexible(
                                           child: GridView.builder(
                                             itemCount:
                                                 DesignConstants
@@ -264,7 +268,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 SizedBox(
                   width: 250,
                   child: Text(
-                    "By using the Utsav app, you agree to our Terms of Service",
+                    "All Allowed",
                     style: GoogleFonts.getFont(
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
@@ -281,7 +285,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     HapticFeedback.heavyImpact();
                   },
                   child: Text(
-                    "SEE >",
+                    "CHANGE >",
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
@@ -293,7 +297,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               ],
             ),
             Text(
-              "TERMS OF SERVICE",
+              "NOTIFICATIONS",
               style: GoogleFonts.getFont(
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
@@ -317,7 +321,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 SizedBox(
                   width: 250,
                   child: Text(
-                    "By using the Utsav app, you agree to our Privacy Policy",
+                    "Off",
                     style: GoogleFonts.getFont(
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
@@ -334,7 +338,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     HapticFeedback.heavyImpact();
                   },
                   child: Text(
-                    "SEE >",
+                    "CHANGE >",
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
@@ -346,7 +350,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               ],
             ),
             Text(
-              "PRIVACY POLICY",
+              "DATA SAVING MODE",
               style: GoogleFonts.getFont(
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
@@ -355,7 +359,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(bottom: 15, top: 5),
+              margin: const EdgeInsets.only(bottom: 25, top: 5),
               decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
@@ -365,75 +369,27 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 250,
-                  child: Text(
-                    "See open-source licenses",
-                    style: GoogleFonts.getFont(
-                      'Roboto Condensed',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      textStyle: TextStyle(
-                        color: DesignConstants.TEXT_PRIMARY_COLOR,
-                      ),
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    HapticFeedback.heavyImpact();
-                    showLicensePage(
-                      context: context,
-                      applicationName: "The Utsav App",
-                      applicationLegalese: "DEVELOPED BY RAY ENTERPRISES",
-                      applicationIcon: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.network(
-                            "https://static.wixstatic.com/media/6aea32_fcf292bdcea4480ea69f57ea11fb57b7~mv2.png/v1/fill/w_129,h_195,al_c,lg_1,q_85,enc_avif,quality_auto/utsav_logo_edited.png",
-                            height: 70,
-                          ),
-                          SizedBox(height: 10),
-                          Image.asset(
-                            "assets/logos/Ray Enterprises Black.png",
-                            width: MediaQuery.of(context).size.width - 70,
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "SEE >",
-                    style: GoogleFonts.getFont(
-                      "Roboto Condensed",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Text(
-              "LICENSES",
-              style: GoogleFonts.getFont(
-                "Roboto Condensed",
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
-              ),
-            ),
             Container(
-              margin: const EdgeInsets.only(bottom: 15, top: 5),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
-                    width: 1.0,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              child: TextButton(
+                onPressed: () => {},
+                style: ButtonStyle(
+                  enableFeedback: true,
+                  foregroundColor: WidgetStateProperty.all(DesignConstants.RED),
+                  side: WidgetStateProperty.all(BorderSide(
+                    color: const Color.fromRGBO(255, 63, 63, 1),
+                    width: 2
+                  )),
+                  padding: WidgetStatePropertyAll(EdgeInsets.fromLTRB(55, 10, 55, 10))
+                ),
+                child: Text(
+                  "SIGN OUT",
+                  style: GoogleFonts.getFont(
+                    'Roboto Condensed',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    textStyle: TextStyle(color: const Color.fromRGBO(255, 63, 63, 1)),
                   ),
                 ),
               ),

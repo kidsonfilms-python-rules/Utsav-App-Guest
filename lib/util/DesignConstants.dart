@@ -10,6 +10,7 @@ class DesignConstants {
   static var TEXT_SECONDARY_COLOR = Color.fromARGB(255, 89, 89, 109);
   static var GREEN = Color.fromARGB(255, 69, 186, 105);
   static var DARK_GREEN = Color.fromARGB(255, 8, 134, 47);
+  static var RED = Color.fromARGB(255, 240, 85, 55);
 
   static var MAP_STYLE = '''[
     {

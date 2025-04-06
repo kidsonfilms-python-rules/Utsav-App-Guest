@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
 
-class AboutAppPage extends StatefulWidget {
-  const AboutAppPage({Key? key}) : super(key: key);
+class HelpPage extends StatefulWidget {
+  const HelpPage({Key? key}) : super(key: key);
 
   @override
-  _AboutAppPageState createState() => _AboutAppPageState();
+  _HelpPageState createState() => _HelpPageState();
 }
 
-class _AboutAppPageState extends State<AboutAppPage> {
-  _AboutAppPageState();
+class _HelpPageState extends State<HelpPage> {
+  _HelpPageState();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
         centerTitle: true,
         backgroundColor: DesignConstants.BACKGROUND_COLOR,
         title: Text(
-          "ABOUT APP",
+          "HELP",
           style: GoogleFonts.getFont(
             'Roboto Condensed',
             fontWeight: FontWeight.w200,
@@ -41,65 +41,12 @@ class _AboutAppPageState extends State<AboutAppPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network(
-                    "https://static.wixstatic.com/media/6aea32_fcf292bdcea4480ea69f57ea11fb57b7~mv2.png/v1/fill/w_129,h_195,al_c,lg_1,q_85,enc_avif,quality_auto/utsav_logo_edited.png",
-                    height: 70,
-                  ),
-                  SizedBox(height: 10),
-                  Image.asset(
-                    DesignConstants.themeOptions[DesignConstants.chosenTheme].isDark ? "assets/logos/Ray Enterprises White.png" : "assets/logos/Ray Enterprises Black.png",
-                    width: MediaQuery.of(context).size.width - 70,
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 300,
-                  child: Text(
-                    "The Utsav App and the EventX Platform is developed by and the sole property of Ray Enterprises.",
-                    style: GoogleFonts.getFont(
-                      'Roboto Condensed',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Text(
-              "ABOUT RAY ENTERPRISES",
-              style: GoogleFonts.getFont(
-                "Roboto Condensed",
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: DesignConstants.TEXT_SECONDARY_COLOR,
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 15, top: 5),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: DesignConstants.TEXT_SECONDARY_COLOR,
-                    width: 1.0,
-                  ),
-                ),
-              ),
-            ),
             Row(
               children: [
                 SizedBox(
                   width: 250,
                   child: Text(
-                    "See open-source licenses",
+                    "Report an issue with the event",
                     style: GoogleFonts.getFont(
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
@@ -112,41 +59,72 @@ class _AboutAppPageState extends State<AboutAppPage> {
                 GestureDetector(
                   onTap: () {
                     HapticFeedback.heavyImpact();
-                    showLicensePage(
-                      context: context,
-                      applicationName: "The Utsav App",
-                      applicationLegalese: "DEVELOPED BY RAY ENTERPRISES",
-                      applicationIcon: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.network(
-                            "https://static.wixstatic.com/media/6aea32_fcf292bdcea4480ea69f57ea11fb57b7~mv2.png/v1/fill/w_129,h_195,al_c,lg_1,q_85,enc_avif,quality_auto/utsav_logo_edited.png",
-                            height: 70,
-                          ),
-                          SizedBox(height: 10),
-                          Image.asset(
-                            "assets/logos/Ray Enterprises Black.png",
-                            width: MediaQuery.of(context).size.width - 70,
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    );
                   },
                   child: Text(
-                    "VIEW >",
+                    "REPORT >",
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                      color: DesignConstants.RED,
                     ),
                   ),
                 ),
               ],
             ),
             Text(
-              "LICENSES",
+              "EVENT ISSUES",
+              style: GoogleFonts.getFont(
+                "Roboto Condensed",
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: DesignConstants.TEXT_SECONDARY_COLOR,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 15, top: 5),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    "Report a bug with the app",
+                    style: GoogleFonts.getFont(
+                      'Roboto Condensed',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      textStyle: TextStyle(color: DesignConstants.TEXT_PRIMARY_COLOR),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.heavyImpact();
+                  },
+                  child: Text(
+                    "REPORT >",
+                    style: GoogleFonts.getFont(
+                      "Roboto Condensed",
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: DesignConstants.RED,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              "BUGS",
               style: GoogleFonts.getFont(
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
@@ -170,7 +148,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
                 SizedBox(
                   width: 250,
                   child: Text(
-                    "Build Version",
+                    "Email us if you still need help.",
                     style: GoogleFonts.getFont(
                       'Roboto Condensed',
                       fontWeight: FontWeight.w400,
@@ -180,10 +158,24 @@ class _AboutAppPageState extends State<AboutAppPage> {
                   ),
                 ),
                 const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.heavyImpact();
+                  },
+                  child: Text(
+                    "OPEN >",
+                    style: GoogleFonts.getFont(
+                      "Roboto Condensed",
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: DesignConstants.TEXT_SECONDARY_COLOR,
+                    ),
+                  ),
+                ),
               ],
             ),
             Text(
-              "0.122.1 17165742",
+              "CONTACT US",
               style: GoogleFonts.getFont(
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,
