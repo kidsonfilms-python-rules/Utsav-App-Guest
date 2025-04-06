@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utsav_app/pages/Announcements.dart';
 import 'package:utsav_app/pages/Home.dart';
 import 'package:utsav_app/pages/Map.dart';
@@ -11,17 +12,23 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
-  runApp(const MyApp());
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  runApp(MyApp(prefs));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences prefs;
+  const MyApp(this.prefs, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    int? theme = prefs.getInt("THEME");
+    if (theme != DesignConstants.chosenTheme && theme != null) {
+      DesignConstants.chosenTheme = theme;
+      DesignConstants.updateTheme();
+    }
+    
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

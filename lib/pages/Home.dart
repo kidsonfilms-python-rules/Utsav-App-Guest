@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:utsav_app/pages/Settings.dart';
 import 'package:utsav_app/util/DesignConstants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -37,6 +38,78 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             textAlign: TextAlign.center,
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton.icon(
+                  onPressed:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (BuildContext context) => const SettingsPage(),
+                        ),
+                      ),
+                  label: Text(
+                    "SETTINGS",
+                    style: GoogleFonts.getFont(
+                      "Roboto Condensed",
+                      textStyle: TextStyle(
+                        color: DesignConstants.TEXT_PRIMARY_COLOR,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                  ),
+                  icon: Icon(FontAwesomeIcons.gear),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                      DesignConstants.PRIMARY_CARD_COLOR,
+                    ),
+                    iconColor: WidgetStateProperty.all(
+                      DesignConstants.TEXT_PRIMARY_COLOR,
+                    ),
+                    iconSize: WidgetStateProperty.all(25),
+                  ),
+                ),
+                Spacer(),
+                TextButton.icon(
+                  onPressed:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (BuildContext context) => const SettingsPage(),
+                        ),
+                      ),
+                  label: Text(
+                    "PROFILE",
+                    style: GoogleFonts.getFont(
+                      "Roboto Condensed",
+                      textStyle: TextStyle(
+                        color: DesignConstants.TEXT_PRIMARY_COLOR,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                  ),
+                  icon: Icon(FontAwesomeIcons.solidCircleUser),
+                  style: ButtonStyle(
+                    
+                    backgroundColor: WidgetStateProperty.all(
+                      DesignConstants.PRIMARY_CARD_COLOR,
+                    ),
+                    iconColor: WidgetStateProperty.all(
+                      DesignConstants.TEXT_PRIMARY_COLOR,
+                    ),
+                    iconSize: WidgetStateProperty.all(25),
+                  ),
+                ),
+              ],
+            ),
           ),
           GestureDetector(
             onTap: () => widget.navigateToPage(3),
@@ -88,7 +161,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           GestureDetector(
-          onTap: () => widget.navigateToPage(1),
+            onTap: () => widget.navigateToPage(1),
             child: Card(
               color: DesignConstants.PRIMARY_CARD_COLOR,
               margin: EdgeInsets.all(20),

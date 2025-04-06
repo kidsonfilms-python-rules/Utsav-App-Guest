@@ -45,6 +45,8 @@ dependencies:
   sliding_up_panel2: ^3.3.0+1
   mapbox_maps_flutter: ^2.6.1
   smooth_page_indicator: ^1.2.1
+  markdown_widget: ^2.3.2+6
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -69,9 +71,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/logos/Ray Enterprises White.png
+    - assets/logos/Ray Enterprises Black.png
   #   - images/a_dot_ham.jpeg
+  
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
