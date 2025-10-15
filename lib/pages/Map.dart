@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:utsav_app/util/design_constants.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
   final String? autoSelectMarkerId;
@@ -15,11 +18,21 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final Set<Marker> _markers = {};
-  String _mapStyle = '';
-  Location? _selectedLocation;
   late PanelController _panelController;
-  GoogleMapController? _mapController;
+  Location? _selectedLocation;
+  MapboxMap? mapboxMap;
+  double _panelPosition = 0;
+
+  CameraOptions initCamera = CameraOptions(
+    center: Point(coordinates: Position(-121.22430823733487, 38.690377656961)),
+    zoom: 19,
+    bearing: 0,
+    pitch: 0,
+  );
+
+  PointAnnotation? pointAnnotation;
+  PointAnnotationManager? pointAnnotationManager;
+
   // We'll store the list of locations so we can reference them.
   final List<Location> _locations = [];
 
@@ -27,16 +40,34 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _panelController = PanelController();
-    _loadMapStyle();
-    _setMarkers();
   }
 
-  void _loadMapStyle() {
-    _mapStyle = DesignConstants.mapStyle;
+  void _onMarkerTapped(Location location) {
+    setState(() {
+      _selectedLocation = location;
+    });
+    _panelController.open();
   }
 
-  void _setMarkers() {
-    // Define a list of locations with full attributes.
+  void _onPanelClosed() {
+    setState(() {});
+  }
+
+  void _defaultMapStyleChanges() async {
+    mapboxMap?.style.setStyleImportConfigProperty(
+      "basemap",
+      "lightPreset",
+      "night",
+    );
+
+    await mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
+    await mapboxMap?.compass.updateSettings(CompassSettings(enabled: false));
+  }
+
+  _onMapCreated(MapboxMap mapboxMap) {
+    this.mapboxMap = mapboxMap;
+    _defaultMapStyleChanges();
+
     final List<Location> locations = [
       Location(
         name: "Cafeteria",
@@ -78,96 +109,72 @@ class _MapPageState extends State<MapPage> {
     _locations.clear();
     _locations.addAll(locations);
 
-    // Create markers from the locations.
-    for (var location in locations) {
-      final Marker marker = Marker(
-        markerId: MarkerId(location.name),
-        position: location.position,
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-        // Disable default info window
-        infoWindow: const InfoWindow(title: '', snippet: ''),
-        onTap: () {
-          _onMarkerTapped(location);
-        },
-      );
-      _markers.add(marker);
-    }
+    mapboxMap.annotations.createPointAnnotationManager().then((value) {
+      pointAnnotationManager = value;
 
-    setState(() {});
+      rootBundle.load('assets/icons/Map Pin.png').then((bytes) {
+        final Uint8List imageData = bytes.buffer.asUint8List();
 
-    // If an auto-select marker id is provided, try to auto-select it.
-    if (widget.autoSelectMarkerId != null) {
-      // ignore: unnecessary_nullable_for_final_variable_declarations
-      final Location? autoLocation = _locations.firstWhere(
-        (loc) =>
-            loc.name.toLowerCase() == widget.autoSelectMarkerId!.toLowerCase(),
-        // orElse: () => null,
-      );
-      if (autoLocation != null) {
-        // Delay a little to ensure the map is rendered
-        Future.delayed(const Duration(milliseconds: 300), () {
-          _onMarkerTapped(autoLocation);
-        });
-      }
-    }
-  }
+        for (var i = 0; i < locations.length; i++) {
+          pointAnnotationManager
+              ?.create(
+                PointAnnotationOptions(
+                  geometry: Point(
+                    coordinates: Position(
+                      locations[i].position.longitude,
+                      locations[i].position.latitude,
+                      100,
+                    ),
+                  ),
+                  image: imageData,
+                  iconSize: 1.5,
+                ),
+              )
+              .then((a) {
+                locations[i].id = a.id;
+              });
+        }
 
-  Marker? currentGreenMarker;
-  void _onMarkerTapped(Location location) {
-    setState(() {
-      // Reset all markers to blue
-      if (currentGreenMarker != null) {
-        _markers.add(
-          Marker(
-            markerId: currentGreenMarker!.markerId,
-            position: currentGreenMarker!.position,
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueBlue,
-            ),
-            infoWindow: currentGreenMarker!.infoWindow,
-            onTap: currentGreenMarker!.onTap,
-          ),
+        // rootBundle.load('assets/icons/Map Pin Selected.png').then((bytes2) {
+        //   final Uint8List imageData2 = bytes2.buffer.asUint8List();
+        pointAnnotationManager?.tapEvents(
+          onTap: (annotation) {
+            // ignore: avoid_print
+            print("onAnnotationClick, id: ${annotation.id}");
+            _onMarkerTapped(
+              locations.firstWhere(
+                (loc) => loc.id == annotation.id,
+                orElse:
+                    () => Location(
+                      buildingName: "NF",
+                      name: "NF",
+                      locationType: "NF",
+                      description: "NF",
+                      position: LatLng(0, 0),
+                    ),
+              ),
+            );
+          },
         );
-        _markers.remove(currentGreenMarker);
-      }
-      // Set the tapped marker to green
-      currentGreenMarker = Marker(
-        markerId: MarkerId(location.name),
-        position: location.position,
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-        // infoWindow: InfoWindow(
-        //   title: location.name,
-        //   snippet: location.description,
-        // ),
-        onTap: () {
-          _onMarkerTapped(location);
-        },
-      );
-      _markers.add(currentGreenMarker!);
-      _selectedLocation = location;
-    });
-    _panelController.open();
-  }
-
-  void _onPanelClosed() {
-    setState(() {
-      _markers.add(
-        Marker(
-          markerId: currentGreenMarker!.markerId,
-          position: currentGreenMarker!.position,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          infoWindow: currentGreenMarker!.infoWindow,
-          onTap: currentGreenMarker!.onTap,
-        ),
-      );
-      _markers.remove(currentGreenMarker);
-      currentGreenMarker = null;
-      _selectedLocation = null;
+        // });
+        // circleAnnotationManager?.longPressEvents(
+        //   onLongPress: (annotation) {
+        //     // ignore: avoid_print
+        //     print("onAnnotationLongPress, id: ${annotation.id}");
+        //   },
+        // );
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final double panelMaxHeight = MediaQuery.of(context).size.height * 0.4;
+    final double logoWidth = 90.0;
+    final double logoLeft = 16.0;
+    final double logoClosedBottom = 90.0; // bottom offset when closed
+    final double logoAbovePanelOffset = -5.0; // distance above panel when open
+
     return SlidingUpPanel(
       controller: _panelController,
       minHeight: 0,
@@ -175,6 +182,9 @@ class _MapPageState extends State<MapPage> {
       snapPoint: 0.4,
       panelSnapping: true,
       panelBuilder: () => _buildPanel(),
+      onPanelSlide: (pos) {
+        setState(() => _panelPosition = pos);
+      },
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(25.0),
         topRight: Radius.circular(25.0),
@@ -183,35 +193,12 @@ class _MapPageState extends State<MapPage> {
       color: DesignConstants.backgroundColor,
       body: Stack(
         children: [
-          GoogleMap(
-            style: _mapStyle,
-            onMapCreated: (controller) {
-              _mapController = controller;
-              // Optionally, you can animate the camera to the selected location if autoSelect is enabled.
-              if (widget.autoSelectMarkerId != null &&
-                  _selectedLocation != null) {
-                _mapController?.animateCamera(
-                  CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                      target: _selectedLocation!.position,
-                      zoom: 19.0,
-                      tilt: 45,
-                    ),
-                  ),
-                );
-              }
-            },
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(38.690377656961, -121.22430823733487),
-              tilt: 45,
-              zoom: 19.0,
-            ),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            mapType: DesignConstants.mapType,
-            zoomControlsEnabled: false,
-            compassEnabled: false,
-            markers: _markers,
+          MapWidget(
+            cameraOptions: initCamera,
+            textureView: true,
+            styleUri:
+                "mapbox://styles/thesiddharthray/cmgrk2b03005g01sq2qgjhq42",
+            onMapCreated: _onMapCreated,
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(16, 45, 16, 0),
@@ -338,7 +325,7 @@ class _MapPageState extends State<MapPage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
                   child: IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       setState(() {
                         if (DesignConstants.mapType != MapType.hybrid) {
                           DesignConstants.mapType = MapType.hybrid;
@@ -346,6 +333,12 @@ class _MapPageState extends State<MapPage> {
                           DesignConstants.mapType = MapType.normal;
                         }
                       });
+                      await mapboxMap!.loadStyleURI(
+                        DesignConstants.mapType == MapType.normal
+                            ? "mapbox://styles/thesiddharthray/cmgrk2b03005g01sq2qgjhq42"
+                            : MapboxStyles.STANDARD_SATELLITE,
+                      );
+                      _defaultMapStyleChanges();
                     },
                     icon: Padding(
                       padding: EdgeInsets.all(12),
@@ -385,6 +378,27 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
               ],
+            ),
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 120),
+            // curve: Curves.easeOut,
+            curve: Curves.linear,
+            left: logoLeft,
+            bottom: logoClosedBottom,
+            // (_panelPosition * (panelMaxHeight + logoAbovePanelOffset)),
+            child: IgnorePointer(
+              ignoring: true,
+              child: SafeArea(
+                child: Opacity(
+                  opacity: 0.4,
+                  child: Image.network(
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Mapbox_logo_2019.svg/640px-Mapbox_logo_2019.svg.png',
+                    width: logoWidth,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -599,6 +613,7 @@ class Location {
   final String description;
   final LatLng position;
   final String currentEvent;
+  String? id;
 
   Location({
     required this.name,
@@ -607,5 +622,6 @@ class Location {
     required this.description,
     required this.position,
     this.currentEvent = "None",
+    this.id = "NONE",
   });
 }

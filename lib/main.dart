@@ -9,11 +9,21 @@ import 'package:utsav_app/pages/schedule.dart';
 import 'package:utsav_app/pages/tickets.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  try {
+    await dotenv.load(fileName: ".env"); // Load environment variables
+  } catch (e) {
+    throw Exception('Error loading .env file: $e'); // Print error if any
+  }
+  String MAPBOX_ACCESS_TOKEN = dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? 'CANT FIND';
+  print("MAPBOX TOKEN: $MAPBOX_ACCESS_TOKEN");
+  MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
   runApp(MyApp(prefs));
 }
 
