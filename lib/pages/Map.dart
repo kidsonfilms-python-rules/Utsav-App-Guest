@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,7 +19,11 @@ class _MapPageState extends State<MapPage> {
   late PanelController _panelController;
   Location? _selectedLocation;
   MapboxMap? mapboxMap;
-  double _panelPosition = 0;
+  // Class-level variables to store the overlay IDs
+  String? _floorplanLayerId;
+
+  final LightState _lightTimeState = LightState.dusk;
+  LightState _lightState = LightState.dusk;
 
   CameraOptions initCamera = CameraOptions(
     center: Point(coordinates: Position(-121.22430823733487, 38.690377656961)),
@@ -64,7 +66,7 @@ class _MapPageState extends State<MapPage> {
     await mapboxMap?.compass.updateSettings(CompassSettings(enabled: false));
   }
 
-  _onMapCreated(MapboxMap mapboxMap) {
+  _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
     _defaultMapStyleChanges();
 
@@ -165,15 +167,115 @@ class _MapPageState extends State<MapPage> {
         // );
       });
     });
+
+    // Add your overlay source and layer here
+    await _addFloorplanOverlay();
+
+    // Now that layer exists, set up the zoom listener
+    mapboxMap.onMapZoomListener = (x) {
+      _onMapZoom(x);
+    };
+  }
+
+  // --------------------------
+  // Listen to camera changes to update opacity
+  // --------------------------
+  void _onMapZoom(MapContentGestureContext mcgc) async {
+    if (mapboxMap == null || _floorplanLayerId == null) return;
+
+    final CameraState cameraState = await mapboxMap!.getCameraState();
+    final double zoom = cameraState.zoom;
+
+    double opacity;
+    if (zoom < 19) {
+      opacity = 0.0;
+    } else if (zoom >= 19 && zoom <= 20) {
+      opacity = 0.8 * ((zoom - 19) / 2.0);
+    } else {
+      opacity = 0.8;
+    }
+
+    print("ZOOOOOM $opacity $zoom");
+
+    // ✅ Check that layer exists before applying property
+    final bool layerExists = await mapboxMap!.style.styleLayerExists(
+      _floorplanLayerId!,
+    );
+    if (layerExists) {
+      try {
+        await mapboxMap!.style.setStyleLayerProperty(
+          _floorplanLayerId!,
+          "raster-opacity",
+          opacity,
+        );
+      } catch (e) {
+        print("⚠️ Failed to set layer opacity: $e");
+      }
+    } else {
+      print(
+        "⚠️ Layer ${_floorplanLayerId!} not yet ready, skipping opacity update.",
+      );
+    }
+
+    // optional lighting adjustments
+    if (opacity >= 0.45 && _lightState != LightState.night) {
+      mapboxMap!.style.setStyleImportConfigProperty(
+        "basemap",
+        "lightPreset",
+        "night",
+      );
+      _lightState = LightState.night;
+    } else if (opacity < 0.45 && _lightState == LightState.night) {
+      mapboxMap!.style.setStyleImportConfigProperty(
+        "basemap",
+        "lightPreset",
+        _lightTimeState.name,
+      );
+      _lightState = _lightTimeState;
+    }
+  }
+
+  String? _floorplanSourceId;
+
+  Future<void> _addFloorplanOverlay() async {
+    if (mapboxMap == null) return;
+
+    _floorplanSourceId = "floorplan-raster-source";
+    _floorplanLayerId = "floorplan-raster-layer";
+
+    final corners = [
+      [-121.22439494461875, 38.690640533370846], // top-left 38.690640533370846, -121.22439494461875
+      [-121.22395370205517, 38.69036969409656], // top-right 38.69036969409656, -121.22395370205517
+      [-121.22422125238931, 38.69011637297282], // bottom-right 38.69011637297282, -121.22422125238931
+      [-121.22468793061434, 38.69039269638518], // bottom-left 38.69039269638518, -121.22468793061434
+    ];
+
+    // Add image source
+    await mapboxMap!.style.addSource(
+      ImageSource(
+        id: _floorplanSourceId!,
+        url: "https://siddharthray.com/cdn/Internal Map OCC.png", // TODO: replace later
+        coordinates: corners,
+      ),
+    );
+
+    // Add raster layer using that source
+    await mapboxMap!.style.addLayer(
+      RasterLayer(
+        id: _floorplanLayerId!,
+        sourceId: _floorplanSourceId!,
+        rasterOpacity: 0.0,
+      ),
+    );
+
+    print("✅ Floorplan overlay added to style");
   }
 
   @override
   Widget build(BuildContext context) {
-    final double panelMaxHeight = MediaQuery.of(context).size.height * 0.4;
     final double logoWidth = 90.0;
     final double logoLeft = 16.0;
     final double logoClosedBottom = 90.0; // bottom offset when closed
-    final double logoAbovePanelOffset = -5.0; // distance above panel when open
 
     return SlidingUpPanel(
       controller: _panelController,
@@ -182,9 +284,7 @@ class _MapPageState extends State<MapPage> {
       snapPoint: 0.4,
       panelSnapping: true,
       panelBuilder: () => _buildPanel(),
-      onPanelSlide: (pos) {
-        setState(() => _panelPosition = pos);
-      },
+      onPanelSlide: (pos) {},
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(25.0),
         topRight: Radius.circular(25.0),
@@ -199,6 +299,7 @@ class _MapPageState extends State<MapPage> {
             styleUri:
                 "mapbox://styles/thesiddharthray/cmgrk2b03005g01sq2qgjhq42",
             onMapCreated: _onMapCreated,
+            onZoomListener: (x) => _onMapZoom(x),
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(16, 45, 16, 0),
@@ -625,3 +726,5 @@ class Location {
     this.id = "NONE",
   });
 }
+
+enum LightState { day, night, dusk, dawn }

@@ -21,8 +21,8 @@ Future<void> main() async {
   } catch (e) {
     throw Exception('Error loading .env file: $e'); // Print error if any
   }
+  // ignore: non_constant_identifier_names
   String MAPBOX_ACCESS_TOKEN = dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? 'CANT FIND';
-  print("MAPBOX TOKEN: $MAPBOX_ACCESS_TOKEN");
   MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
   runApp(MyApp(prefs));
 }
