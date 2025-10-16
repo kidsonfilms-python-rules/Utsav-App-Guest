@@ -180,7 +180,7 @@ class _MapPageState extends State<MapPage> {
   // --------------------------
   // Listen to camera changes to update opacity
   // --------------------------
-  void _onMapZoom(MapContentGestureContext mcgc) async {
+  void _onMapZoom(MapContentGestureContext? mcgc) async {
     if (mapboxMap == null || _floorplanLayerId == null) return;
 
     final CameraState cameraState = await mapboxMap!.getCameraState();
@@ -194,8 +194,6 @@ class _MapPageState extends State<MapPage> {
     } else {
       opacity = 0.8;
     }
-
-    print("ZOOOOOM $opacity $zoom");
 
     // ✅ Check that layer exists before applying property
     final bool layerExists = await mapboxMap!.style.styleLayerExists(
@@ -244,17 +242,30 @@ class _MapPageState extends State<MapPage> {
     _floorplanLayerId = "floorplan-raster-layer";
 
     final corners = [
-      [-121.22441280930384, 38.69064536788592], // top-left 38.69064536788592, -121.22441280930384
-      [-121.22396736256658, 38.69035874824386], // top-right 38.69035874824386, -121.22396736256658
-      [-121.22421847843263, 38.69012039014122], // bottom-right 38.69012039014122, -121.22421847843263
-      [-121.2246639251699, 38.690406025789684], // bottom-left 38.690406025789684, -121.2246639251699
+      [
+        -121.22441280930384,
+        38.69064536788592,
+      ], // top-left 38.69064536788592, -121.22441280930384
+      [
+        -121.22396736256658,
+        38.69035874824386,
+      ], // top-right 38.69035874824386, -121.22396736256658
+      [
+        -121.22421847843263,
+        38.69012039014122,
+      ], // bottom-right 38.69012039014122, -121.22421847843263
+      [
+        -121.2246639251699,
+        38.690406025789684,
+      ], // bottom-left 38.690406025789684, -121.2246639251699
     ];
 
     // Add image source
     await mapboxMap!.style.addSource(
       ImageSource(
         id: _floorplanSourceId!,
-        url: "https://siddharthray.com/cdn/Internal Map OCC.png", // TODO: replace later
+        url:
+            "https://siddharthray.com/cdn/Internal Map OCC.png", // TODO: replace later
         coordinates: corners,
       ),
     );
@@ -268,7 +279,16 @@ class _MapPageState extends State<MapPage> {
       ),
     );
 
-    print("✅ Floorplan overlay added to style");
+    print("Floorplan overlay added to style");
+  }
+
+  Future<void> _reloadFloorplanOverlay() async {
+    if (mapboxMap == null) return;
+
+    // Re-add the floorplan overlay
+    await _addFloorplanOverlay();
+
+    _onMapZoom(null); // optionally pass dummy context
   }
 
   @override
@@ -440,6 +460,9 @@ class _MapPageState extends State<MapPage> {
                             : MapboxStyles.STANDARD_SATELLITE,
                       );
                       _defaultMapStyleChanges();
+                      final bool rasterExists = await mapboxMap!.style
+                          .styleLayerExists(_floorplanLayerId!);
+                      if (!rasterExists) await _reloadFloorplanOverlay();
                     },
                     icon: Padding(
                       padding: EdgeInsets.all(12),
