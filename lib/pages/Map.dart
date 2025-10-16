@@ -21,6 +21,8 @@ class _MapPageState extends State<MapPage> {
   MapboxMap? mapboxMap;
   // Class-level variables to store the overlay IDs
   String? _floorplanLayerId;
+  bool _isMapLoading = true;
+  bool _showLoader = true; // controls whether loader is in the widget tree
 
   final LightState _lightTimeState = LightState.dusk;
   LightState _lightState = LightState.dusk;
@@ -165,6 +167,17 @@ class _MapPageState extends State<MapPage> {
         //     print("onAnnotationLongPress, id: ${annotation.id}");
         //   },
         // );
+        Future.delayed(const Duration(milliseconds: 300), () {
+  if (!mounted) return;
+
+  setState(() => _isMapLoading = false); // start fade out
+
+  // Remove loader from tree after fade duration
+  Future.delayed(const Duration(milliseconds: 500), () {
+    if (!mounted) return;
+    setState(() => _showLoader = false);
+  });
+});
       });
     });
 
@@ -321,6 +334,38 @@ class _MapPageState extends State<MapPage> {
             onMapCreated: _onMapCreated,
             onZoomListener: (x) => _onMapZoom(x),
           ),
+          // Loader overlay
+          if (_showLoader)
+  AnimatedOpacity(
+    opacity: _isMapLoading ? 1.0 : 0.0,
+    duration: const Duration(milliseconds: 500),
+    curve: Curves.easeInOut,
+    child: Container(
+      color: Color.fromARGB(255, 88, 109, 104),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: DesignConstants.primaryTextColor,
+            ),
+            SizedBox(height: 15),
+            Text(
+              "LOADING EVENT MAP",
+              style: GoogleFonts.getFont(
+                'Roboto Condensed',
+                textStyle: TextStyle(
+                  color: DesignConstants.primaryTextColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
           Padding(
             padding: EdgeInsets.fromLTRB(16, 45, 16, 0),
             child: Row(
