@@ -128,15 +128,27 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      // onWillPop: _onWillPop,
+      canPop: _pageStack.length <= 1, // Allow system pop only if no history
+  onPopInvokedWithResult: (didPop, result) async {
+    // Only handle pop manually if Flutter didn’t handle it
+    if (!didPop) {
+      final shouldPop = await _onWillPop();
+      if (shouldPop && context.mounted) {
+        // If at root, exit app
+        SystemNavigator.pop();
+      }
+    }
+  },
       child: Scaffold(
         backgroundColor: DesignConstants.backgroundColor,
         bottomNavigationBar: GNav(
           key: const PageStorageKey('bottom_nav_bar'),
+          padding: EdgeInsets.fromLTRB(24, 12, 24, 24),
           selectedIndex: _selectedTab,
           haptic: true,
-          color: const Color.fromARGB(255, 120, 120, 120),
+          color: const Color.fromARGB(255, 114, 114, 117),
           activeColor: Colors.white,
           iconSize: 22,
           backgroundColor: DesignConstants.primaryCardColor,

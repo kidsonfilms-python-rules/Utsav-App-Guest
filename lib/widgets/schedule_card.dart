@@ -231,15 +231,19 @@ class _ExpandableCardState extends State<ExpandableCard>
                                     ),
                                   );
                                   // Handle delete action
-                                  MainSnackbar(
-                                    message: 'Copied!',
-                                    icon: Icon(
-                                      FontAwesomeIcons.check,
-                                      color: DesignConstants.green,
-                                    ),
-                                    // showNewIndicator: true
-                                  ).show(context);
-                                  Navigator.of(context).pop();
+                                  if (context.mounted) {
+                                    MainSnackbar(
+                                      message: 'Copied!',
+                                      icon: Icon(
+                                        FontAwesomeIcons.check,
+                                        color: DesignConstants.green,
+                                      ),
+                                      // showNewIndicator: true
+                                    ).show(context);
+                                  }
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+                                  }
                                 },
                               ),
                             ],
@@ -278,6 +282,7 @@ class _ExpandableCardState extends State<ExpandableCard>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GestureDetector(
       onTap: _handleTap,
       onLongPress: () => _showOptionsModal(context),

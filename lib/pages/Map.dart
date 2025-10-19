@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:flutter/foundation.dart';
 
 class MapPage extends StatefulWidget {
   final String? autoSelectMarkerId;
@@ -102,15 +103,17 @@ class _MapPageState extends State<MapPage> {
       pitch: 0,
     );
 
-      try {
-        await mapboxMap!.easeTo(
-          cameraTo,
-          MapAnimationOptions(duration: 500, startDelay: 0),
-        );
-      } catch (e2) {
-        // As a last resort, log the error and continue — selection is visible via panel
-        print("Warning: failed to move camera programmatically: $e2");
+    try {
+      await mapboxMap!.easeTo(
+        cameraTo,
+        MapAnimationOptions(duration: 500, startDelay: 0),
+      );
+    } catch (e2) {
+      // As a last resort, log the error and continue — selection is visible via panel
+      if (kDebugMode) {
+        debugPrint("Warning: failed to move camera programmatically: $e2");
       }
+    }
   }
 
   void _onPanelClosed() {
@@ -203,8 +206,9 @@ class _MapPageState extends State<MapPage> {
         //   final Uint8List imageData2 = bytes2.buffer.asUint8List();
         pointAnnotationManager?.tapEvents(
           onTap: (annotation) {
-            // ignore: avoid_print
-            print("onAnnotationClick, id: ${annotation.id}");
+            if (kDebugMode) {
+              debugPrint("onAnnotationClick, id: ${annotation.id}");
+            }
             _onMarkerTapped(
               locations.firstWhere(
                 (loc) => loc.id == annotation.id,
@@ -223,8 +227,7 @@ class _MapPageState extends State<MapPage> {
         // });
         // circleAnnotationManager?.longPressEvents(
         //   onLongPress: (annotation) {
-        //     // ignore: avoid_print
-        //     print("onAnnotationLongPress, id: ${annotation.id}");
+        //     debugPrint("onAnnotationLongPress, id: ${annotation.id}");
         //   },
         // );
 
@@ -254,8 +257,8 @@ class _MapPageState extends State<MapPage> {
         }
 
         // Add your overlay source and layer here
-    await _addFloorplanOverlay();
-        
+        await _addFloorplanOverlay();
+
         Future.delayed(const Duration(milliseconds: 000), () {
           if (!mounted) return;
 
@@ -307,12 +310,16 @@ class _MapPageState extends State<MapPage> {
           opacity,
         );
       } catch (e) {
-        print("⚠️ Failed to set layer opacity: $e");
+        if (kDebugMode) {
+          debugPrint("Failed to set layer opacity: $e");
+        }
       }
     } else {
-      print(
-        "⚠️ Layer ${_floorplanLayerId!} not yet ready, skipping opacity update.",
-      );
+      if (kDebugMode) {
+        debugPrint(
+          "Layer ${_floorplanLayerId!} not yet ready, skipping opacity update.",
+        );
+      }
     }
 
     // optional lighting adjustments
@@ -364,8 +371,7 @@ class _MapPageState extends State<MapPage> {
     await mapboxMap!.style.addSource(
       ImageSource(
         id: _floorplanSourceId!,
-        url:
-            "https://siddharthray.com/cdn/Internal Map OCC.png", // TODO: replace later
+        url: "https://siddharthray.com/cdn/Internal Map OCC.png",
         coordinates: corners,
       ),
     );
@@ -379,7 +385,9 @@ class _MapPageState extends State<MapPage> {
       ),
     );
 
-    print("Floorplan overlay added to style");
+    if (kDebugMode) {
+      debugPrint("Floorplan overlay added to style");
+    }
   }
 
   Future<void> _reloadFloorplanOverlay() async {
@@ -395,8 +403,9 @@ class _MapPageState extends State<MapPage> {
     // Nothing to do if no pending or map/annotations aren't ready.
     if (_pendingAutoSelectMarkerId == null ||
         !_annotationsReady ||
-        mapboxMap == null)
+        mapboxMap == null) {
       return;
+    }
 
     final String requested = _pendingAutoSelectMarkerId!;
     Location? target;
@@ -490,7 +499,11 @@ class _MapPageState extends State<MapPage> {
         );
       } catch (e2) {
         // As a last resort, log the error and continue — selection is visible via panel
-        print("Warning: failed to move camera programmatically: $e / $e2");
+        if (kDebugMode) {
+          debugPrint(
+            "Warning: failed to move camera programmatically: $e / $e2",
+          );
+        }
       }
     }
 
