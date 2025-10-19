@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -18,6 +19,9 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   late PanelController _panelController;
   Location? _selectedLocation;
+  String?
+  _pendingAutoSelectMarkerId; // queued marker id (from constructor or later)
+  bool _annotationsReady = false;
   MapboxMap? mapboxMap;
   // Class-level variables to store the overlay IDs
   String? _floorplanLayerId;
@@ -44,13 +48,69 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _panelController = PanelController();
+    _pendingAutoSelectMarkerId = widget.autoSelectMarkerId;
   }
 
-  void _onMarkerTapped(Location location) {
+  // handle when parent updates the passed-in autoSelectMarkerId
+  @override
+  void didUpdateWidget(covariant MapPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.autoSelectMarkerId != oldWidget.autoSelectMarkerId) {
+      _pendingAutoSelectMarkerId = widget.autoSelectMarkerId;
+      // try selecting right away if everything is ready
+      _maybeAutoSelectPending();
+    }
+  }
+
+  void _onMarkerTapped(Location location) async {
     setState(() {
       _selectedLocation = location;
     });
     _panelController.open();
+    // Get the size of the screen
+    final screenSize = MediaQuery.of(context).size;
+
+    // Offset target by shifting the screen center upward (~1/4 from top)
+    final double safePadding = screenSize.height * 0.05;
+    final double adjustedOffset = (screenSize.height * 0.05).clamp(
+      0,
+      screenSize.height / 2 - safePadding,
+    );
+
+    // Convert offset to screen coordinates
+    final screenCoordinate = await mapboxMap!.pixelForCoordinate(
+      Point(
+        coordinates: Position(
+          _selectedLocation!.position.longitude,
+          _selectedLocation!.position.latitude,
+        ),
+      ),
+    );
+
+    final offsetCoordinate = await mapboxMap!.coordinateForPixel(
+      ScreenCoordinate(
+        x: screenCoordinate.x,
+        y: screenCoordinate.y + adjustedOffset,
+      ),
+    );
+
+    // Now move camera toward the offset point
+    final CameraOptions cameraTo = CameraOptions(
+      center: offsetCoordinate,
+      zoom: 21.0,
+      bearing: 0,
+      pitch: 0,
+    );
+
+      try {
+        await mapboxMap!.easeTo(
+          cameraTo,
+          MapAnimationOptions(duration: 500, startDelay: 0),
+        );
+      } catch (e2) {
+        // As a last resort, log the error and continue — selection is visible via panel
+        print("Warning: failed to move camera programmatically: $e2");
+      }
   }
 
   void _onPanelClosed() {
@@ -79,7 +139,7 @@ class _MapPageState extends State<MapPage> {
         locationType: 'Food',
         description:
             'A delicious treat available on campus like the really great mutton.',
-        position: const LatLng(38.69023475780903, -121.2241666435147),
+        position: const gmaps.LatLng(38.69023475780903, -121.2241666435147),
         currentEvent: "Dinner",
       ),
       Location(
@@ -88,7 +148,7 @@ class _MapPageState extends State<MapPage> {
         locationType: 'Food',
         description:
             'A delicious treat available on campus and also get the delicious samosas.',
-        position: const LatLng(38.69040278065333, -121.22425229254445),
+        position: const gmaps.LatLng(38.69040278065333, -121.22425229254445),
       ),
       Location(
         name: 'Stage #1',
@@ -96,7 +156,7 @@ class _MapPageState extends State<MapPage> {
         locationType: 'Stage',
         description:
             'The main stage for events and natoks. Come watch the show of your life!',
-        position: const LatLng(38.690483782353056, -121.2243186340391),
+        position: const gmaps.LatLng(38.690483782353056, -121.2243186340391),
         currentEvent: "Natok #1",
       ),
       Location(
@@ -105,7 +165,7 @@ class _MapPageState extends State<MapPage> {
         locationType: 'Alternate',
         description:
             'A quiet place to relax and play chess or hangout when you need a break from the festivities.',
-        position: const LatLng(38.69040063973745, -121.22447240884625),
+        position: const gmaps.LatLng(38.69040063973745, -121.22447240884625),
       ),
     ];
 
@@ -116,7 +176,7 @@ class _MapPageState extends State<MapPage> {
     mapboxMap.annotations.createPointAnnotationManager().then((value) {
       pointAnnotationManager = value;
 
-      rootBundle.load('assets/icons/Map Pin.png').then((bytes) {
+      rootBundle.load('assets/icons/Map Pin.png').then((bytes) async {
         final Uint8List imageData = bytes.buffer.asUint8List();
 
         for (var i = 0; i < locations.length; i++) {
@@ -154,7 +214,7 @@ class _MapPageState extends State<MapPage> {
                       name: "NF",
                       locationType: "NF",
                       description: "NF",
-                      position: LatLng(0, 0),
+                      position: gmaps.LatLng(0, 0),
                     ),
               ),
             );
@@ -167,22 +227,49 @@ class _MapPageState extends State<MapPage> {
         //     print("onAnnotationLongPress, id: ${annotation.id}");
         //   },
         // );
-        Future.delayed(const Duration(milliseconds: 300), () {
-  if (!mounted) return;
 
-  setState(() => _isMapLoading = false); // start fade out
+        // annotations have been started — mark ready and try to auto-select if requested
+        _annotationsReady = true;
+        _maybeAutoSelectPending(); // attempt queued selection
 
-  // Remove loader from tree after fade duration
-  Future.delayed(const Duration(milliseconds: 500), () {
-    if (!mounted) return;
-    setState(() => _showLoader = false);
-  });
-});
+        if (await Permission.locationWhenInUse.request().isGranted) {
+          mapboxMap.location.updateSettings(
+            LocationComponentSettings(
+              enabled: true,
+              puckBearingEnabled: true,
+              showAccuracyRing: true,
+              puckBearing: PuckBearing.HEADING,
+              accuracyRingColor: Colors.blue.toARGB32(),
+              locationPuck: LocationPuck(
+                locationPuck3D: LocationPuck3D(
+                  modelScale: [20, 20, 20],
+                  modelCastShadows: true,
+                  modelReceiveShadows: true,
+                  modelUri:
+                      "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
+                ),
+              ),
+            ),
+          );
+        }
+
+        // Add your overlay source and layer here
+    await _addFloorplanOverlay();
+        
+        Future.delayed(const Duration(milliseconds: 000), () {
+          if (!mounted) return;
+
+          setState(() => _isMapLoading = false); // start fade out
+          _onMapZoom(null);
+
+          // Remove loader from tree after fade duration
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (!mounted) return;
+            setState(() => _showLoader = false);
+          });
+        });
       });
     });
-
-    // Add your overlay source and layer here
-    await _addFloorplanOverlay();
 
     // Now that layer exists, set up the zoom listener
     mapboxMap.onMapZoomListener = (x) {
@@ -304,6 +391,113 @@ class _MapPageState extends State<MapPage> {
     _onMapZoom(null); // optionally pass dummy context
   }
 
+  Future<void> _maybeAutoSelectPending() async {
+    // Nothing to do if no pending or map/annotations aren't ready.
+    if (_pendingAutoSelectMarkerId == null ||
+        !_annotationsReady ||
+        mapboxMap == null)
+      return;
+
+    final String requested = _pendingAutoSelectMarkerId!;
+    Location? target;
+
+    // Try to match the requested id against the runtime annotation ids first
+    target = _locations.firstWhere(
+      (loc) => loc.id == requested,
+      orElse:
+          () => Location(
+            buildingName: "NF",
+            name: "NF",
+            locationType: "NF",
+            description: "NF",
+            position: gmaps.LatLng(0, 0),
+          ),
+    );
+    if (target.name == "NF") {
+      // Not found by annotation id — try matching by name or buildingName (in case callers passed a name)
+      target = _locations.firstWhere(
+        (loc) =>
+            loc.name.toLowerCase() == requested.toLowerCase() ||
+            loc.buildingName.toLowerCase() == requested.toLowerCase(),
+        orElse:
+            () => Location(
+              buildingName: "NF",
+              name: "NF",
+              locationType: "NF",
+              description: "NF",
+              position: gmaps.LatLng(0, 0),
+            ),
+      );
+    }
+
+    if (target.name == "NF") {
+      // couldn't find match — clear pending and exit
+      _pendingAutoSelectMarkerId = null;
+      return;
+    }
+
+    // Found the location: set selected location (opens panel)
+    if (!mounted) return;
+    setState(() {
+      _selectedLocation = target;
+    });
+    _panelController.open();
+
+    // Get the size of the screen
+    final screenSize = MediaQuery.of(context).size;
+
+    // Offset target by shifting the screen center upward (~1/4 from top)
+    final double safePadding = screenSize.height * 0.05;
+    final double adjustedOffset = (screenSize.height * 0.05).clamp(
+      0,
+      screenSize.height / 2 - safePadding,
+    );
+
+    // Convert offset to screen coordinates
+    final screenCoordinate = await mapboxMap!.pixelForCoordinate(
+      Point(
+        coordinates: Position(
+          target.position.longitude,
+          target.position.latitude,
+        ),
+      ),
+    );
+
+    final offsetCoordinate = await mapboxMap!.coordinateForPixel(
+      ScreenCoordinate(
+        x: screenCoordinate.x,
+        y: screenCoordinate.y + adjustedOffset,
+      ),
+    );
+
+    // Now move camera toward the offset point
+    final CameraOptions cameraTo = CameraOptions(
+      center: offsetCoordinate,
+      zoom: 21.0,
+      bearing: 0,
+      pitch: 0,
+    );
+
+    try {
+      // Most map plugins expose some camera APIs — try setCamera first:
+      await mapboxMap!.setCamera(cameraTo);
+    } catch (e) {
+      // If setCamera isn't available on your version: try other common APIs, guarded in try/catch.
+      try {
+        await mapboxMap!.easeTo(
+          cameraTo,
+          MapAnimationOptions(duration: 500, startDelay: 0),
+        );
+      } catch (e2) {
+        // As a last resort, log the error and continue — selection is visible via panel
+        print("Warning: failed to move camera programmatically: $e / $e2");
+      }
+    }
+
+    // done — clear pending so it won't repeat
+    _pendingAutoSelectMarkerId = null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final double logoWidth = 90.0;
@@ -336,36 +530,36 @@ class _MapPageState extends State<MapPage> {
           ),
           // Loader overlay
           if (_showLoader)
-  AnimatedOpacity(
-    opacity: _isMapLoading ? 1.0 : 0.0,
-    duration: const Duration(milliseconds: 500),
-    curve: Curves.easeInOut,
-    child: Container(
-      color: Color.fromARGB(255, 88, 109, 104),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              color: DesignConstants.primaryTextColor,
-            ),
-            SizedBox(height: 15),
-            Text(
-              "LOADING EVENT MAP",
-              style: GoogleFonts.getFont(
-                'Roboto Condensed',
-                textStyle: TextStyle(
-                  color: DesignConstants.primaryTextColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w900,
+            AnimatedOpacity(
+              opacity: _isMapLoading ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              child: Container(
+                color: Color.fromARGB(255, 88, 109, 104),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        color: DesignConstants.primaryTextColor,
+                      ),
+                      SizedBox(height: 15),
+                      Text(
+                        "LOADING EVENT MAP",
+                        style: GoogleFonts.getFont(
+                          'Roboto Condensed',
+                          textStyle: TextStyle(
+                            color: DesignConstants.primaryTextColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    ),
-  ),
           Padding(
             padding: EdgeInsets.fromLTRB(16, 45, 16, 0),
             child: Row(
@@ -417,7 +611,7 @@ class _MapPageState extends State<MapPage> {
                                 name: "NF",
                                 locationType: "NF",
                                 description: "NF",
-                                position: LatLng(0, 0),
+                                position: gmaps.LatLng(0, 0),
                               ),
                         );
                         if (searchLocation.name == "NF") {
@@ -431,7 +625,7 @@ class _MapPageState extends State<MapPage> {
                                   name: "NF",
                                   locationType: "NF",
                                   description: "NF",
-                                  position: LatLng(0, 0),
+                                  position: gmaps.LatLng(0, 0),
                                 ),
                           );
                         }
@@ -446,7 +640,7 @@ class _MapPageState extends State<MapPage> {
                                   name: "NF",
                                   locationType: "NF",
                                   description: "NF",
-                                  position: LatLng(0, 0),
+                                  position: gmaps.LatLng(0, 0),
                                 ),
                           );
                         }
@@ -461,7 +655,7 @@ class _MapPageState extends State<MapPage> {
                                   name: "NF",
                                   locationType: "NF",
                                   description: "NF",
-                                  position: LatLng(0, 0),
+                                  position: gmaps.LatLng(0, 0),
                                 ),
                           );
                         }
@@ -476,7 +670,7 @@ class _MapPageState extends State<MapPage> {
                                   name: "NF",
                                   locationType: "NF",
                                   description: "NF",
-                                  position: LatLng(0, 0),
+                                  position: gmaps.LatLng(0, 0),
                                 ),
                           );
                         }
@@ -493,14 +687,14 @@ class _MapPageState extends State<MapPage> {
                   child: IconButton(
                     onPressed: () async {
                       setState(() {
-                        if (DesignConstants.mapType != MapType.hybrid) {
-                          DesignConstants.mapType = MapType.hybrid;
+                        if (DesignConstants.mapType != gmaps.MapType.hybrid) {
+                          DesignConstants.mapType = gmaps.MapType.hybrid;
                         } else {
-                          DesignConstants.mapType = MapType.normal;
+                          DesignConstants.mapType = gmaps.MapType.normal;
                         }
                       });
                       await mapboxMap!.loadStyleURI(
-                        DesignConstants.mapType == MapType.normal
+                        DesignConstants.mapType == gmaps.MapType.normal
                             ? "mapbox://styles/thesiddharthray/cmgrk2b03005g01sq2qgjhq42"
                             : MapboxStyles.STANDARD_SATELLITE,
                       );
@@ -515,12 +709,12 @@ class _MapPageState extends State<MapPage> {
                     ),
                     padding: EdgeInsets.all(16),
                     color:
-                        DesignConstants.mapType == MapType.hybrid
+                        DesignConstants.mapType == gmaps.MapType.hybrid
                             ? DesignConstants.backgroundColor
                             : DesignConstants.primaryTextColor,
                     style: IconButton.styleFrom(
                       backgroundColor:
-                          DesignConstants.mapType != MapType.hybrid
+                          DesignConstants.mapType != gmaps.MapType.hybrid
                               ? DesignConstants.backgroundColor
                               : DesignConstants.primaryTextColor,
                       padding: EdgeInsets.all(4),
@@ -780,7 +974,7 @@ class Location {
   final String buildingName;
   final String locationType;
   final String description;
-  final LatLng position;
+  final gmaps.LatLng position;
   final String currentEvent;
   String? id;
 

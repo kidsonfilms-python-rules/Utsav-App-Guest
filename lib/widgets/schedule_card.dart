@@ -31,10 +31,13 @@ class ExpandableCard extends StatefulWidget {
 }
 
 class _ExpandableCardState extends State<ExpandableCard>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   bool _isExpanded = false;
   late AnimationController _expandController;
   late Animation<double> _expandAnimation;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -54,10 +57,15 @@ class _ExpandableCardState extends State<ExpandableCard>
     }
   }
 
+  bool _isDisposed = false;
+
   @override
   void dispose() {
-    _expandController.dispose();
-    widget.animationController?.dispose();
+    if (!_isDisposed) {
+      _expandController.dispose();
+      widget.animationController?.dispose();
+      _isDisposed = true;
+    }
     super.dispose();
   }
 

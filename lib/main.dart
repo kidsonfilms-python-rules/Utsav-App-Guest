@@ -65,61 +65,66 @@ class _MainPageState extends State<MainPage> {
   int _selectedTab = 2;
   final List<Widget> _pageStack = [];
   final List<int> _navigationHistory = [];
+  late final Map<int, Widget> _pages;
 
   @override
   void initState() {
     super.initState();
-    _currentPage = HomePage(navigateToPage: _navigateToPage);
+    _pages = {
+    0: TicketsPage(key: const PageStorageKey('ticketsPage')),
+    1: AnnouncementsPage(key: const PageStorageKey('announcementsPage')),
+    2: HomePage(navigateToPage: _navigateToPage, key: const PageStorageKey('homePage')),
+    3: SchedulePage(navigateToPage: _navigateToPage, key: const PageStorageKey('schedulePage')),
+    4: MapPage(key: const PageStorageKey('mapPage'), autoSelectMarkerId: null),
+  };
+    _selectedTab = 2;
+    _currentPage = _pages[_selectedTab]!;
     _pageStack.add(_currentPage);
-    _navigationHistory.add(2); // HomePage corresponds to index 2
+    _navigationHistory.add(_selectedTab); // HomePage corresponds to index 2
   }
 
-  void _navigateToPage(int index, {String? markerId}) {
-    HapticFeedback.lightImpact();
-    Widget newPage;
-    switch (index) {
-      case 0:
-        newPage = TicketsPage();
-        break;
-      case 1:
-        newPage = AnnouncementsPage();
-        break;
-      case 2:
-        newPage = HomePage(navigateToPage: _navigateToPage);
-        break;
-      case 3:
-        newPage = SchedulePage(navigateToPage: _navigateToPage);
-        break;
-      case 4:
-        // When navigating to MapPage, optionally pass a marker id
-        newPage = MapPage(autoSelectMarkerId: markerId);
+  bool customMapPage = false;
 
-        break;
-      default:
-        newPage = MapPage();
-        break;
-    }
+  void _navigateToPage(int index, {String? markerId}) {
+  HapticFeedback.lightImpact();
+
+  Widget newPage = _pages[index]!;
+
+  // If MapPage and markerId is provided, create a new instance with markerId
+  if (index == 4 && markerId != null) {
+    newPage = MapPage(autoSelectMarkerId: markerId, key: const PageStorageKey('mapPage'));
+    _pages[4] = newPage;
+    customMapPage = true;
+  } else if (index == 4 && markerId == null && customMapPage) {
+    newPage = MapPage(autoSelectMarkerId: null, key: const PageStorageKey('mapPage'));
+    _pages[4] = newPage;
+    customMapPage = false;
+  }
+
+  // Only add to stack if navigating to a new page (avoid duplicates in a row)
+  if (_currentPage != newPage) {
+    _pageStack.add(newPage);
+    _navigationHistory.add(index);
     setState(() {
       _selectedTab = index;
-      _pageStack.add(newPage);
-      _navigationHistory.add(index);
       _currentPage = newPage;
     });
   }
+  }
 
   Future<bool> _onWillPop() async {
-    if (_pageStack.length > 1) {
-      setState(() {
-        _pageStack.removeLast();
-        _navigationHistory.removeLast();
-        int lastIndex = _navigationHistory.last;
-        _selectedTab = lastIndex;
-        _currentPage = _pageStack.last;
-      });
-      return false;
-    }
-    return true;
+  if (_pageStack.length > 1) {
+    setState(() {
+      _pageStack.removeLast();
+      _navigationHistory.removeLast();
+      int lastIndex = _navigationHistory.last;
+      _selectedTab = lastIndex;
+      _currentPage = _pageStack.last;
+    });
+    return false;
   }
+  return true; // exit app
+}
 
   @override
   Widget build(BuildContext context) {
