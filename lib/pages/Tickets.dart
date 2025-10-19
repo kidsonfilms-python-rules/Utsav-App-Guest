@@ -388,7 +388,7 @@ class _TicketsPageState extends State<TicketsPage>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(
-                              FontAwesomeIcons.caretDown,
+                              FontAwesomeIcons.ellipsisVertical,
                               color: DesignConstants.primaryTextColor,
                               size: 14,
                             ),
@@ -427,7 +427,7 @@ class _TicketsPageState extends State<TicketsPage>
         ),
         Column(
           children: [
-            SizedBox(height: 50),
+            SizedBox(height: 60),
             Text(
               "TICKET OPTIONS",
               style: GoogleFonts.getFont(
@@ -440,7 +440,7 @@ class _TicketsPageState extends State<TicketsPage>
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 30),
             Card(
               color: DesignConstants.primaryCardColor,
               child: ListBody(
@@ -448,6 +448,58 @@ class _TicketsPageState extends State<TicketsPage>
                   ListTile(
                     title: Text(
                       "About Event",
+                      style: GoogleFonts.getFont(
+                        "Roboto Condensed",
+                        textStyle: TextStyle(
+                          color: DesignConstants.primaryTextColor,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(color: DesignConstants.secondaryTextColor),
+                  ListTile(
+                    title: Text(
+                      "Manage Tickets",
+                      style: GoogleFonts.getFont(
+                        "Roboto Condensed",
+                        textStyle: TextStyle(
+                          color: DesignConstants.primaryTextColor,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(color: DesignConstants.secondaryTextColor),
+                  ListTile(
+                    title: Text(
+                      "Get Directions in Google Maps",
+                      style: GoogleFonts.getFont(
+                        "Roboto Condensed",
+                        textStyle: TextStyle(
+                          color: DesignConstants.primaryTextColor,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(color: DesignConstants.secondaryTextColor),
+                  ListTile(
+                    title: Text(
+                      "Contact Event Host",
+                      style: GoogleFonts.getFont(
+                        "Roboto Condensed",
+                        textStyle: TextStyle(
+                          color: DesignConstants.primaryTextColor,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(color: DesignConstants.secondaryTextColor),
+                  ListTile(
+                    title: Text(
+                      "Frequently Asked Questions",
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
