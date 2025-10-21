@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:utsav_app/widgets/animated_carousel_indicator.dart';
@@ -26,6 +29,28 @@ class _TicketsPageState extends State<TicketsPage>
   void _onDotTapped(int index) {
     HapticFeedback.selectionClick();
     controller.animateToPage(index);
+  }
+
+  final String address = "6826 Hazel Ave, Orangevale, CA 95662";
+  Future<void> _openInDefaultMap() async {
+    final encoded = Uri.encodeComponent(address);
+
+    // Universal map URL pattern
+    final Uri uri = Uri.parse(
+      Uri.base.toString().contains("ios")
+          ? "http://maps.apple.com/?q=$encoded"
+          : "geo:0,0?q=$encoded",
+    );
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      // Fallback to Google Maps web
+      final fallback = Uri.parse(
+        "https://www.google.com/maps/search/?api=1&query=$encoded",
+      );
+      await launchUrl(fallback, mode: LaunchMode.externalApplication);
+    }
   }
 
   @override
@@ -56,6 +81,8 @@ class _TicketsPageState extends State<TicketsPage>
 
   @override
   Widget build(BuildContext context) {
+    final mapAppName = Platform.isIOS ? "Apple Maps" : "Google Maps";
+
     return PageView(
       scrollDirection: Axis.vertical,
       onPageChanged: (p) {
@@ -401,8 +428,7 @@ class _TicketsPageState extends State<TicketsPage>
                                   padding: const EdgeInsets.only(left: 8),
                                   child: Text(
                                     "OPTIONS",
-                                    overflow:
-                                        TextOverflow.clip,
+                                    overflow: TextOverflow.clip,
                                     style: GoogleFonts.getFont(
                                       "Roboto Condensed",
                                       textStyle: TextStyle(
@@ -425,94 +451,193 @@ class _TicketsPageState extends State<TicketsPage>
             ),
           ],
         ),
-        Column(
-          children: [
-            SizedBox(height: 60),
-            Text(
-              "TICKET OPTIONS",
-              style: GoogleFonts.getFont(
-                "Roboto Condensed",
-                textStyle: TextStyle(
-                  color: DesignConstants.primaryTextColor,
-                  fontSize: 30,
-                  fontStyle: FontStyle.normal,
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 60),
+              Text(
+                "TICKET OPTIONS",
+                style: GoogleFonts.getFont(
+                  "Roboto Condensed",
+                  textStyle: TextStyle(
+                    color: DesignConstants.primaryTextColor,
+                    fontSize: 30,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 10),
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+                color: DesignConstants.primaryCardColor,
+                child: ListBody(
+                  children: [
+                    SizedBox(height: 10),
+                    ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.circleInfo,
+                        color: DesignConstants.primaryTextColor,
+                      ),
+                      title: Text(
+                        "About Event",
+                        style: GoogleFonts.getFont(
+                          "Roboto Condensed",
+                          textStyle: TextStyle(
+                            color: DesignConstants.primaryTextColor,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(color: DesignConstants.secondaryTextColor),
+                    ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.pen,
+                        color: DesignConstants.primaryTextColor,
+                      ),
+                      title: Text(
+                        "Manage Tickets",
+                        style: GoogleFonts.getFont(
+                          "Roboto Condensed",
+                          textStyle: TextStyle(
+                            color: DesignConstants.primaryTextColor,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(color: DesignConstants.secondaryTextColor),
+                    GestureDetector(
+                      onTap: () async {
+                        await Clipboard.setData(ClipboardData(text: address));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Copied to clipboard"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.copy,
+                          color: DesignConstants.primaryTextColor,
+                        ),
+                        title: Text(
+                          "Copy Address",
+                          style: GoogleFonts.getFont(
+                            "Roboto Condensed",
+                            textStyle: TextStyle(
+                              color: DesignConstants.primaryTextColor,
+                              fontStyle: FontStyle.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(color: DesignConstants.secondaryTextColor),
+                    GestureDetector(
+                      onTap: _openInDefaultMap,
+                      child: ListTile(
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.asset(
+                            Platform.isIOS
+                                ? 'assets/icons/apple_maps.png'
+                                : 'assets/icons/google_maps.png',
+                            height: 27,
+                            width: 27,
+                          ),
+                        ),
+                        title: Text(
+                          "Open in $mapAppName",
+                          style: GoogleFonts.getFont(
+                            "Roboto Condensed",
+                            textStyle: TextStyle(
+                              color: DesignConstants.primaryTextColor,
+                              fontStyle: FontStyle.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(color: DesignConstants.secondaryTextColor),
+                    ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.paperPlane,
+                        color: DesignConstants.primaryTextColor,
+                      ),
+                      title: Text(
+                        "Contact Event Host",
+                        style: GoogleFonts.getFont(
+                          "Roboto Condensed",
+                          textStyle: TextStyle(
+                            color: DesignConstants.primaryTextColor,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(color: DesignConstants.secondaryTextColor),
+                    ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.circleQuestion,
+                        color: DesignConstants.primaryTextColor,
+                      ),
+                      title: Text(
+                        "Frequently Asked Questions",
+                        style: GoogleFonts.getFont(
+                          "Roboto Condensed",
+                          textStyle: TextStyle(
+                            color: DesignConstants.primaryTextColor,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(color: DesignConstants.secondaryTextColor),
+                    ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.linkSlash,
+                        color: DesignConstants.red,
+                      ),
+                      title: Text(
+                        "Unlink Tickets from App",
+                        style: GoogleFonts.getFont(
+                          "Roboto Condensed",
+                          textStyle: TextStyle(
+                            color: DesignConstants.red,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(color: DesignConstants.secondaryTextColor),
+                    ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.circleExclamation,
+                        color: DesignConstants.red,
+                      ),
+                      title: Text(
+                        "Report an Issue",
+                        style: GoogleFonts.getFont(
+                          "Roboto Condensed",
+                          textStyle: TextStyle(
+                            color: DesignConstants.red,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                  ],
                 ),
               ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 30),
-            Card(
-              color: DesignConstants.primaryCardColor,
-              child: ListBody(
-                children: [
-                  ListTile(
-                    title: Text(
-                      "About Event",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.primaryTextColor,
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Divider(color: DesignConstants.secondaryTextColor),
-                  ListTile(
-                    title: Text(
-                      "Manage Tickets",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.primaryTextColor,
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Divider(color: DesignConstants.secondaryTextColor),
-                  ListTile(
-                    title: Text(
-                      "Get Directions in Google Maps",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.primaryTextColor,
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Divider(color: DesignConstants.secondaryTextColor),
-                  ListTile(
-                    title: Text(
-                      "Contact Event Host",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.primaryTextColor,
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Divider(color: DesignConstants.secondaryTextColor),
-                  ListTile(
-                    title: Text(
-                      "Frequently Asked Questions",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.primaryTextColor,
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+              SizedBox(height: 15),
+            ],
+          ),
         ),
       ],
     );

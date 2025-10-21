@@ -71,12 +71,21 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _pages = {
-    0: TicketsPage(key: const PageStorageKey('ticketsPage')),
-    1: AnnouncementsPage(key: const PageStorageKey('announcementsPage')),
-    2: HomePage(navigateToPage: _navigateToPage, key: const PageStorageKey('homePage')),
-    3: SchedulePage(navigateToPage: _navigateToPage, key: const PageStorageKey('schedulePage')),
-    4: MapPage(key: const PageStorageKey('mapPage'), autoSelectMarkerId: null),
-  };
+      0: TicketsPage(key: const PageStorageKey('ticketsPage')),
+      1: AnnouncementsPage(key: const PageStorageKey('announcementsPage')),
+      2: HomePage(
+        navigateToPage: _navigateToPage,
+        key: const PageStorageKey('homePage'),
+      ),
+      3: SchedulePage(
+        navigateToPage: _navigateToPage,
+        key: const PageStorageKey('schedulePage'),
+      ),
+      4: MapPage(
+        key: const PageStorageKey('mapPage'),
+        autoSelectMarkerId: null,
+      ),
+    };
     _selectedTab = 2;
     _currentPage = _pages[_selectedTab]!;
     _pageStack.add(_currentPage);
@@ -86,86 +95,121 @@ class _MainPageState extends State<MainPage> {
   bool customMapPage = false;
 
   void _navigateToPage(int index, {String? markerId}) {
-  HapticFeedback.lightImpact();
+    HapticFeedback.lightImpact();
 
-  Widget newPage = _pages[index]!;
+    Widget newPage = _pages[index]!;
 
-  // If MapPage and markerId is provided, create a new instance with markerId
-  if (index == 4 && markerId != null) {
-    newPage = MapPage(autoSelectMarkerId: markerId, key: const PageStorageKey('mapPage'));
-    _pages[4] = newPage;
-    customMapPage = true;
-  } else if (index == 4 && markerId == null && customMapPage) {
-    newPage = MapPage(autoSelectMarkerId: null, key: const PageStorageKey('mapPage'));
-    _pages[4] = newPage;
-    customMapPage = false;
-  }
+    // If MapPage and markerId is provided, create a new instance with markerId
+    if (index == 4 && markerId != null) {
+      newPage = MapPage(
+        autoSelectMarkerId: markerId,
+        key: const PageStorageKey('mapPage'),
+      );
+      _pages[4] = newPage;
+      customMapPage = true;
+    } else if (index == 4 && markerId == null && customMapPage) {
+      newPage = MapPage(
+        autoSelectMarkerId: null,
+        key: const PageStorageKey('mapPage'),
+      );
+      _pages[4] = newPage;
+      customMapPage = false;
+    }
 
-  // Only add to stack if navigating to a new page (avoid duplicates in a row)
-  if (_currentPage != newPage) {
-    _pageStack.add(newPage);
-    _navigationHistory.add(index);
-    setState(() {
-      _selectedTab = index;
-      _currentPage = newPage;
-    });
-  }
+    // Only add to stack if navigating to a new page (avoid duplicates in a row)
+    if (_currentPage != newPage) {
+      _pageStack.add(newPage);
+      _navigationHistory.add(index);
+      setState(() {
+        _selectedTab = index;
+        _currentPage = newPage;
+      });
+    }
   }
 
   Future<bool> _onWillPop() async {
-  if (_pageStack.length > 1) {
-    setState(() {
-      _pageStack.removeLast();
-      _navigationHistory.removeLast();
-      int lastIndex = _navigationHistory.last;
-      _selectedTab = lastIndex;
-      _currentPage = _pageStack.last;
-    });
-    return false;
+    if (_pageStack.length > 1) {
+      setState(() {
+        _pageStack.removeLast();
+        _navigationHistory.removeLast();
+        int lastIndex = _navigationHistory.last;
+        _selectedTab = lastIndex;
+        _currentPage = _pageStack.last;
+      });
+      return false;
+    }
+    return true; // exit app
   }
-  return true; // exit app
-}
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       // onWillPop: _onWillPop,
       canPop: _pageStack.length <= 1, // Allow system pop only if no history
-  onPopInvokedWithResult: (didPop, result) async {
-    // Only handle pop manually if Flutter didn’t handle it
-    if (!didPop) {
-      final shouldPop = await _onWillPop();
-      if (shouldPop && context.mounted) {
-        // If at root, exit app
-        SystemNavigator.pop();
-      }
-    }
-  },
+      onPopInvokedWithResult: (didPop, result) async {
+        // Only handle pop manually if Flutter didn’t handle it
+        if (!didPop) {
+          final shouldPop = await _onWillPop();
+          if (shouldPop && context.mounted) {
+            // If at root, exit app
+            SystemNavigator.pop();
+          }
+        }
+      },
       child: Scaffold(
         backgroundColor: DesignConstants.backgroundColor,
         bottomNavigationBar: GNav(
           key: const PageStorageKey('bottom_nav_bar'),
-          padding: EdgeInsets.fromLTRB(24, 12, 24, 24),
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
           selectedIndex: _selectedTab,
           haptic: true,
           color: const Color.fromARGB(255, 114, 114, 117),
+          // color: Colors.white,
           activeColor: Colors.white,
           iconSize: 22,
           backgroundColor: DesignConstants.primaryCardColor,
           onTabChange: (index) {
-            // For example, if you want to auto-select marker1 when MapPage is selected,
-            // pass the marker id:
-
             _navigateToPage(index);
           },
-          tabs: const [
-            GButton(icon: FontAwesomeIcons.ticket),
-            GButton(icon: FontAwesomeIcons.bullhorn),
-            GButton(icon: FontAwesomeIcons.house),
-            GButton(icon: FontAwesomeIcons.clock),
-            GButton(icon: FontAwesomeIcons.compass),
+          tabs: [
+            GButton(
+              icon:
+                  _selectedTab == 0
+                      ? FontAwesomeIcons.ticketSimple
+                      : FontAwesomeIcons.ticket,
+            ),
+            GButton(
+              icon:
+                  _selectedTab == 1
+                      ? FontAwesomeIcons.bullhorn
+                      : FontAwesomeIcons.bullhorn,
+            ),
+            GButton(
+              icon:
+                  _selectedTab == 2
+                      ? FontAwesomeIcons.house
+                      : IconData(
+                        0xf015, // Unicode for 
+                        fontFamily:
+                            'FontAwesomeSolid', // or 'FontAwesomeRegular' depending on the style
+                        fontPackage: 'font_awesome_flutter',
+                      ),
+            ),
+            GButton(
+              icon:
+                  _selectedTab == 3
+                      ? FontAwesomeIcons.solidClock
+                      : FontAwesomeIcons.clock,
+            ),
+            GButton(
+              icon:
+                  _selectedTab == 4
+                      ? FontAwesomeIcons.solidCompass
+                      : FontAwesomeIcons.compass,
+            ),
           ],
         ),
+
         body: _currentPage,
       ),
     );
