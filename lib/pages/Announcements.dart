@@ -21,14 +21,14 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: 80, width: MediaQuery.sizeOf(context).width),
+          SizedBox(height: 50, width: MediaQuery.sizeOf(context).width),
           Text(
             "ANNOUNCEMENTS",
             style: GoogleFonts.getFont(
               "Roboto Condensed",
               textStyle: TextStyle(
                 color: DesignConstants.primaryTextColor,
-                fontSize: 30,
+                fontSize: 34,
                 fontFamily: "Roboto",
                 fontStyle: FontStyle.normal,
               ),

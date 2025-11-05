@@ -266,7 +266,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             Row(
               children: [
                 SizedBox(
-                  width: 250,
+                  width: 240,
                   child: Text(
                     "All Allowed",
                     style: GoogleFonts.getFont(
@@ -319,7 +319,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             Row(
               children: [
                 SizedBox(
-                  width: 250,
+                  width: 240,
                   child: Text(
                     "Off",
                     style: GoogleFonts.getFont(

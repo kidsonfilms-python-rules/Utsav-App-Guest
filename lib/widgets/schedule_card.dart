@@ -12,6 +12,7 @@ class ExpandableCard extends StatefulWidget {
   final String location;
   final String description;
   final bool isNow;
+  final bool expanded;
   final AnimationController? animationController;
   final Function(int, {String? markerId}) navigateToPage;
 
@@ -24,6 +25,7 @@ class ExpandableCard extends StatefulWidget {
     this.isNow = false,
     this.animationController,
     required this.navigateToPage,
+    this.expanded = false,
   });
 
   @override
@@ -55,6 +57,15 @@ class _ExpandableCardState extends State<ExpandableCard>
     if (widget.isNow && widget.animationController == null) {
       widget.animationController?.repeat(reverse: true);
     }
+
+    setState(() {
+      _isExpanded = widget.expanded;
+      if (_isExpanded) {
+        _expandController.forward();
+      } else {
+        _expandController.reverse();
+      }
+    });
   }
 
   bool _isDisposed = false;
@@ -112,7 +123,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                     double topPosition =
                         sheetHeight -
                         cardHeight -
-                        230.0; // 20.0 is the desired margin
+                        330.0; // 20.0 is the desired margin
                     return Stack(
                       clipBehavior: Clip.none, // Prevent clipping
                       children: [
@@ -265,6 +276,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                               isNow: widget.isNow,
                               animationController: widget.animationController,
                               navigateToPage: widget.navigateToPage,
+                              expanded: true,
                             ),
                           ),
                         ),

@@ -44,7 +44,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
             Row(
               children: [
                 SizedBox(
-                  width: 250,
+                  width: 240,
                   child: Text(
                     "English",
                     style: GoogleFonts.getFont(
@@ -150,7 +150,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
             Row(
               children: [
                 SizedBox(
-                  width: 250,
+                  width: 240,
                   child: Text(
                     "Email us if you still need help.",
                     style: GoogleFonts.getFont(

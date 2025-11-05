@@ -187,13 +187,8 @@ class _MainPageState extends State<MainPage> {
             GButton(
               icon:
                   _selectedTab == 2
-                      ? FontAwesomeIcons.house
-                      : IconData(
-                        0xf015, // Unicode for 
-                        fontFamily:
-                            'FontAwesomeSolid', // or 'FontAwesomeRegular' depending on the style
-                        fontPackage: 'font_awesome_flutter',
-                      ),
+                      ? FontAwesomeIcons.solidHouse
+                      : FontAwesomeIcons.house,
             ),
             GButton(
               icon:

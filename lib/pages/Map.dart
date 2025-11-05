@@ -515,7 +515,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     final double logoWidth = 90.0;
     final double logoLeft = 16.0;
-    final double logoClosedBottom = 90.0; // bottom offset when closed
+    final double logoClosedBottom = 75.0; // bottom offset when closed
 
     return SlidingUpPanel(
       controller: _panelController,

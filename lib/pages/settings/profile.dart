@@ -27,6 +27,18 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
             textStyle: TextStyle(color: DesignConstants.primaryTextColor),
           ),
         ),
+        // actions: [
+        //   GestureDetector(
+        //     onTap: () {},
+        //     child: Text(
+        //               "SAVE",
+        //               style: GoogleFonts.getFont(
+        //     'Roboto Condensed',
+        //     fontWeight: FontWeight.w200,
+        //     textStyle: TextStyle(color: DesignConstants.primaryTextColor),
+        //               )),
+        //   )
+        // ],
         foregroundColor: DesignConstants.primaryTextColor,
       ),
       backgroundColor: DesignConstants.backgroundColor,
@@ -47,7 +59,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Email",
+                    "EMAIL",
                     textAlign: TextAlign.start,
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
@@ -87,7 +99,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Utsav ID",
+                    "UTSAV ID",
                     textAlign: TextAlign.start,
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",
@@ -128,7 +140,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Last Name",
+                    "LAST NAME",
                     textAlign: TextAlign.start,
                     style: GoogleFonts.getFont(
                       "Roboto Condensed",

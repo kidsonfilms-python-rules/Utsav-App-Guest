@@ -99,7 +99,7 @@ class _TicketsPageState extends State<TicketsPage>
                 "Roboto Condensed",
                 textStyle: TextStyle(
                   color: DesignConstants.primaryTextColor,
-                  fontSize: 30,
+                  fontSize: 34,
                   fontStyle: FontStyle.normal,
                 ),
               ),
@@ -206,7 +206,7 @@ class _TicketsPageState extends State<TicketsPage>
                                           color:
                                               DesignConstants.primaryTextColor,
                                           fontWeight: FontWeight.w800,
-                                          fontSize: 30,
+                                          fontSize: 40,
                                         ),
                                       ),
                                     ),
@@ -461,7 +461,7 @@ class _TicketsPageState extends State<TicketsPage>
                   "Roboto Condensed",
                   textStyle: TextStyle(
                     color: DesignConstants.primaryTextColor,
-                    fontSize: 30,
+                    fontSize: 34,
                     fontStyle: FontStyle.normal,
                   ),
                 ),
@@ -478,16 +478,44 @@ class _TicketsPageState extends State<TicketsPage>
                     SizedBox(height: 10),
                     ListTile(
                       leading: Icon(
-                        FontAwesomeIcons.circleInfo,
+                        FontAwesomeIcons.print,
                         color: DesignConstants.primaryTextColor,
                       ),
                       title: Text(
-                        "About Event",
+                        "Print Tickets",
                         style: GoogleFonts.getFont(
                           "Roboto Condensed",
                           textStyle: TextStyle(
                             color: DesignConstants.primaryTextColor,
                             fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                     Divider(color: DesignConstants.secondaryTextColor),
+                    GestureDetector(
+                      onTap: () async {
+                        await Clipboard.setData(ClipboardData(text: address));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Copied to clipboard"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.download,
+                          color: DesignConstants.primaryTextColor,
+                        ),
+                        title: Text(
+                          "Download Tickets",
+                          style: GoogleFonts.getFont(
+                            "Roboto Condensed",
+                            textStyle: TextStyle(
+                              color: DesignConstants.primaryTextColor,
+                              fontStyle: FontStyle.normal,
+                            ),
                           ),
                         ),
                       ),
@@ -511,34 +539,6 @@ class _TicketsPageState extends State<TicketsPage>
                     ),
                     Divider(color: DesignConstants.secondaryTextColor),
                     GestureDetector(
-                      onTap: () async {
-                        await Clipboard.setData(ClipboardData(text: address));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Copied to clipboard"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      },
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.copy,
-                          color: DesignConstants.primaryTextColor,
-                        ),
-                        title: Text(
-                          "Copy Address",
-                          style: GoogleFonts.getFont(
-                            "Roboto Condensed",
-                            textStyle: TextStyle(
-                              color: DesignConstants.primaryTextColor,
-                              fontStyle: FontStyle.normal,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(color: DesignConstants.secondaryTextColor),
-                    GestureDetector(
                       onTap: _openInDefaultMap,
                       child: ListTile(
                         leading: ClipRRect(
@@ -552,7 +552,7 @@ class _TicketsPageState extends State<TicketsPage>
                           ),
                         ),
                         title: Text(
-                          "Open in $mapAppName",
+                          "Get Directions in $mapAppName",
                           style: GoogleFonts.getFont(
                             "Roboto Condensed",
                             textStyle: TextStyle(
