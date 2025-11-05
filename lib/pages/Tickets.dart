@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:utsav_app/util/tickets_util.dart';
 import 'package:utsav_app/widgets/animated_carousel_indicator.dart';
 import 'package:utsav_app/widgets/blinking_dot.dart';
 
@@ -54,32 +55,31 @@ class _TicketsPageState extends State<TicketsPage>
   }
 
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  _animation = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 1),
-  )..repeat(reverse: true);
+    _animation = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
 
-  // Always reset to the first (main) page when entering
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (_pageController.hasClients) {
-      _pageController.jumpToPage(0);
-    }
-  });
+    // Always reset to the first (main) page when entering
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_pageController.hasClients) {
+        _pageController.jumpToPage(0);
+      }
+    });
 
-  // Show "Options" text briefly after opening
-  Future.delayed(const Duration(milliseconds: 500), () {
-    if (mounted) {
-      setState(() => _showOptionsText = true);
-      Future.delayed(const Duration(seconds: 2), () {
-        if (mounted) setState(() => _showOptionsText = false);
-      });
-    }
-  });
-}
-
+    // Show "Options" text briefly after opening
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() => _showOptionsText = true);
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) setState(() => _showOptionsText = false);
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -484,32 +484,33 @@ void initState() {
                 child: ListBody(
                   children: [
                     SizedBox(height: 10),
-                    ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.print,
-                        color: DesignConstants.primaryTextColor,
-                      ),
-                      title: Text(
-                        "Print Tickets",
-                        style: GoogleFonts.getFont(
-                          "Roboto Condensed",
-                          textStyle: TextStyle(
-                            color: DesignConstants.primaryTextColor,
-                            fontStyle: FontStyle.normal,
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.lightImpact();
+                        TicketsUtil.printPDFUsingPopup(context);
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.print,
+                          color: DesignConstants.primaryTextColor,
+                        ),
+                        title: Text(
+                          "Print Tickets",
+                          style: GoogleFonts.getFont(
+                            "Roboto Condensed",
+                            textStyle: TextStyle(
+                              color: DesignConstants.primaryTextColor,
+                              fontStyle: FontStyle.normal,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                     Divider(color: DesignConstants.secondaryTextColor),
+                    Divider(color: DesignConstants.secondaryTextColor),
                     GestureDetector(
                       onTap: () async {
-                        await Clipboard.setData(ClipboardData(text: address));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Copied to clipboard"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
+                        HapticFeedback.lightImpact();
+                        TicketsUtil.downloadPDFUsingPopup(context);
                       },
                       child: ListTile(
                         leading: Icon(
