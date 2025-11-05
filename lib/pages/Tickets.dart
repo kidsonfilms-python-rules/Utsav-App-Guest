@@ -54,24 +54,32 @@ class _TicketsPageState extends State<TicketsPage>
   }
 
   @override
-  void initState() {
-    super.initState();
-    _animation = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..repeat(reverse: true);
-    // _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+void initState() {
+  super.initState();
 
-    // Show "Options" text briefly after opening
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() => _showOptionsText = true);
-        Future.delayed(const Duration(seconds: 2), () {
-          if (mounted) setState(() => _showOptionsText = false);
-        });
-      }
-    });
-  }
+  _animation = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 1),
+  )..repeat(reverse: true);
+
+  // Always reset to the first (main) page when entering
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (_pageController.hasClients) {
+      _pageController.jumpToPage(0);
+    }
+  });
+
+  // Show "Options" text briefly after opening
+  Future.delayed(const Duration(milliseconds: 500), () {
+    if (mounted) {
+      setState(() => _showOptionsText = true);
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) setState(() => _showOptionsText = false);
+      });
+    }
+  });
+}
+
 
   @override
   void dispose() {
