@@ -8,7 +8,6 @@ import 'package:barcode/barcode.dart';
 import 'package:utsav_app/util/design_constants.dart';
 
 class TicketsUtil {
-  // ✅ Matches your current hardcoded UI data exactly
   static final List<Map<String, dynamic>> dummyTickets = [
     {
       "name": "JOHN SMITH",
@@ -16,7 +15,7 @@ class TicketsUtil {
       "total": "1/4",
       "venue": "GREAT VENUE",
       "instructions":
-          "Park in the Guest parking lot and some other instructions",
+          "Park in the Guest parking lot and some other instructions, Park in the Guest parking lot and some other instructions, Park in the Guest parking lot and some other instructions,Park in the Guest parking lot and some other instructions",
       "barcode": "UTSAV-053467-082026-01",
     },
     {
@@ -38,7 +37,7 @@ class TicketsUtil {
       "barcode": "UTSAV-053467-082026-03",
     },
     {
-      "name": "MAYA PATEL",
+      "name": "MAYA PATELAKRISNAN",
       "type": "BASIC",
       "total": "4/4",
       "venue": "GREAT VENUE",
@@ -82,6 +81,8 @@ class TicketsUtil {
                             fontWeight: FontWeight.bold,
                             color: DesignConstants.primaryTextColor,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
                           "Ticket ${t["total"]}",
@@ -161,6 +162,10 @@ class TicketsUtil {
         drawText: false,
       );
 
+      final instructionLines =
+    (ticket["instructions"].length / 70).ceil().clamp(1, 4); // crude line estimate
+final topSpacing = 40 - (instructionLines - 1) * 6; // shrink ~6 per line
+
       pdf.addPage(
         pw.Page(
           margin: const pw.EdgeInsets.all(24),
@@ -177,7 +182,6 @@ class TicketsUtil {
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      // Centered Ticket title
                       pw.Center(
                         child: pw.Text(
                           "TICKET ${ticket["total"]}",
@@ -191,11 +195,11 @@ class TicketsUtil {
 
                       pw.SizedBox(height: 10),
 
-                      // Barcode directly under ticket text
+                      
                       pw.Center(child: pw.SvgImage(svg: barcodeSvg)),
                       pw.SizedBox(height: 16),
 
-                      // Ticket details with padding
+                      
                       pw.Padding(
                         padding: pw.EdgeInsets.fromLTRB(25, 0, 25, 0),
                         child: pw.Column(
@@ -217,14 +221,13 @@ class TicketsUtil {
                             pw.SizedBox(height: 16),
                             _section("VENUE", ticket["venue"]),
                             pw.SizedBox(height: 16),
-                            _section(
-                              "VENUE INSTRUCTIONS",
-                              ticket["instructions"],
-                            ),
+                            _section("VENUE INSTRUCTIONS", ticket["instructions"]),
+
+pw.SizedBox(height: topSpacing.toDouble()),
 
                             // Light gray box with extra venue info and "What to do next?"
                             pw.Container(
-                              margin: const pw.EdgeInsets.only(top: 40),
+                              // margin: const pw.EdgeInsets.only(top: 40),
                               padding: const pw.EdgeInsets.all(12),
                               decoration: pw.BoxDecoration(
                                 color: PdfColors.grey200,
@@ -249,7 +252,7 @@ class TicketsUtil {
                                     crossAxisAlignment:
                                         pw.CrossAxisAlignment.center,
                                     children: [
-                                      // Circle with white number
+                                      
                                       pw.Container(
                                         width: 28,
                                         height: 28,
@@ -269,7 +272,7 @@ class TicketsUtil {
                                         ),
                                       ),
                                       pw.SizedBox(width: 12),
-                                      // Text wraps nicely, smaller font
+                                      
                                       pw.Expanded(
                                         child: pw.Text(
                                           "Download the official Utsav App to get live schedules, tickets on your phone, interactive maps, and more!",
@@ -501,26 +504,42 @@ class TicketsUtil {
   }
 
   static pw.Widget _section(String title, String value) {
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Text(
-          title,
-          style: pw.TextStyle(
-            fontSize: 11,
-            fontWeight: pw.FontWeight.bold,
-            color: PdfColors.grey700,
-          ),
+  // Base font size
+  double fontSize = title == "NAME" ? 45 : 15;
+
+  // If NAME is too long, reduce font size proportionally
+  if (title == "NAME" && value.length > 12) {
+    // Drop size by ~1.5 per extra character beyond 12
+    fontSize = (45 - (value.length - 12) * 1.5).clamp(20, 45);
+  }
+
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      pw.Text(
+        title,
+        style: pw.TextStyle(
+          fontSize: 11,
+          fontWeight: pw.FontWeight.bold,
+          color: PdfColors.grey700,
         ),
-        pw.Text(
+      ),
+      pw.Container(
+        constraints: pw.BoxConstraints(maxWidth: title == "NAME" ? 400 : 600),
+        child: pw.Text(
           value,
+          maxLines: title == "NAME" ? 1 : 4,
+          softWrap: title == "NAME" ? false : true,
+          overflow: pw.TextOverflow.clip,
           style: pw.TextStyle(
-            fontSize: title == "NAME" ? 45 : 15,
+            fontSize: fontSize,
             fontWeight: pw.FontWeight.bold,
             color: PdfColors.black,
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 }

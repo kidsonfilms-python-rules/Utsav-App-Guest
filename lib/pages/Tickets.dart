@@ -134,7 +134,10 @@ class _TicketsPageState extends State<TicketsPage>
                   },
                 ),
                 carouselController: controller,
-                items: List<Widget>.generate(4, (int index) {
+                items: List<Widget>.generate(TicketsUtil.dummyTickets.length, (
+                  int index,
+                ) {
+                  final t = TicketsUtil.dummyTickets[index];
                   return ClipRRect(
                     clipBehavior: Clip.hardEdge,
                     child: GestureDetector(
@@ -207,7 +210,7 @@ class _TicketsPageState extends State<TicketsPage>
                                       ),
                                     ),
                                     Text(
-                                      "JOHN SMITH",
+                                      t["name"],
                                       style: GoogleFonts.getFont(
                                         "Roboto Condensed",
                                         textStyle: TextStyle(
@@ -217,6 +220,10 @@ class _TicketsPageState extends State<TicketsPage>
                                           fontSize: 40,
                                         ),
                                       ),
+                                      maxLines:
+                                          1, // Limits the text to a single line
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
                                     ),
                                   ],
                                 ),
@@ -245,7 +252,7 @@ class _TicketsPageState extends State<TicketsPage>
                                           ),
                                         ),
                                         Text(
-                                          "BASIC",
+                                          t["type"],
                                           style: GoogleFonts.getFont(
                                             "Roboto Condensed",
                                             textStyle: TextStyle(
@@ -310,7 +317,7 @@ class _TicketsPageState extends State<TicketsPage>
                                       ),
                                     ),
                                     Text(
-                                      "GREAT VENUE",
+                                      t["venue"],
                                       style: GoogleFonts.getFont(
                                         "Roboto Condensed",
                                         textStyle: TextStyle(
@@ -342,7 +349,7 @@ class _TicketsPageState extends State<TicketsPage>
                                       ),
                                     ),
                                     Text(
-                                      "Park in the Guest parking lot and some other instructions",
+                                      t["instructions"],
                                       style: GoogleFonts.getFont(
                                         "Roboto Condensed",
                                         textStyle: TextStyle(
@@ -350,7 +357,10 @@ class _TicketsPageState extends State<TicketsPage>
                                               DesignConstants.primaryTextColor,
                                           fontWeight: FontWeight.w400,
                                         ),
+                                      
                                       ),
+                                      maxLines: 3,
+                                      overflow: TextOverflow.fade,
                                     ),
                                   ],
                                 ),
