@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:utsav_app/pages/general_faqs.dart';
 import 'package:utsav_app/util/design_constants.dart';
 
 class HelpPage extends StatefulWidget {
@@ -129,6 +130,65 @@ class _HelpPageState extends State<HelpPage> {
             ),
             Text(
               "BUGS",
+              style: GoogleFonts.getFont(
+                "Roboto Condensed",
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: DesignConstants.secondaryTextColor,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 15, top: 5),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: DesignConstants.secondaryTextColor,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 250,
+                  child: Text(
+                    "Have a question?",
+                    style: GoogleFonts.getFont(
+                      'Roboto Condensed',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      textStyle: TextStyle(
+                        color: DesignConstants.primaryTextColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.heavyImpact();
+                    Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GeneralFAQPage(),
+                          ),
+                        );
+                  },
+                  child: Text(
+                    "OPEN >",
+                    style: GoogleFonts.getFont(
+                      "Roboto Condensed",
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: DesignConstants.secondaryTextColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              "FAQS",
               style: GoogleFonts.getFont(
                 "Roboto Condensed",
                 fontWeight: FontWeight.w400,

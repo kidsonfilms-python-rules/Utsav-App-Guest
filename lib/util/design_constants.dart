@@ -10,7 +10,7 @@ class DesignConstants {
   static var secondaryTextColor = Color.fromARGB(255, 89, 89, 109);
   static var green = Color.fromARGB(255, 69, 186, 105);
   static var darkGreen = Color.fromARGB(255, 8, 134, 47);
-  static var red = Color.fromARGB(255, 240, 85, 55);
+  static var red = Color.fromRGBO(255, 63, 63, 1);
   static var orange = Color.fromARGB(255, 240, 141, 55);
 
   static var mapStyle = '''[
@@ -185,7 +185,7 @@ class DesignConstants {
       Color.fromARGB(255, 31, 31, 31),
       Color.fromARGB(255, 62, 62, 62),
       Colors.white,
-      Color.fromARGB(255, 98, 98, 98),
+      Colors.white30,
       Color.fromARGB(255, 69, 186, 105),
       Color.fromARGB(255, 8, 134, 47),
     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/design_constants.dart';
+import 'package:utsav_app/widgets/markdown_text.dart';
 
 class AnnouncementsPage extends StatefulWidget {
   const AnnouncementsPage({super.key});
@@ -77,8 +78,8 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         width: 200,
-                        child: Text(
-                          "Dinner is currently being served!",
+                        child: MarkdownText(
+                          "Dinner is **currently** being served!",
                           style: GoogleFonts.getFont(
                             "Roboto Condensed",
                             textStyle: TextStyle(
@@ -158,8 +159,8 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     width: 200,
-                    child: Text(
-                      "Come see the new artists directly from India!",
+                    child: MarkdownText(
+                      "Come see the really new [artists](https://utsavsac.org) directly from India!",
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
@@ -203,8 +204,8 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     width: 200,
-                    child: Text(
-                      "This is a really long announcement about someone not parking right!",
+                    child: MarkdownText(
+                      "This is a really long announcement about someone *not* parking right!",
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(
@@ -248,8 +249,8 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     width: 200,
-                    child: Text(
-                      "Lunch is currently being served!",
+                    child: MarkdownText(
+                      "Lunch is ~~currently~~ being served!",
                       style: GoogleFonts.getFont(
                         "Roboto Condensed",
                         textStyle: TextStyle(

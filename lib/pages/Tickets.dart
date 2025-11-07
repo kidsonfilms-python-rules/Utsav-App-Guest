@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:utsav_app/pages/tickets_faq.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:utsav_app/util/tickets_util.dart';
@@ -357,7 +358,6 @@ class _TicketsPageState extends State<TicketsPage>
                                               DesignConstants.primaryTextColor,
                                           fontWeight: FontWeight.w400,
                                         ),
-                                      
                                       ),
                                       maxLines: 3,
                                       overflow: TextOverflow.fade,
@@ -583,35 +583,67 @@ class _TicketsPageState extends State<TicketsPage>
                       ),
                     ),
                     Divider(color: DesignConstants.secondaryTextColor),
-                    ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.paperPlane,
-                        color: DesignConstants.primaryTextColor,
-                      ),
-                      title: Text(
-                        "Contact Event Host",
-                        style: GoogleFonts.getFont(
-                          "Roboto Condensed",
-                          textStyle: TextStyle(
-                            color: DesignConstants.primaryTextColor,
-                            fontStyle: FontStyle.normal,
+                    GestureDetector(
+                      onTap: () async {
+                        final Uri emailLaunchUri = Uri(
+                          scheme: 'mailto',
+                          path: 'support@utsavfestival.com',
+                          query: Uri.encodeFull(
+                            'subject=Ticket Support Request',
+                          ),
+                        );
+
+                        try {
+                          await launchUrl(emailLaunchUri);
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Unable to open email client."),
+                            ),
+                          );
+                        }
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.paperPlane,
+                          color: DesignConstants.primaryTextColor,
+                        ),
+                        title: Text(
+                          "Contact Event Host",
+                          style: GoogleFonts.getFont(
+                            "Roboto Condensed",
+                            textStyle: TextStyle(
+                              color: DesignConstants.primaryTextColor,
+                              fontStyle: FontStyle.normal,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     Divider(color: DesignConstants.secondaryTextColor),
-                    ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.circleQuestion,
-                        color: DesignConstants.primaryTextColor,
-                      ),
-                      title: Text(
-                        "Frequently Asked Questions",
-                        style: GoogleFonts.getFont(
-                          "Roboto Condensed",
-                          textStyle: TextStyle(
-                            color: DesignConstants.primaryTextColor,
-                            fontStyle: FontStyle.normal,
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.heavyImpact();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TicketsFAQPage(),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.circleQuestion,
+                          color: DesignConstants.primaryTextColor,
+                        ),
+                        title: Text(
+                          "Frequently Asked Questions",
+                          style: GoogleFonts.getFont(
+                            "Roboto Condensed",
+                            textStyle: TextStyle(
+                              color: DesignConstants.primaryTextColor,
+                              fontStyle: FontStyle.normal,
+                            ),
                           ),
                         ),
                       ),
