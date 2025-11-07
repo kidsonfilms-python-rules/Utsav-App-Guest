@@ -6,6 +6,7 @@ import 'package:utsav_app/pages/announcements.dart';
 import 'package:utsav_app/pages/home.dart';
 import 'package:utsav_app/pages/map.dart';
 import 'package:utsav_app/pages/schedule.dart';
+import 'package:utsav_app/pages/sign_in.dart';
 import 'package:utsav_app/pages/tickets.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -46,15 +47,13 @@ class MyApp extends StatelessWidget {
           backgroundColor: DesignConstants.backgroundColor,
         ),
       ),
-      home: const MainPage(title: 'Flutter Demo Home Page'),
+      home: MainPage(),
     );
   }
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key, required this.title});
-
-  final String title;
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
