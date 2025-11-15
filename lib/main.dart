@@ -40,14 +40,16 @@ class MyApp extends StatelessWidget {
       DesignConstants.updateTheme();
     }
 
+    bool isSignedIn = false;
+
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'The Utsav App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           backgroundColor: DesignConstants.backgroundColor,
         ),
       ),
-      home: MainPage(),
+      home: !isSignedIn ? WelcomePage() : MainPage(),
     );
   }
 }

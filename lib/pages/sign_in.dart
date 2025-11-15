@@ -11,20 +11,26 @@ import 'package:utsav_app/main.dart';
 // Custom widget for the main gradient background
 class _GradientBackground extends StatelessWidget {
   final Widget child;
-  const _GradientBackground({required this.child});
+  final bool isLogin;
+
+  const _GradientBackground({required this.child, required this.isLogin});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        // Using a RadialGradient to get a more defined, centered light effect
+    // Different gradient centers for login vs signup
+    final Alignment targetCenter =
+        isLogin
+            ? const Alignment(-2.25, -1) // top-left
+            : const Alignment(0, -1.75); // top-center
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.easeOutCubic,
+      decoration: BoxDecoration(
         gradient: RadialGradient(
-          center: Alignment(-2.25, -1), // Centered near the top
-          radius: 1.5, // Extend past the edges
-          colors: [
-            Color(0xFF484951), // Lighter center color
-            Color(0xFF10101B), // Darker edge color
-          ],
+          center: targetCenter,
+          radius: 1.5,
+          colors: const [Color(0xFF484951), Color(0xFF10101B)],
         ),
       ),
       child: child,
@@ -137,7 +143,9 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF10101B),
       body: _GradientBackground(
+        isLogin: true,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -246,6 +254,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isLogin = true;
 
   void _toggleAuthMode() {
+    HapticFeedback.heavyImpact();
     setState(() {
       _isLogin = !_isLogin;
     });
@@ -254,7 +263,9 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF10101B),
       body: _GradientBackground(
+        isLogin: _isLogin,
         child: SafeArea(
           child: LayoutBuilder(
             // Use LayoutBuilder to get constraints for filling the screen
@@ -315,27 +326,71 @@ class _AuthScreenState extends State<AuthScreen> {
                         if (!_isLogin) // Sign Up buttons (Google + Facebook)
                           Column(
                             children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: _SocialButton(
-                                  text: "Sign in with Google",
-                                  icon: const FaIcon(
-                                    FontAwesomeIcons.google,
-                                    color: Colors.white,
-                                    size: 18,
+                              if (!Platform.isIOS) // Apple
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: _SocialButton(
+                                    text: "Sign up with Apple",
+                                    icon: Padding(
+                                      padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.apple,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      HapticFeedback.heavyImpact();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainPage(),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  onPressed: () {},
                                 ),
-                              ),
+                              if (!Platform.isAndroid) // Google (on Android)
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: _SocialButton(
+                                    text: "Sign up with Google",
+                                    icon: Padding(
+                                      padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.google,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      HapticFeedback.heavyImpact();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainPage(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                               const SizedBox(height: 16),
                               SizedBox(
                                 width: double.infinity,
                                 child: _SocialButton(
-                                  text: "Sign in with Facebook",
-                                  icon: const FaIcon(
-                                    FontAwesomeIcons.facebook,
-                                    color: Colors.white,
-                                    size: 18,
+                                  text: "Sign up with Facebook",
+                                  icon: Padding(
+                                    padding: EdgeInsetsGeometry.fromLTRB(
+                                      0,
+                                      0,
+                                      20,
+                                      0,
+                                    ),
+                                    child: const FaIcon(
+                                      FontAwesomeIcons.facebook,
+                                      color: Colors.white,
+                                      size: 25,
+                                    ),
                                   ),
                                   onPressed: () {},
                                 ),
@@ -346,15 +401,18 @@ class _AuthScreenState extends State<AuthScreen> {
                         if (_isLogin) // Login buttons (Platform-aware)
                           Column(
                             children: [
-                              if (Platform.isIOS) // Apple
+                              if (!Platform.isIOS) // Apple
                                 SizedBox(
                                   width: double.infinity,
                                   child: _SocialButton(
                                     text: "Sign in with Apple",
-                                    icon: const FaIcon(
-                                      FontAwesomeIcons.apple,
-                                      color: Colors.white,
-                                      size: 20,
+                                    icon: Padding(
+                                      padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.apple,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
                                     ),
                                     onPressed: () {
                                       HapticFeedback.heavyImpact();
@@ -367,15 +425,18 @@ class _AuthScreenState extends State<AuthScreen> {
                                     },
                                   ),
                                 ),
-                              if (Platform.isAndroid) // Google (on Android)
+                              if (!Platform.isAndroid) // Google (on Android)
                                 SizedBox(
                                   width: double.infinity,
                                   child: _SocialButton(
                                     text: "Sign in with Google",
-                                    icon: const FaIcon(
-                                      FontAwesomeIcons.google,
-                                      color: Colors.white,
-                                      size: 18,
+                                    icon: Padding(
+                                      padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.google,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
                                     ),
                                     onPressed: () {
                                       HapticFeedback.heavyImpact();
@@ -393,19 +454,22 @@ class _AuthScreenState extends State<AuthScreen> {
                                 width: double.infinity,
                                 child: _SocialButton(
                                   text: "Sign in with Facebook",
-                                  icon: const FaIcon(
-                                    FontAwesomeIcons.facebookF,
-                                    color: Colors.white,
-                                    size: 18,
+                                  icon: Padding(
+                                    padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                    child: const FaIcon(
+                                      FontAwesomeIcons.facebook,
+                                      color: Colors.white,
+                                      size: 25,
+                                    ),
                                   ),
                                   onPressed: () {
                                     HapticFeedback.heavyImpact();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MainPage(),
-                                        ),
-                                      );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MainPage(),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
@@ -417,7 +481,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                         // Email Field
                         _CustomTextField(
-                          label: _isLogin ? "Email or Phone" : "Email",
+                          label: "Email",
                           icon: Icons.mail_outline,
                         ),
                         const SizedBox(height: 20),
@@ -426,7 +490,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         _CustomTextField(
                           label: "Password",
                           icon: Icons.lock_outline,
-                          obscureText: true,
+                          isPassword: true,
                         ),
                         const SizedBox(height: 12),
 
@@ -453,12 +517,12 @@ class _AuthScreenState extends State<AuthScreen> {
                           onPressed: () {
                             // Handle login or registration logic
                             HapticFeedback.heavyImpact();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MainPage(),
-                                        ),
-                                      );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainPage(),
+                              ),
+                            );
                           },
                         ),
                         const SizedBox(height: 30),
@@ -507,25 +571,32 @@ class _AuthScreenState extends State<AuthScreen> {
 }
 
 // Custom widget for the text fields
-class _CustomTextField extends StatelessWidget {
+class _CustomTextField extends StatefulWidget {
   final String label;
   final IconData icon;
-  final bool obscureText;
+  final bool isPassword;
 
   const _CustomTextField({
     required this.label,
     required this.icon,
-    this.obscureText = false,
+    this.isPassword = false,
   });
+
+  @override
+  State<_CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<_CustomTextField> {
+  late bool obscured = widget.isPassword;
 
   @override
   Widget build(BuildContext context) {
     // Using TextFormField to get the label-as-title effect from the image
     return TextFormField(
-      obscureText: obscureText,
+      obscureText: obscured,
       style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
       decoration: InputDecoration(
-        labelText: label,
+        labelText: widget.label,
         labelStyle: TextStyle(
           color: Colors.grey[400],
           fontWeight: FontWeight.w500,
@@ -537,6 +608,30 @@ class _CustomTextField extends StatelessWidget {
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.blueAccent),
         ),
+        // icon: Icon(icon),
+        suffixIcon:
+            widget.isPassword
+                ? (obscured
+                    ? GestureDetector(
+                      onTap: () {
+                        HapticFeedback.heavyImpact();
+                        setState(() {
+                          obscured = false;
+                        });
+                      },
+                      child: Icon(FontAwesomeIcons.eye),
+                    )
+                    : GestureDetector(
+                      onTap: () {
+                        HapticFeedback.heavyImpact();
+                        setState(() {
+                          obscured = true;
+                        });
+                      },
+                      child: Icon(FontAwesomeIcons.eyeSlash),
+                    ))
+                : null,
+        suffixIconColor: Colors.grey[800],
       ),
     );
   }
@@ -589,6 +684,7 @@ class LinkTicketsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _GradientBackground(
+        isLogin: false,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
