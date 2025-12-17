@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -134,6 +136,7 @@ class _MapPageState extends State<MapPage> {
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
     _defaultMapStyleChanges();
+    await _addCustomBuildingModel();
 
     final List<Location> locations = [
       Location(
@@ -397,6 +400,86 @@ class _MapPageState extends State<MapPage> {
     await _addFloorplanOverlay();
 
     _onMapZoom(null); // optionally pass dummy context
+  }
+
+  Future<void> _addCustomBuildingModel() async {
+    final clipSourceId = "clip-source";
+    final clipLayerId = "clip-layer";
+    final polygonGeojson = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              [
+                [-121.22434777827584, 38.69059509243456],
+                [-121.22435464575915, 38.69059727816014],
+                [-121.22450895839094, 38.690452070276024],
+                [-121.22424767694196, 38.69028984572287],
+                [-121.22432487373347, 38.69020376723924],
+                [-121.22421204765382, 38.69013159366125],
+                [-121.22408564851189, 38.69025210363142],
+                [-121.22420017122435, 38.690324939229015],
+                [-121.22409667662482, 38.69044015175038],
+                [-121.22434777827584, 38.69059509243456],
+              ],
+            ],
+            "type": "Polygon",
+          },
+        },
+      ],
+    };
+
+    await mapboxMap!.style.addSource(
+      GeoJsonSource(id: clipSourceId, data: json.encode(polygonGeojson)),
+    );
+    final clipLayer = ClipLayer(id: clipLayerId, sourceId: clipSourceId)
+      ..clipLayerTypes = ["model"];
+    await mapboxMap!.style.addLayer(clipLayer);
+
+    final styleModelId = "custom-building-model";
+    final modelAsset = "https://siddharthray.com/cdn/occ-1.glb";
+    // final modelAsset = "asset://maps/models/occ-1.glb";
+    try {
+      await mapboxMap!.style.addStyleModel(styleModelId, modelAsset);
+      print("MDOEL LOADED: 200 OK");
+    } catch (e) {
+      if (kDebugMode) {
+        print("MODEL FAILED LOADING: $e");
+      }
+    }
+
+    final geoPoint = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+          -121.22428239724283,
+          38.690370273849794
+        ],
+            "type": "Point",
+          },
+        },
+      ],
+    };
+    final modelSourceId = "model-source";
+    await mapboxMap!.style.addSource(
+      GeoJsonSource(id: modelSourceId, data: json.encode(geoPoint)),
+    );
+
+    final layerId = "custom-model-layer";
+    final modelLayer =
+        ModelLayer(id: layerId, sourceId: modelSourceId)
+          ..modelId = styleModelId
+          ..modelScale = [1.5, 1.5, 1.5] // x, y, z
+          ..modelRotation = [0, 0, 40] //x, y z
+          ..modelType = ModelType.COMMON_3D;
+    await mapboxMap!.style.addLayer(modelLayer);
   }
 
   Future<void> _maybeAutoSelectPending() async {

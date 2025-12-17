@@ -81,7 +81,8 @@ flutter:
     - assets/logos/Ray Enterprises Black.png
     - assets/icons/Map Pin.png
     - assets/icons/Map Pin Selected.png
-    - assets/floorplans/OCC-1.png
+    - assets/maps/floorplans/OCC-1.png
+    - assets/maps/models/occ-1.glb
     - assets/icons/google_maps.png
     - assets/icons/apple_maps.png
     - .env
