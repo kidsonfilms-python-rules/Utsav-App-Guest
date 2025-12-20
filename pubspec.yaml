@@ -85,6 +85,7 @@ flutter:
     - assets/maps/models/occ-1.glb
     - assets/icons/google_maps.png
     - assets/icons/apple_maps.png
+    - assets/images/
     - .env
   #   - images/a_dot_ham.jpeg
   

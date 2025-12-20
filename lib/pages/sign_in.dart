@@ -156,46 +156,8 @@ class WelcomePage extends StatelessWidget {
                 // --- Illustration Placeholder ---
                 // Replace this with your 3D asset
                 SizedBox(
-                  height: 250,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Wallet icon
-                      Positioned(
-                        top: 50,
-                        child: Icon(
-                          Icons.wallet_rounded,
-                          size: 180,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      // Money icons
-                      Positioned(
-                        top: 20,
-                        right: 20,
-                        child: Transform.rotate(
-                          angle: -0.2,
-                          child: Icon(
-                            Icons.monetization_on_rounded,
-                            size: 80,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 30,
-                        left: 30,
-                        child: Transform.rotate(
-                          angle: 0.1,
-                          child: Icon(
-                            Icons.sticky_note_2_rounded,
-                            size: 70,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  height: 500,
+                  child: Image.asset("assets/images/splash.png"),
                 ),
                 // --- End Illustration Placeholder ---
                 const Spacer(flex: 1),
@@ -203,7 +165,7 @@ class WelcomePage extends StatelessWidget {
                 Text(
                   "Utsav Events",
                   style: GoogleFonts.poppins(
-                    fontSize: 32,
+                    fontSize: 42,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -332,7 +294,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                   child: _SocialButton(
                                     text: "Sign up with Apple",
                                     icon: Padding(
-                                      padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                      padding: EdgeInsetsGeometry.fromLTRB(
+                                        0,
+                                        0,
+                                        20,
+                                        0,
+                                      ),
                                       child: const FaIcon(
                                         FontAwesomeIcons.apple,
                                         color: Colors.white,
@@ -356,7 +323,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                   child: _SocialButton(
                                     text: "Sign up with Google",
                                     icon: Padding(
-                                      padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                      padding: EdgeInsetsGeometry.fromLTRB(
+                                        0,
+                                        0,
+                                        20,
+                                        0,
+                                      ),
                                       child: const FaIcon(
                                         FontAwesomeIcons.google,
                                         color: Colors.white,
@@ -407,7 +379,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                   child: _SocialButton(
                                     text: "Sign in with Apple",
                                     icon: Padding(
-                                      padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                      padding: EdgeInsetsGeometry.fromLTRB(
+                                        0,
+                                        0,
+                                        20,
+                                        0,
+                                      ),
                                       child: const FaIcon(
                                         FontAwesomeIcons.apple,
                                         color: Colors.white,
@@ -431,7 +408,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                   child: _SocialButton(
                                     text: "Sign in with Google",
                                     icon: Padding(
-                                      padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                      padding: EdgeInsetsGeometry.fromLTRB(
+                                        0,
+                                        0,
+                                        20,
+                                        0,
+                                      ),
                                       child: const FaIcon(
                                         FontAwesomeIcons.google,
                                         color: Colors.white,
@@ -455,7 +437,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                 child: _SocialButton(
                                   text: "Sign in with Facebook",
                                   icon: Padding(
-                                    padding: EdgeInsetsGeometry.fromLTRB(0, 0, 20, 0),
+                                    padding: EdgeInsetsGeometry.fromLTRB(
+                                      0,
+                                      0,
+                                      20,
+                                      0,
+                                    ),
                                     child: const FaIcon(
                                       FontAwesomeIcons.facebook,
                                       color: Colors.white,
@@ -589,11 +576,33 @@ class _CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<_CustomTextField> {
   late bool obscured = widget.isPassword;
 
+  String? emailValidator(String? value) {
+    if (widget.isPassword) return null;
+
+    if (value == null || value.trim().isEmpty) {
+      return 'Email is required';
+    }
+
+    // Basic email regex pattern (simple and sufficient for most cases)
+    final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+
+    if (!emailRegex.hasMatch(value.trim())) {
+      return 'Please enter a valid email address';
+    }
+
+    return null; // Valid
+  }
+
   @override
   Widget build(BuildContext context) {
     // Using TextFormField to get the label-as-title effect from the image
     return TextFormField(
       obscureText: obscured,
+      keyboardType:
+          widget.isPassword
+              ? TextInputType.visiblePassword
+              : TextInputType.emailAddress,
+      validator: emailValidator,
       style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
       decoration: InputDecoration(
         labelText: widget.label,
@@ -601,6 +610,7 @@ class _CustomTextFieldState extends State<_CustomTextField> {
           color: Colors.grey[400],
           fontWeight: FontWeight.w500,
         ),
+        
         // The image shows an underline, not a filled box
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.grey[800]!),
