@@ -12,6 +12,7 @@ class DayDivider extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
+        vertical: 4.0
       ), // margin from screen edges
       child: Row(
         children: [
