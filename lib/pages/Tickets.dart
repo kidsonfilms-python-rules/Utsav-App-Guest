@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:utsav_app/pages/tickets_faq.dart';
+import 'package:utsav_app/pages/faqs/tickets_faq.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:utsav_app/util/tickets_util.dart';

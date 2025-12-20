@@ -86,6 +86,7 @@ flutter:
     - assets/icons/google_maps.png
     - assets/icons/apple_maps.png
     - assets/images/
+    - assets/fonts/
     - .env
   #   - images/a_dot_ham.jpeg
   

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:utsav_app/pages/general_faqs.dart';
+import 'package:utsav_app/pages/faqs/general_faqs.dart';
 import 'package:utsav_app/util/design_constants.dart';
 
 class HelpPage extends StatefulWidget {

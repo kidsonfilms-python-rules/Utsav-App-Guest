@@ -88,7 +88,7 @@ class MarkdownText extends StatelessWidget {
       if (bold != null) {
         spans.add(TextSpan(
           text: bold,
-          style: baseStyle.copyWith(fontWeight: FontWeight.w900),
+          style: baseStyle.copyWith(fontWeight: FontWeight.bold),
         ));
       } else if (italic != null) {
         spans.add(TextSpan(
@@ -101,6 +101,7 @@ class MarkdownText extends StatelessWidget {
           style: baseStyle.copyWith(
             decoration: TextDecoration.lineThrough,
             decorationColor: baseStyle.color,
+            decorationThickness: 2.5
           ),
         ));
       } else if (linkText != null && linkUrl != null) {

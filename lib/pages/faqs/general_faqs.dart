@@ -203,8 +203,10 @@ class GeneralFAQPage extends StatelessWidget {
                   ),
                   icon: const Icon(FontAwesomeIcons.envelope),
                   label: Text(
-                    "Contact Support",
-                    style: GoogleFonts.getFont('Roboto Condensed'),
+                    "CONTACT SUPPORT",
+                    style: GoogleFonts.getFont('Roboto Condensed', textStyle: TextStyle(
+                      fontWeight: FontWeight.bold
+                    )),
                   ),
                 ),
               ],
