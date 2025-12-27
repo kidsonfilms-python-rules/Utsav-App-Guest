@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:utsav_app/main.dart';
 import 'package:utsav_app/widgets/utsav_id_input_field.dart';
 
@@ -573,7 +574,112 @@ class _AuthScreenState extends State<AuthScreen> {
                               ],
                             )
                             : SizedBox.shrink(),
-                        const SizedBox(height: 20),
+                        SizedBox(height: !_isLogin ? 10 : 0),
+
+                        !_isLogin
+                            ? Center(
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.grey[400],
+                                    fontSize: 14,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          "By creating an account, you agree to our ",
+                                    ),
+                                    TextSpan(
+                                      text: "Terms of Service",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.blueAccent[200],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      recognizer:
+                                          TapGestureRecognizer()
+                                            ..onTap = () async {
+                                              try {
+                                                final launched =
+                                                    await launchUrl(
+                                                      Uri.https("utsavsac.org"),
+                                                      mode:
+                                                          LaunchMode
+                                                              .inAppBrowserView,
+                                                    );
+                                                if (!launched) {
+                                                  await launchUrl(
+                                                    Uri.https("utsavsac.org"),
+                                                    mode:
+                                                        LaunchMode
+                                                            .platformDefault,
+                                                  );
+                                                }
+                                              } catch (e) {
+                                                debugPrint(
+                                                  "Failed to launch ToS: $e",
+                                                );
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      "Could not open link: ToS",
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                    ),
+                                    TextSpan(text: " and "),
+                                    TextSpan(
+                                      text: "Privacy Policy",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.blueAccent[200],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      recognizer:
+                                          TapGestureRecognizer()
+                                            ..onTap = () async {
+                                              try {
+                                                final launched =
+                                                    await launchUrl(
+                                                      Uri.https("utsavsac.org"),
+                                                      mode:
+                                                          LaunchMode
+                                                              .inAppBrowserView,
+                                                    );
+                                                if (!launched) {
+                                                  await launchUrl(
+                                                    Uri.https("utsavsac.org"),
+                                                    mode:
+                                                        LaunchMode
+                                                            .platformDefault,
+                                                  );
+                                                }
+                                              } catch (e) {
+                                                debugPrint(
+                                                  "Failed to launch ToS: $e",
+                                                );
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      "Could not open link: ToS",
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            : SizedBox.shrink(),
+
+                        const SizedBox(height: 15),
 
                         // Toggle Auth Mode Text
                         Center(
@@ -788,15 +894,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                       Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) =>
-                                        _isLogin
-                                            ? MainPage()
-                                            : LinkTicketsPage(),
-                              ),
-                            );
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  _isLogin ? MainPage() : LinkTicketsPage(),
+                        ),
+                      );
                     },
                     child: Text(
                       "Continue as Guest",
