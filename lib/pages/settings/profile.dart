@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/design_constants.dart';
+import 'package:utsav_app/widgets/utsav_id_input_field.dart';
 
 class AccountSettingsPage extends StatefulWidget {
   const AccountSettingsPage({super.key});
@@ -369,7 +370,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                           const SizedBox(height: 24),
 
                                           // --- 6-Digit Input Boxes ---
-                                          _UtsavIdInputField(),
+                                          UtsavIdInputField(),
 
                                           const SizedBox(height: 28),
                                           SizedBox(
@@ -877,98 +878,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _UtsavIdInputField extends StatefulWidget {
-  @override
-  State<_UtsavIdInputField> createState() => _UtsavIdInputFieldState();
-}
-
-class _UtsavIdInputFieldState extends State<_UtsavIdInputField> {
-  final int length = 6;
-  late List<TextEditingController> controllers;
-  late List<FocusNode> focusNodes;
-
-  @override
-  void initState() {
-    super.initState();
-    controllers = List.generate(length, (_) => TextEditingController());
-    focusNodes = List.generate(length, (_) => FocusNode());
-  }
-
-  @override
-  void dispose() {
-    for (var c in controllers) {
-      c.dispose();
-    }
-    for (var f in focusNodes) {
-      f.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    // Calculate max width per box (with some margin) to avoid overflow on small screens
-    final boxWidth =
-        (screenWidth - 80) /
-        length; // 60 is total horizontal padding/margin approx
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(length, (index) {
-        return Container(
-          width: boxWidth.clamp(40, 50), // clamp for min 40, max 55 width
-          height: 55,
-          margin: const EdgeInsets.symmetric(horizontal: 2.5),
-          child: TextField(
-            controller: controllers[index],
-            focusNode: focusNodes[index],
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            textAlignVertical:
-                TextAlignVertical.center, // <-- vertical center fix
-            maxLength: 1,
-            cursorColor: DesignConstants.green,
-            style: GoogleFonts.getFont(
-              "Roboto Condensed",
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-              color: Colors.white,
-            ),
-            decoration: InputDecoration(
-              counterText: "",
-              isDense: true, // removes extra vertical padding
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 10,
-              ), // remove vertical padding
-              filled: true,
-              fillColor: Colors.white10,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Colors.white24),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: DesignConstants.green,
-                  width: 1.5,
-                ),
-              ),
-            ),
-            onChanged: (value) {
-              if (value.isNotEmpty && index < length - 1) {
-                FocusScope.of(context).requestFocus(focusNodes[index + 1]);
-              } else if (value.isEmpty && index > 0) {
-                FocusScope.of(context).requestFocus(focusNodes[index - 1]);
-              }
-            },
-          ),
-        );
-      }),
     );
   }
 }
