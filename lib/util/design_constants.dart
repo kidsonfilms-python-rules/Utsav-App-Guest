@@ -12,6 +12,7 @@ class DesignConstants {
   static var darkGreen = Color.fromARGB(255, 8, 134, 47);
   static var red = Color.fromRGBO(255, 63, 63, 1);
   static var orange = Color.fromARGB(255, 240, 141, 55);
+  static var accent = Color.fromARGB(255, 229, 67, 22);
 
   static var mapStyle = '''[
     {

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:utsav_app/widgets/utsav_id_input_field.dart';
@@ -153,7 +154,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                             keyboardType:
                                                 TextInputType.emailAddress,
                                             textAlign: TextAlign.center,
-                                            cursorColor: DesignConstants.green,
+                                            cursorColor: DesignConstants.accent,
                                             style: GoogleFonts.getFont(
                                               "Roboto Condensed",
                                               fontWeight: FontWeight.w600,
@@ -184,7 +185,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                                 borderRadius:
                                                     BorderRadius.circular(12),
                                                 borderSide: BorderSide(
-                                                  color: DesignConstants.green,
+                                                  color: DesignConstants.accent,
                                                 ),
                                               ),
                                             ),
@@ -200,7 +201,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
-                                                    DesignConstants.green,
+                                                    DesignConstants.accent,
                                                 foregroundColor: Colors.black,
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -271,7 +272,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(bottom: 25, top: 5),
+                    margin: const EdgeInsets.only(bottom: 15, top: 5),
                     decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -383,7 +384,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
-                                                    DesignConstants.green,
+                                                    DesignConstants.accent,
                                                 foregroundColor: Colors.black,
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -454,7 +455,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(bottom: 25, top: 5),
+                    margin: const EdgeInsets.only(bottom: 15, top: 5),
                     decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -553,11 +554,11 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                           const SizedBox(height: 20),
                                           TextField(
                                             autofocus: true,
-                                            keyboardType:
-                                                TextInputType.name,
-                                                textCapitalization: TextCapitalization.words,
+                                            keyboardType: TextInputType.name,
+                                            textCapitalization:
+                                                TextCapitalization.words,
                                             textAlign: TextAlign.center,
-                                            cursorColor: DesignConstants.green,
+                                            cursorColor: DesignConstants.accent,
                                             style: GoogleFonts.getFont(
                                               "Roboto Condensed",
                                               fontWeight: FontWeight.w600,
@@ -588,7 +589,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                                 borderRadius:
                                                     BorderRadius.circular(12),
                                                 borderSide: BorderSide(
-                                                  color: DesignConstants.green,
+                                                  color: DesignConstants.accent,
                                                 ),
                                               ),
                                             ),
@@ -604,7 +605,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
-                                                    DesignConstants.green,
+                                                    DesignConstants.accent,
                                                 foregroundColor: Colors.black,
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -675,7 +676,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(bottom: 25, top: 5),
+                    margin: const EdgeInsets.only(bottom: 15, top: 5),
                     decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -705,6 +706,131 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       GestureDetector(
                         onTap: () {
                           HapticFeedback.heavyImpact();
+
+                          showDialog(
+                            context: context,
+                            barrierDismissible:
+                                true, // Allow user to tap away since it's just info
+                            builder: (context) {
+                              return Dialog(
+                                backgroundColor: Colors.transparent,
+                                insetPadding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(24),
+                                  decoration: BoxDecoration(
+                                    color: DesignConstants.primaryCardColor,
+                                    borderRadius: BorderRadius.circular(24),
+                                    border: Border.all(color: Colors.white10),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      // Icon Header (Centered)
+                                      Center(
+                                        child: Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: DesignConstants.accent.withValues(
+                                              alpha: 0.15,
+                                            ),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              FontAwesomeIcons.key,
+                                              color: DesignConstants.accent,
+                                              size: 32,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      Text(
+                                        "Reset Password",
+                                        style: GoogleFonts.getFont(
+                                            "Roboto Condensed",
+                                          fontSize: 26,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      RichText(
+                                        textAlign: TextAlign.center,
+                                        text: TextSpan(
+                                          style: GoogleFonts.getFont(
+                                            "Roboto Condensed",
+                                            fontSize: 16,
+                                            color: Colors.grey[400],
+                                            height: 1.5,
+                                          ),
+                                          children: [
+                                            const TextSpan(
+                                              text:
+                                                  "We have sent a password reset link to\n",
+                                            ),
+                                            TextSpan(
+                                              text: "john.smith009@gmail.com",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            const TextSpan(
+                                              text:
+                                                  "\n\nPlease check your inbox and follow the instructions to reset your password.",
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 30),
+
+                                      // Use your updated brand orange button
+                                      ElevatedButton(
+                                              onPressed: () {
+                                                HapticFeedback.heavyImpact();
+                                                // TODO: Handle save email logic
+                                                HapticFeedback.lightImpact();
+                                          Navigator.pop(context);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    DesignConstants.accent,
+                                                foregroundColor: Colors.black,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 14,
+                                                      horizontal: 100,
+                                                    ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "DONE",
+                                                style: GoogleFonts.getFont(
+                                                  "Poppins",
+                                                  textStyle: const TextStyle(
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: 13,
+                                                    letterSpacing: 0.8,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
                         },
                         child: Text(
                           "RESET >",
@@ -834,7 +960,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(bottom: 25, top: 5),
+                    margin: const EdgeInsets.only(bottom: 15, top: 5),
                     decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
