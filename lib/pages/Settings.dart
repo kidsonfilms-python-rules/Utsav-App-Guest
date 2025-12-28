@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/pages/settings/about_app.dart';
@@ -10,14 +11,14 @@ import 'package:utsav_app/pages/settings/legal.dart';
 import 'package:utsav_app/pages/settings/profile.dart';
 import 'package:utsav_app/util/design_constants.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   void initState() {
     super.initState();

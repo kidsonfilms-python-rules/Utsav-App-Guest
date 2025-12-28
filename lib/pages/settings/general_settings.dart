@@ -2,17 +2,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:utsav_app/providers/theme_provider.dart';
 import 'package:utsav_app/util/design_constants.dart';
 
-class GeneralSettingsPage extends StatefulWidget {
+class GeneralSettingsPage extends ConsumerStatefulWidget {
   const GeneralSettingsPage({super.key});
 
   @override
-  State<GeneralSettingsPage> createState() => _GeneralSettingsPageState();
+  ConsumerState<GeneralSettingsPage> createState() => _GeneralSettingsPageState();
 }
 
-class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
+class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   _GeneralSettingsPageState();
 
   @override
@@ -238,6 +240,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                                               // Calls the update function from your logic
                                               setState(() {
                                                 DesignConstants.updateTheme();
+                                                ref.read(themeProvider.notifier).state = DesignConstants.chosenTheme;
                                               });
                                               Navigator.pop(context);
                                             },

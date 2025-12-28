@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:utsav_app/util/design_constants.dart';
 
 class UtsavIdInputField extends StatefulWidget {
+  const UtsavIdInputField({super.key});
+
   @override
   State<UtsavIdInputField> createState() => UtsavIdInputFieldState();
 }
@@ -56,7 +58,7 @@ class UtsavIdInputFieldState extends State<UtsavIdInputField> {
             // Remove expands: true as it can interfere with horizontal centering
             expands: false,
 
-            cursorColor: const Color.fromARGB(255, 229, 67, 22),
+            cursorColor: DesignConstants.accent,
             style: GoogleFonts.getFont(
               "Roboto Condensed",
               fontWeight: FontWeight.bold,
@@ -82,7 +84,7 @@ class UtsavIdInputFieldState extends State<UtsavIdInputField> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: const Color.fromARGB(255, 229, 67, 22),
+                  color: DesignConstants.accent,
                   width: 1.5,
                 ),
               ),

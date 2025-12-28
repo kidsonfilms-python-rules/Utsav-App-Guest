@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utsav_app/pages/announcements.dart';
@@ -8,6 +9,7 @@ import 'package:utsav_app/pages/map.dart';
 import 'package:utsav_app/pages/schedule.dart';
 import 'package:utsav_app/pages/sign_in.dart';
 import 'package:utsav_app/pages/tickets.dart';
+import 'package:utsav_app/providers/theme_provider.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -25,15 +27,15 @@ Future<void> main() async {
   // ignore: non_constant_identifier_names
   String MAPBOX_ACCESS_TOKEN = dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? 'CANT FIND';
   MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
-  runApp(MyApp(prefs));
+  runApp(ProviderScope(child: MyApp(prefs)));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   final SharedPreferences prefs;
   const MyApp(this.prefs, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     int? theme = prefs.getInt("THEME");
     if (theme != DesignConstants.chosenTheme && theme != null) {
       DesignConstants.chosenTheme = theme;
@@ -41,6 +43,7 @@ class MyApp extends StatelessWidget {
     }
 
     bool isSignedIn = false;
+    final currentThemeIndex = ref.watch(themeProvider);
 
     return MaterialApp(
       title: 'The Utsav App',
@@ -54,14 +57,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatefulWidget {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  ConsumerState<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends ConsumerState<MainPage> {
   late Widget _currentPage;
   int _selectedTab = 2;
   final List<Widget> _pageStack = [];
