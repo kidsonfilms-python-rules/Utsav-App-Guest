@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utsav_app/pages/announcements.dart';
@@ -27,6 +28,9 @@ Future<void> main() async {
   // ignore: non_constant_identifier_names
   String MAPBOX_ACCESS_TOKEN = dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? 'CANT FIND';
   MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
+
+  await GoogleFonts.pendingFonts([GoogleFonts.robotoCondensed()]);
+
   runApp(ProviderScope(child: MyApp(prefs)));
 }
 
@@ -70,7 +74,13 @@ class _MainPageState extends ConsumerState<MainPage> {
   final List<Widget> _pageStack = [];
   final List<int> _navigationHistory = [];
   late final Map<int, Widget> _pages;
-  List<bool> _hasUpdate = [false, true, false, false, false]; // example: Announcements has update
+  List<bool> _hasUpdate = [
+    false,
+    true,
+    false,
+    false,
+    false,
+  ]; // example: Announcements has update
 
   @override
   void initState() {
@@ -146,37 +156,43 @@ class _MainPageState extends ConsumerState<MainPage> {
     return true; // exit app
   }
 
-  Widget _buildIcon(IconData icon, {bool active = false, bool showDot = false}) {
-  return Stack(
-    clipBehavior: Clip.none,
-    children: [
-      Icon(
-        icon,
-        color: active ? DesignConstants.primaryTextColor : const Color.fromARGB(255, 114, 114, 117),
-        size: 22,
-      ),
-      if (showDot)
-        Positioned(
-          right: -9,
-          top: -9,
-          child: Container(
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-              color: DesignConstants.green,
-              shape: BoxShape.circle,
-              border: BoxBorder.all(
-                color: DesignConstants.primaryCardColor,
-                width: 4,
-                // strokeAlign: 1
-              )
+  Widget _buildIcon(
+    IconData icon, {
+    bool active = false,
+    bool showDot = false,
+  }) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Icon(
+          icon,
+          color:
+              active
+                  ? DesignConstants.primaryTextColor
+                  : const Color.fromARGB(255, 114, 114, 117),
+          size: 22,
+        ),
+        if (showDot)
+          Positioned(
+            right: -9,
+            top: -9,
+            child: Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: DesignConstants.green,
+                shape: BoxShape.circle,
+                border: BoxBorder.all(
+                  color: DesignConstants.primaryCardColor,
+                  width: 4,
+                  // strokeAlign: 1
+                ),
+              ),
             ),
           ),
-        ),
-    ],
-  );
-}
-
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,55 +225,55 @@ class _MainPageState extends ConsumerState<MainPage> {
             _navigateToPage(index);
           },
           tabs: [
-  GButton(
-    icon: FontAwesomeIcons.ticket,
-    leading: _buildIcon(
-      _selectedTab == 0
-          ? FontAwesomeIcons.ticketSimple
-          : FontAwesomeIcons.ticket,
-      active: _selectedTab == 0,
-      showDot: _hasUpdate[0],
-    ),
-  ),
-  GButton(
-    icon: FontAwesomeIcons.bullhorn,
-    leading: _buildIcon(
-      FontAwesomeIcons.bullhorn,
-      active: _selectedTab == 1,
-      showDot: _hasUpdate[1],
-    ),
-  ),
-  GButton(
-    icon: FontAwesomeIcons.house,
-    leading: _buildIcon(
-      _selectedTab == 2
-          ? FontAwesomeIcons.solidHouse
-          : FontAwesomeIcons.house,
-      active: _selectedTab == 2,
-      showDot: _hasUpdate[2],
-    ),
-  ),
-  GButton(
-    icon: FontAwesomeIcons.house,
-    leading: _buildIcon(
-      _selectedTab == 3
-          ? FontAwesomeIcons.solidClock
-          : FontAwesomeIcons.clock,
-      active: _selectedTab == 3,
-      showDot: _hasUpdate[3],
-    ),
-  ),
-  GButton(
-    icon: FontAwesomeIcons.house,
-    leading: _buildIcon(
-      _selectedTab == 4
-          ? FontAwesomeIcons.solidCompass
-          : FontAwesomeIcons.compass,
-      active: _selectedTab == 4,
-      showDot: _hasUpdate[4],
-    ),
-  ),
-],
+            GButton(
+              icon: FontAwesomeIcons.ticket,
+              leading: _buildIcon(
+                _selectedTab == 0
+                    ? FontAwesomeIcons.ticketSimple
+                    : FontAwesomeIcons.ticket,
+                active: _selectedTab == 0,
+                showDot: _hasUpdate[0],
+              ),
+            ),
+            GButton(
+              icon: FontAwesomeIcons.bullhorn,
+              leading: _buildIcon(
+                FontAwesomeIcons.bullhorn,
+                active: _selectedTab == 1,
+                showDot: _hasUpdate[1],
+              ),
+            ),
+            GButton(
+              icon: FontAwesomeIcons.house,
+              leading: _buildIcon(
+                _selectedTab == 2
+                    ? FontAwesomeIcons.solidHouse
+                    : FontAwesomeIcons.house,
+                active: _selectedTab == 2,
+                showDot: _hasUpdate[2],
+              ),
+            ),
+            GButton(
+              icon: FontAwesomeIcons.house,
+              leading: _buildIcon(
+                _selectedTab == 3
+                    ? FontAwesomeIcons.solidClock
+                    : FontAwesomeIcons.clock,
+                active: _selectedTab == 3,
+                showDot: _hasUpdate[3],
+              ),
+            ),
+            GButton(
+              icon: FontAwesomeIcons.house,
+              leading: _buildIcon(
+                _selectedTab == 4
+                    ? FontAwesomeIcons.solidCompass
+                    : FontAwesomeIcons.compass,
+                active: _selectedTab == 4,
+                showDot: _hasUpdate[4],
+              ),
+            ),
+          ],
         ),
 
         body: _currentPage,

@@ -165,7 +165,7 @@ class WelcomePage extends StatelessWidget {
                 // Replace this with your 3D asset
                 SizedBox(
                   height: 500,
-                  child: Image.asset("assets/images/splash.png"),
+                  child: Image.asset("assets/images/splash 2.png"),
                 ),
                 // --- End Illustration Placeholder ---
                 const Spacer(flex: 1),
@@ -188,7 +188,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 const Spacer(flex: 3),
                 // Use the new solid button
-                _SolidButton(
+                _GradientButton(
                   text: "Get started",
                   onPressed: () {
                     Navigator.push(
@@ -880,7 +880,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                   // Primary Action: Go to Login
                   _GradientButton(
-                    text: "Sign In / Register",
+                    text: "Sign In or Register",
                     onPressed: () {
                       HapticFeedback.mediumImpact();
                       // Pops the dialog and then pops the screen back to Auth
@@ -903,7 +903,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       );
                     },
                     child: Text(
-                      "Continue as Guest",
+                      "Continue without an account",
+                      textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
                         color: Colors.grey[600],
                         fontSize: 14,

@@ -17,6 +17,8 @@ class AccountSettingsPage extends StatefulWidget {
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
   _AccountSettingsPageState();
 
+  bool uidVerified = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -301,6 +303,243 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                           softWrap: false,
                         ),
                       ),
+                      SizedBox(width: 5),
+                      uidVerified
+                          ? GestureDetector(
+                            child: FaIcon(
+                              FontAwesomeIcons.solidCircleCheck,
+                              color: DesignConstants.green,
+                              size: 17,
+                            ),
+                            onTap: () {
+                              HapticFeedback.mediumImpact();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Your Utsav ID has been verified and is linked to your account.",
+                                    style: GoogleFonts.getFont(
+                                      "Roboto Condensed",
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                          : GestureDetector(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: DesignConstants.red,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: Row(
+                                children: [
+                                  FaIcon(
+                                    FontAwesomeIcons.solidCircleXmark,
+                                    color: Colors.black,
+                                    size: 14,
+                                  ),
+                                  Text(
+                                    " UNVERIFIED",
+                                    style: GoogleFonts.getFont(
+                                      "Roboto Condensed",
+                                      fontWeight: FontWeight.bold,
+                                      // fontStyle: FontStyle.italic,
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                              HapticFeedback.mediumImpact();
+
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.transparent,
+                                barrierColor: Colors.black.withValues(
+                                  alpha: 0.4,
+                                ),
+                                builder: (context) {
+                                  return ClipRRect(
+                                    borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(24),
+                                    ),
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                        sigmaX: 10,
+                                        sigmaY: 10,
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                          24,
+                                          18,
+                                          24,
+                                          40,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withValues(
+                                            alpha: 0.7,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            // Drag Handle
+                                            Container(
+                                              width: 45,
+                                              height: 4,
+                                              margin: const EdgeInsets.only(
+                                                bottom: 24,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white24,
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+
+                                            FaIcon(
+                                              FontAwesomeIcons.solidCircleXmark,
+                                              color: DesignConstants.red,
+                                              size: 40,
+                                            ),
+                                            const SizedBox(height: 20),
+
+                                            Text(
+                                              "VERIFICATION PENDING",
+                                              style: GoogleFonts.getFont(
+                                                'Roboto Condensed',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 20,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 16),
+
+                                            Text.rich(
+                                              TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: "joh***@gmail.com",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight
+                                                              .bold, // Bolds the email
+                                                      color:
+                                                          Colors
+                                                              .white, // Optional: Make it slightly brighter white to pop
+                                                    ),
+                                                  ),
+                                                  const TextSpan(
+                                                    text:
+                                                        " has not yet verified that your account should be linked to this Utsav ID. Access to some features remains restricted until confirmed.",
+                                                  ),
+                                                ],
+                                              ),
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.getFont(
+                                                'Roboto Condensed',
+                                                fontSize: 15,
+                                                color: Colors.white70,
+                                                height: 1.4,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 32),
+
+                                            // --- PRIMARY ACTION: RESEND ---
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  HapticFeedback.heavyImpact();
+                                                  // TODO: Logic to resend confirmation email
+                                                  Navigator.pop(context);
+                                                  ScaffoldMessenger.of(
+                                                    context,
+                                                  ).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        "Verification email sent to joh***@gmail.com",
+                                                        style:
+                                                            GoogleFonts.getFont(
+                                                              "Roboto Condensed",
+                                                            ),
+                                                      ),
+                                                      action: SnackBarAction(
+                                                        label: "HELP",
+                                                        onPressed: () {},
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      DesignConstants.accent,
+                                                  foregroundColor: Colors.black,
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        vertical: 14,
+                                                      ),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          14,
+                                                        ),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  "RESEND VERIFICATION EMAIL",
+                                                  style: GoogleFonts.getFont(
+                                                    "Poppins",
+                                                    textStyle: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      fontSize: 13,
+                                                      letterSpacing: 0.8,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 12),
+
+                                            // --- SECONDARY ACTION: CONTACT ---
+                                            TextButton(
+                                              onPressed: () {
+                                                HapticFeedback.lightImpact();
+                                                // TODO: Logic to contact support
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                "INCORRECT UTSAV ID EMAIL?",
+                                                style: GoogleFonts.getFont(
+                                                  "Roboto Condensed",
+                                                  textStyle: const TextStyle(
+                                                    color: Colors.white54,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 14,
+                                                    decoration:
+                                                        TextDecoration
+                                                            .underline, // Optional: gives it more "link" feel
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
@@ -735,9 +974,8 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                           width: 80,
                                           height: 80,
                                           decoration: BoxDecoration(
-                                            color: DesignConstants.accent.withValues(
-                                              alpha: 0.15,
-                                            ),
+                                            color: DesignConstants.accent
+                                                .withValues(alpha: 0.15),
                                             shape: BoxShape.circle,
                                           ),
                                           child: Center(
@@ -753,7 +991,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                                       Text(
                                         "Reset Password",
                                         style: GoogleFonts.getFont(
-                                            "Roboto Condensed",
+                                          "Roboto Condensed",
                                           fontSize: 26,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -792,38 +1030,38 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
 
                                       // Use your updated brand orange button
                                       ElevatedButton(
-                                              onPressed: () {
-                                                HapticFeedback.heavyImpact();
-                                                // TODO: Handle save email logic
-                                                HapticFeedback.lightImpact();
+                                        onPressed: () {
+                                          HapticFeedback.heavyImpact();
+                                          // TODO: Handle save email logic
+                                          HapticFeedback.lightImpact();
                                           Navigator.pop(context);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    DesignConstants.accent,
-                                                foregroundColor: Colors.black,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      vertical: 14,
-                                                      horizontal: 100,
-                                                    ),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(14),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                "DONE",
-                                                style: GoogleFonts.getFont(
-                                                  "Poppins",
-                                                  textStyle: const TextStyle(
-                                                    fontWeight: FontWeight.w800,
-                                                    fontSize: 13,
-                                                    letterSpacing: 0.8,
-                                                  ),
-                                                ),
-                                              ),
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              DesignConstants.accent,
+                                          foregroundColor: Colors.black,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 14,
+                                            horizontal: 100,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              14,
                                             ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "DONE",
+                                          style: GoogleFonts.getFont(
+                                            "Poppins",
+                                            textStyle: const TextStyle(
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 13,
+                                              letterSpacing: 0.8,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                       const SizedBox(height: 10),
                                     ],
                                   ),
