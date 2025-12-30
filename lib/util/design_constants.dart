@@ -3,16 +3,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DesignConstants {
-  static var backgroundColor = Color.fromARGB(255, 22, 21, 56);
-  static var primaryCardColor = Color.fromARGB(255, 9, 12, 41);
-  static var primaryCardColorLight = Color.fromARGB(255, 58, 60, 82);
-  static var primaryTextColor = Colors.white;
-  static var secondaryTextColor = Color.fromARGB(255, 89, 89, 109);
-  static var green = Color.fromARGB(255, 69, 186, 105);
-  static var darkGreen = Color.fromARGB(255, 8, 134, 47);
-  static var red = Color.fromRGBO(255, 63, 63, 1);
-  static var orange = Color.fromARGB(255, 240, 141, 55);
-  static var accent = Color.fromARGB(255, 229, 67, 22);
+  static Color backgroundColor = Color.fromARGB(255, 22, 21, 56);
+  static Color primaryCardColor = Color.fromARGB(255, 9, 12, 41);
+  static Color primaryCardColorLight = Color.fromARGB(255, 58, 60, 82);
+  static Color primaryTextColor = Colors.white;
+  static Color secondaryTextColor = Color.fromARGB(255, 89, 89, 109);
+  static Color green = Color.fromARGB(255, 69, 186, 105);
+  static Color darkGreen = Color.fromARGB(255, 8, 134, 47);
+  static Color red = Color.fromRGBO(255, 63, 63, 1);
+  static Color orange = Color.fromARGB(255, 240, 141, 55);
+  static Color accent = Color.fromARGB(255, 229, 67, 22);
+
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   static var mapStyle = '''[
     {

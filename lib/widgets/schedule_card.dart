@@ -409,6 +409,26 @@ class _ExpandableCardState extends State<ExpandableCard>
                           ),
                         ),
                       ),
+                      // const SizedBox(height: 10),
+                      TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                          minimumSize: const Size(50, 30),
+                          // tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          alignment: Alignment.centerLeft,
+                        ),
+                        child: Text(
+                          "View More Details",
+                          style: GoogleFonts.getFont(
+                            "Roboto Condensed",
+                            textStyle: TextStyle(
+                              color: DesignConstants.secondaryTextColor,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

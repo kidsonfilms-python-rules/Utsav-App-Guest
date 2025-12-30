@@ -15,6 +15,7 @@ import 'package:utsav_app/util/design_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:utsav_app/widgets/connectivity_banner.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,11 +52,23 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       title: 'The Utsav App',
+      navigatorKey: DesignConstants.navigatorKey,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           backgroundColor: DesignConstants.backgroundColor,
         ),
       ),
+      builder: (context, child) {
+    return Scaffold( // Provides a base background color
+      backgroundColor: DesignConstants.backgroundColor,
+      body: Column(
+        children: [
+          const ConnectivityBanner(), // This expands/collapses
+          Expanded(child: child!),   // This fills the rest of the space
+        ],
+      ),
+    );
+  },
       home: !isSignedIn ? WelcomePage() : MainPage(),
     );
   }
