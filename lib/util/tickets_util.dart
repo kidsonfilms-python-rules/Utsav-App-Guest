@@ -6,53 +6,16 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:barcode/barcode.dart';
 import 'package:utsav_app/util/design_constants.dart';
+import '../models/ticket_model.dart';
 
 class TicketsUtil {
-  static final List<Map<String, dynamic>> dummyTickets = [
-    {
-      "name": "JOHN SMITH",
-      "type": "BASIC",
-      "total": "1/4",
-      "venue": "GREAT VENUE",
-      "instructions":
-          "Park in the Guest parking lot and some other instructions, Park in the Guest parking lot and some other instructions, Park in the Guest parking lot and some other instructions,Park in the Guest parking lot and some other instructions",
-      "barcode": "UTSAV-053467-082026-01",
-    },
-    {
-      "name": "JANE SMITH",
-      "type": "BASIC",
-      "total": "2/4",
-      "venue": "GREAT VENUE",
-      "instructions":
-          "Park in the Guest parking lot and some other instructions",
-      "barcode": "UTSAV-053467-082026-02",
-    },
-    {
-      "name": "ALEX JOHNSON",
-      "type": "BASIC",
-      "total": "3/4",
-      "venue": "GREAT VENUE",
-      "instructions":
-          "Park in the Guest parking lot and some other instructions",
-      "barcode": "UTSAV-053467-082026-03",
-    },
-    {
-      "name": "MAYA PATELAKRISNAN",
-      "type": "BASIC",
-      "total": "4/4",
-      "venue": "GREAT VENUE",
-      "instructions":
-          "Park in the Guest parking lot and some other instructions",
-      "barcode": "UTSAV-053467-082026-04",
-    },
-  ];
-
   /// Opens the popup for selection, builds the PDF, and returns the bytes.
   static Future<Uint8List?> _selectTicketsAndBuildPdf(
-    BuildContext context, {
+    BuildContext context,
+    List<Ticket> allTickets, { // Pass the list from Provider here
     required String confirmLabel,
   }) async {
-    List<bool> selected = List.generate(dummyTickets.length, (_) => true);
+    List<bool> selected = List.generate(allTickets.length, (_) => true);
 
     bool? confirmed = await showDialog<bool>(
       context: context,
@@ -71,11 +34,11 @@ class TicketsUtil {
                 ),
                 content: SingleChildScrollView(
                   child: Column(
-                    children: List.generate(dummyTickets.length, (i) {
-                      final t = dummyTickets[i];
+                    children: List.generate(allTickets.length, (i) {
+                      final t = allTickets[i];
                       return CheckboxListTile(
                         title: Text(
-                          t["name"],
+                          "${t.firstName} ${t.middleName != "" ? "${t.middleName.split("")[0]}. " : ""}${t.lastName}",
                           style: GoogleFonts.getFont(
                             "Roboto Condensed",
                             fontWeight: FontWeight.bold,
@@ -85,7 +48,7 @@ class TicketsUtil {
                           overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
-                          "Ticket ${t["total"]}",
+                          "Ticket ${i + 1}/${allTickets.length}",
                           style: GoogleFonts.getFont(
                             "Roboto Condensed",
                             color: DesignConstants.primaryTextColor,
@@ -133,15 +96,14 @@ class TicketsUtil {
 
     if (confirmed != true) return null;
 
-    // Filter selected tickets
-    final selectedTickets = <Map<String, dynamic>>[];
-    for (int i = 0; i < dummyTickets.length; i++) {
-      if (selected[i]) selectedTickets.add(dummyTickets[i]);
+    final selectedTickets = <Ticket>[];
+    for (int i = 0; i < allTickets.length; i++) {
+      if (selected[i]) selectedTickets.add(allTickets[i]);
     }
 
     if (selectedTickets.isEmpty) return null;
 
-    // Build PDF
+    // PDF Generation Logic
     final pdf = pw.Document();
     final robotoCondensed = await PdfGoogleFonts.robotoCondensedBold();
     final logo = await networkImage(
@@ -154,17 +116,20 @@ class TicketsUtil {
       "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/2560px-Download_on_the_App_Store_Badge.svg.png",
     );
 
+    int i2 = 0;
     for (var ticket in selectedTickets) {
       final barcodeSvg = Barcode.pdf417().toSvg(
-        ticket["barcode"],
+        ticket.barcode,
         width: 300,
         height: 80,
         drawText: false,
       );
+      final int currentTicketNumber = i2 + 1;
 
-      final instructionLines =
-    (ticket["instructions"].length / 70).ceil().clamp(1, 4); // crude line estimate
-final topSpacing = 40 - (instructionLines - 1) * 6; // shrink ~6 per line
+      final instructionLines = (ticket.venueInstructions.length / 70)
+          .ceil()
+          .clamp(1, 4); // crude line estimate
+      final topSpacing = 40 - (instructionLines - 1) * 6; // shrink ~6 per line
 
       pdf.addPage(
         pw.Page(
@@ -184,7 +149,7 @@ final topSpacing = 40 - (instructionLines - 1) * 6; // shrink ~6 per line
                     children: [
                       pw.Center(
                         child: pw.Text(
-                          "TICKET ${ticket["total"]}",
+                          "TICKET $currentTicketNumber/${selectedTickets.length}",
                           style: pw.TextStyle(
                             font: robotoCondensed,
                             fontSize: 22,
@@ -195,35 +160,39 @@ final topSpacing = 40 - (instructionLines - 1) * 6; // shrink ~6 per line
 
                       pw.SizedBox(height: 10),
 
-                      
                       pw.Center(child: pw.SvgImage(svg: barcodeSvg)),
                       pw.SizedBox(height: 16),
 
-                      
                       pw.Padding(
                         padding: pw.EdgeInsets.fromLTRB(25, 0, 25, 0),
                         child: pw.Column(
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
                           children: [
-                            _section("NAME", ticket["name"]),
+                            _section(
+                              "NAME",
+                              "${ticket.firstName} ${ticket.middleName != "" ? "${ticket.middleName.split("")[0]}. " : ""}${ticket.lastName}",
+                            ),
                             pw.SizedBox(height: 20),
                             pw.Row(
                               mainAxisAlignment: pw.MainAxisAlignment.start,
                               children: [
-                                _section("TICKET TYPE", ticket["type"]),
+                                _section("TICKET TYPE", ticket.tier),
                                 pw.SizedBox(width: 30),
                                 _section(
                                   "UTSAV ID",
-                                  ticket["barcode"].split("-")[1],
+                                  ticket.barcode.split("-")[1],
                                 ),
                               ],
                             ),
                             pw.SizedBox(height: 16),
-                            _section("VENUE", ticket["venue"]),
+                            _section("VENUE", ticket.venue),
                             pw.SizedBox(height: 16),
-                            _section("VENUE INSTRUCTIONS", ticket["instructions"]),
+                            _section(
+                              "VENUE INSTRUCTIONS",
+                              ticket.venueInstructions,
+                            ),
 
-pw.SizedBox(height: topSpacing.toDouble()),
+                            pw.SizedBox(height: topSpacing.toDouble()),
 
                             // Light gray box with extra venue info and "What to do next?"
                             pw.Container(
@@ -252,7 +221,6 @@ pw.SizedBox(height: topSpacing.toDouble()),
                                     crossAxisAlignment:
                                         pw.CrossAxisAlignment.center,
                                     children: [
-                                      
                                       pw.Container(
                                         width: 28,
                                         height: 28,
@@ -272,7 +240,7 @@ pw.SizedBox(height: topSpacing.toDouble()),
                                         ),
                                       ),
                                       pw.SizedBox(width: 12),
-                                      
+
                                       pw.Expanded(
                                         child: pw.Text(
                                           "Download the official Utsav App to get live schedules, tickets on your phone, interactive maps, and more!",
@@ -422,7 +390,7 @@ pw.SizedBox(height: topSpacing.toDouble()),
 
                       pw.Spacer(),
 
-                      // Legal boilerplate styled like real ticket fine print
+                      // Legal boilerplate
                       pw.Center(
                         child: pw.Text(
                           "Powered by the EventX platform developed and owned by Ray Enterprises. "
@@ -445,7 +413,7 @@ pw.SizedBox(height: topSpacing.toDouble()),
                       pw.SizedBox(height: 4),
                       pw.Center(
                         child: pw.Text(
-                          "Ticket issued to: ${ticket["name"]}, UID ${ticket["barcode"].split("-")[1]}",
+                          "Ticket issued to: ${ticket.firstName} ${ticket.middleName != "" ? "${ticket.middleName} " : ""}${ticket.lastName}, UID ${ticket.barcode.split("-")[1]}",
                           style: pw.TextStyle(
                             fontSize: 6,
                             color: PdfColors.grey600,
@@ -473,73 +441,84 @@ pw.SizedBox(height: topSpacing.toDouble()),
           },
         ),
       );
+      i2++;
     }
 
     return pdf.save();
   }
 
-  /// Downloads a PDF after showing the ticket selection popup
-  static Future<void> downloadPDFUsingPopup(BuildContext context) async {
+  // --- Public Methods ---
+
+  static Future<void> downloadPDF(
+    BuildContext context,
+    List<Ticket> tickets,
+  ) async {
     final pdfBytes = await _selectTicketsAndBuildPdf(
       context,
+      tickets,
       confirmLabel: "Download",
     );
-    if (pdfBytes == null) return;
-
-    await Printing.sharePdf(bytes: pdfBytes, filename: "Utsav_Tickets.pdf");
+    if (pdfBytes != null) {
+      await Printing.sharePdf(bytes: pdfBytes, filename: "Utsav_Tickets.pdf");
+    }
   }
 
-  /// Prints the PDF using the system print dialog
-  static Future<void> printPDFUsingPopup(BuildContext context) async {
+  static Future<void> printPDF(
+    BuildContext context,
+    List<Ticket> tickets,
+  ) async {
     final pdfBytes = await _selectTicketsAndBuildPdf(
       context,
+      tickets,
       confirmLabel: "Print",
     );
-    if (pdfBytes == null) return;
-
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdfBytes,
-      name: "Utsav_Tickets",
-    );
+    if (pdfBytes != null) {
+      await Printing.layoutPdf(
+        onLayout: (format) async => pdfBytes,
+        name: "Utsav_Tickets",
+      );
+    }
   }
 
   static pw.Widget _section(String title, String value) {
-  // Base font size
-  double fontSize = title == "NAME" ? 45 : 15;
+    // Base font size
+    double fontSize = title == "NAME" ? 45 : 15;
 
-  // If NAME is too long, reduce font size proportionally
-  if (title == "NAME" && value.length > 12) {
-    // Drop size by ~1.5 per extra character beyond 12
-    fontSize = (45 - (value.length - 12) * 1.5).clamp(20, 45);
-  }
+    // If NAME is too long, reduce font size proportionally
+    if (title == "NAME" && value.length > 12) {
+      // Drop size by ~1.5 per extra character beyond 12
+      fontSize = (45 - (value.length - 12) * 1.5).clamp(20, 45);
+    }
 
-  return pw.Column(
-    crossAxisAlignment: pw.CrossAxisAlignment.start,
-    children: [
-      pw.Text(
-        title,
-        style: pw.TextStyle(
-          fontSize: 11,
-          fontWeight: pw.FontWeight.bold,
-          color: PdfColors.grey700,
-        ),
-      ),
-      pw.Container(
-        constraints: pw.BoxConstraints(maxWidth: title == "NAME" ? 400 : 600),
-        child: pw.Text(
-          value,
-          maxLines: title == "NAME" ? 1 : 4,
-          softWrap: title == "NAME" ? false : true,
-          overflow: pw.TextOverflow.clip,
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          title,
           style: pw.TextStyle(
-            fontSize: fontSize,
+            fontSize: 11,
             fontWeight: pw.FontWeight.bold,
-            color: PdfColors.black,
+            color: PdfColors.grey700,
           ),
         ),
-      ),
-    ],
-  );
-}
-
+        pw.Container(
+          constraints: pw.BoxConstraints(maxWidth: title == "NAME" ? 400 : 600),
+          child: pw.Text(
+            value,
+            maxLines: title == "NAME" ? 1 : 4,
+            softWrap: title == "NAME" ? false : true,
+            overflow: pw.TextOverflow.span,
+            style: pw.TextStyle(
+              fontSize: fontSize,
+              fontWeight:
+                  title != "VENUE INSTRUCTIONS"
+                      ? pw.FontWeight.bold
+                      : pw.FontWeight.normal,
+              color: PdfColors.black,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

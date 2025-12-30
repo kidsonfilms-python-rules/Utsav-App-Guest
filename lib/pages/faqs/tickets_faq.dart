@@ -37,6 +37,11 @@ class TicketsFAQPage extends StatelessWidget {
             "Tickets are currently linked to your account and cannot be transferred digitally. However, you may contact support for special cases.",
       },
       {
+        "q": "My tickets have't updated in the app. What should I do?",
+        "a":
+            "Try pulling down to refresh the Tickets page. If that doesn't work, close and reopen the app. If the issue persists, contact support.",
+      },
+      {
         "q": "Do I need to print my ticket?",
         "a":
             "Digital tickets are accepted at entry. You can show the barcode on your phone. Printed copies are optional but recommended as backup.",
