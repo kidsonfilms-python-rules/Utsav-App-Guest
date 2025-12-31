@@ -200,13 +200,12 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                                                   color:
                                                                       DesignConstants
                                                                           .green,
-                                                                  width: 3,
+                                                                  width: 5,
                                                                 )
                                                                 : Border.all(
                                                                   color:
-                                                                      Colors
-                                                                          .white12,
-                                                                  width: 1,
+                                                                      const Color.fromARGB(59, 255, 255, 255),
+                                                                  width: 3,
                                                                 ),
                                                         // boxShadow: isSelected
                                                         //     ? [

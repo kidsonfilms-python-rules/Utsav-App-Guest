@@ -18,61 +18,78 @@ class ErrorTicket extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: DesignConstants.red.withAlpha(100), width: 4),
+        // side: BorderSide(color: DesignConstants.red.withAlpha(100), width: 4),
         borderRadius: BorderRadius.circular(25.0),
       ),
       margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-      color: DesignConstants.primaryCardColor,
+      color: DesignConstants.backgroundColor,
       child: Container(
         padding: const EdgeInsets.all(25),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Styled Error Icon
-            Icon(
-              FontAwesomeIcons.circleExclamation,
-              color: DesignConstants.red,
-              size: 50,
+            Container(
+              padding: const EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                color: DesignConstants.red,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: DesignConstants.red.withValues(alpha: 0.2),
+                  strokeAlign: 2,
+                  width: 5,
+                ),
+              ),
+              child: FaIcon(
+                FontAwesomeIcons.triangleExclamation,
+                color: Colors.black,
+                size: 40,
+              ),
             ),
             const SizedBox(height: 20),
             Text(
               "COULD NOT LOAD TICKETS",
               textAlign: TextAlign.center,
               style: GoogleFonts.robotoCondensed(
-                color: DesignConstants.secondaryTextColor,
+                color: DesignConstants.red,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
-                letterSpacing: 2,
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              errorMessage.replaceFirst("Exception: ", ""),
+              errorMessage.contains('SocketException')
+                  ? "We couldn't reach the servers. Please check your internet connection and try again."
+                  : errorMessage.replaceFirst("Exception: ", ""),
               textAlign: TextAlign.center,
               style: GoogleFonts.robotoCondensed(
-                color: DesignConstants.primaryTextColor,
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
+                color: DesignConstants.secondaryTextColor,
+                fontSize: 14,
+                height: 1.5,
               ),
             ),
             const SizedBox(height: 30),
             
             // Premium Retry Button
-            TextButton(
+            TextButton.icon(
+              onPressed: onRetry,
+              icon: const FaIcon(FontAwesomeIcons.arrowRotateLeft, size: 14),
+              label: Text(
+                "TRY AGAIN",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1,
+                ),
+              ),
               style: TextButton.styleFrom(
-                // side: BorderSide(color: DesignConstants.red, width: 1.5),
+                foregroundColor: Colors.black,
                 backgroundColor: DesignConstants.red,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
-              ),
-              onPressed: onRetry,
-              child: Text(
-                "TRY AGAIN",
-                style: GoogleFonts.poppins(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 12,
                 ),
               ),
             ),

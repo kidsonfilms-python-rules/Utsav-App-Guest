@@ -10,6 +10,7 @@ import 'package:utsav_app/pages/map.dart';
 import 'package:utsav_app/pages/schedule.dart';
 import 'package:utsav_app/pages/sign_in.dart';
 import 'package:utsav_app/pages/tickets.dart';
+import 'package:utsav_app/providers/announcement_provider.dart';
 import 'package:utsav_app/providers/theme_provider.dart';
 import 'package:utsav_app/util/design_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -209,6 +210,13 @@ class _MainPageState extends ConsumerState<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Watch the announcements provider
+  final announcementsAsync = ref.watch(announcementsProvider);
+  final announcements = announcementsAsync.value ?? [];
+  final hasUnreadAnnouncements = announcements.any((a) => !a.isRead);
+  _hasUpdate[1] = hasUnreadAnnouncements;
+
+  
     return PopScope(
       // onWillPop: _onWillPop,
       canPop: _pageStack.length <= 1, // Allow system pop only if no history

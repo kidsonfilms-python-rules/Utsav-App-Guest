@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:utsav_app/providers/announcement_provider.dart';
 import 'package:utsav_app/util/design_constants.dart';
-import 'package:utsav_app/widgets/markdown_text.dart';
+import 'package:utsav_app/widgets/announcement_card.dart';
+import 'package:utsav_app/widgets/announcement_skeleton.dart';
+import 'package:utsav_app/widgets/no_announcements_card.dart';
 
-class AnnouncementsPage extends StatefulWidget {
+class AnnouncementsPage extends ConsumerStatefulWidget {
   const AnnouncementsPage({super.key});
 
   @override
-  State<AnnouncementsPage> createState() => _AnnouncementsPageState();
+  ConsumerState<AnnouncementsPage> createState() => _AnnouncementsPageState();
 }
 
-class _AnnouncementsPageState extends State<AnnouncementsPage> {
+class _AnnouncementsPageState extends ConsumerState<AnnouncementsPage> {
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -19,263 +24,124 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: 50, width: MediaQuery.sizeOf(context).width),
-          Text(
-            "ANNOUNCEMENTS",
-            style: GoogleFonts.getFont(
-              "Roboto Condensed",
-              textStyle: TextStyle(
-                color: DesignConstants.primaryTextColor,
-                fontSize: 34,
-                fontFamily: "Roboto",
-                fontStyle: FontStyle.normal,
-              ),
+    final announcementsAsync = ref.watch(announcementsProvider);
+
+    return Column(
+      children: [
+        SizedBox(height: 50, width: MediaQuery.sizeOf(context).width),
+        Text(
+          "ANNOUNCEMENTS",
+          style: GoogleFonts.getFont(
+            "Roboto Condensed",
+            textStyle: TextStyle(
+              color: DesignConstants.primaryTextColor,
+              fontSize: 34,
+              fontFamily: "Roboto",
+              fontStyle: FontStyle.normal,
             ),
-            textAlign: TextAlign.center,
           ),
-          SizedBox(height: 20),
-          Card(
-            clipBehavior: Clip.hardEdge,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 0),
+        Expanded(
+          child: RefreshIndicator(
+            displacement: 20,
+            onRefresh: () async {
+              HapticFeedback.mediumImpact();
+              await ref.read(announcementsProvider.notifier).refresh();
+            },
+            backgroundColor: DesignConstants.primaryCardColorLight,
+            color: DesignConstants.accent,
+            child: announcementsAsync.when(
+              data: (announcements) {
+                print(announcements);
+                if (announcements.isEmpty) {
+                  return const NoAnnouncementsWidget();
+                }
+
+                // Find where the 'Old' section starts
+                final firstReadIndex = announcements.indexWhere(
+                  (a) => a.isRead,
+                );
+
+                // If we have both Unread and Read, we add 1 to the count for the divider
+                final showDivider = firstReadIndex != -1 && firstReadIndex != 0;
+                final itemCount =
+                    showDivider
+                        ? announcements.length + 1
+                        : announcements.length;
+
+                return ListView.builder(
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) {
+                    // If this specific index is the divider position
+                    if (showDivider && index == firstReadIndex) {
+                      return _buildOldDivider();
+                    }
+
+                    // Adjust the data index if we are past the divider
+                    final dataIndex =
+                        (showDivider && index > firstReadIndex)
+                            ? index - 1
+                            : index;
+                    final announcement = announcements[dataIndex];
+
+                    return AnnouncementCard(
+                      announcement: announcement,
+                      onTap:
+                          () => ref
+                              .read(announcementsProvider.notifier)
+                              .markAsRead(dataIndex),
+                    );
+                  },
+                );
+              },
+              loading:
+                  () => ListView.builder(
+                    shrinkWrap:
+                        true, // If used inside a Column, ensure parent is Expanded
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 5,
+                    itemBuilder: (context, index) => const MediumCardSkeleton(),
+                  ),
+              error:
+                  (err, stack) =>
+                      ErrorAnnouncementsWidget(errorMessage: err.toString()),
             ),
-            margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-            color: DesignConstants.primaryCardColor,
-            child: Container(
-              padding: EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "NEW",
-                        style: GoogleFonts.getFont(
-                          "Roboto Condensed",
-                          textStyle: TextStyle(
-                            color: DesignConstants.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 8.0,
-                        height: 8.0,
-                        decoration: BoxDecoration(
-                          color: DesignConstants.green,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        width: 200,
-                        child: MarkdownText(
-                          "Dinner is **currently** being served!",
-                          style: GoogleFonts.getFont(
-                            "Roboto Condensed",
-                            textStyle: TextStyle(
-                              color: DesignConstants.primaryTextColor,
-                              fontSize: 16,
-                              overflow: TextOverflow.fade,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Text(
-                          "5:59 PM",
-                          style: GoogleFonts.getFont(
-                            "Roboto Condensed",
-                            textStyle: TextStyle(
-                              color: DesignConstants.secondaryTextColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOldDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Divider(
+              color: DesignConstants.secondaryTextColor,
+              thickness: 2,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-            ), // margin from screen edges
-            child: Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    color: DesignConstants.secondaryTextColor,
-                    thickness: 2,
-                  ),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              'OLD ANNOUNCEMENTS',
+              style: GoogleFonts.getFont(
+                "Roboto Condensed",
+                textStyle: TextStyle(
+                  color: DesignConstants.secondaryTextColor,
+                  fontWeight: FontWeight.bold,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    'OLD ANNOUNCEMENTS',
-                    style: GoogleFonts.getFont(
-                      "Roboto Condensed",
-                      textStyle: TextStyle(
-                        color: DesignConstants.secondaryTextColor,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Divider(
-                    color: DesignConstants.secondaryTextColor,
-                    thickness: 2,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Card(
-            clipBehavior: Clip.hardEdge,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-            color: DesignConstants.primaryCardColor,
-            child: Container(
-              padding: EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    width: 200,
-                    child: MarkdownText(
-                      "Come see the really new [artists](https://utsavsac.org) directly from India!",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.primaryTextColor,
-                          fontSize: 16,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Text(
-                      "5:00 PM",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.secondaryTextColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
-          Card(
-            clipBehavior: Clip.hardEdge,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-            color: DesignConstants.primaryCardColor,
-            child: Container(
-              padding: EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    width: 200,
-                    child: MarkdownText(
-                      "This is a really long announcement about someone *not* parking right!",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.primaryTextColor,
-                          fontSize: 16,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Text(
-                      "3:32 PM",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.secondaryTextColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Card(
-            clipBehavior: Clip.hardEdge,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-            color: DesignConstants.primaryCardColor,
-            child: Container(
-              padding: EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    width: 200,
-                    child: MarkdownText(
-                      "Lunch is ~~currently~~ being served!",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.primaryTextColor,
-                          fontSize: 16,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Text(
-                      "11:52 AM",
-                      style: GoogleFonts.getFont(
-                        "Roboto Condensed",
-                        textStyle: TextStyle(
-                          color: DesignConstants.secondaryTextColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+          Expanded(
+            child: Divider(
+              color: DesignConstants.secondaryTextColor,
+              thickness: 2,
             ),
           ),
         ],

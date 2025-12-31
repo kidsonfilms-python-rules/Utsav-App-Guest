@@ -7,9 +7,28 @@ class TicketSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+// Check if the app is currently in Light Mode
+    final bool isLightMode = !DesignConstants.themeOptions[DesignConstants.chosenTheme].isDark;
+
+    // Define colors based on the theme
+    // Dark Mode: Uses your original white-opacity values
+    // Light Mode: Uses standard grey shimmer values for visibility
+    final Color shimmerBase = isLightMode 
+        ? Colors.grey[200]! 
+        : Colors.white.withValues(alpha: 0.05);
+        
+    final Color shimmerHighlight = isLightMode 
+        ? const Color.fromARGB(255, 249, 249, 249)
+        : Colors.white.withValues(alpha: 0.1);
+
+    final Color barcodeBg = isLightMode
+        ? Colors.grey[200]!
+        : Colors.white12;
+
     return Shimmer.fromColors(
-      baseColor: Colors.white.withValues(alpha: 0.05),
-      highlightColor: Colors.white.withValues(alpha: 0.1),
+      baseColor: shimmerBase,
+      highlightColor: shimmerHighlight,
       child: Card(
         clipBehavior: Clip.hardEdge,
         shape: RoundedRectangleBorder(
@@ -37,7 +56,7 @@ class TicketSkeleton extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
-                  color: Colors.white12,
+                  color: barcodeBg,
                 ),
                 margin: const EdgeInsets.all(20),
               ),
