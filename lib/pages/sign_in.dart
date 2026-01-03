@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:utsav_app/main.dart';
 import 'package:utsav_app/widgets/utsav_id_input_field.dart';
+import 'package:utsav_app/pages/event_selection.dart';
 
 // Custom widget for the main gradient background
 class _GradientBackground extends StatelessWidget {
@@ -553,7 +554,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 builder:
                                     (context) =>
                                         _isLogin
-                                            ? MainPage()
+                                            ? EventsSelectionPage()
                                             : LinkTicketsPage(),
                               ),
                             );

@@ -46,6 +46,102 @@ class AnnouncementsNotifier extends AsyncNotifier<List<Announcement>> {
         tags: ["INFO"],
         isRead: true,
       ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(hours: 2)),
+        message: "Dinner is **currently** being served",
+        tags: ["URGENT", "SCHEDULE"],
+        isRead: false,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 1)),
+        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
+        tags: ["PROMO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        message: "This is a really long announcement about someone *not* parking right!",
+        tags: ["INFO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        message: "Lunch is ~~currently~~ being served",
+        tags: ["INFO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(hours: 2)),
+        message: "Dinner is **currently** being served",
+        tags: ["URGENT", "SCHEDULE"],
+        isRead: false,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 1)),
+        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
+        tags: ["PROMO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        message: "This is a really long announcement about someone *not* parking right!",
+        tags: ["INFO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        message: "Lunch is ~~currently~~ being served",
+        tags: ["INFO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(hours: 2)),
+        message: "Dinner is **currently** being served",
+        tags: ["URGENT", "SCHEDULE"],
+        isRead: false,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 1)),
+        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
+        tags: ["PROMO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        message: "This is a really long announcement about someone *not* parking right!",
+        tags: ["INFO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        message: "Lunch is ~~currently~~ being served",
+        tags: ["INFO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(hours: 2)),
+        message: "Dinner is **currently** being served",
+        tags: ["URGENT", "SCHEDULE"],
+        isRead: false,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 1)),
+        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
+        tags: ["PROMO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        message: "This is a really long announcement about someone *not* parking right!",
+        tags: ["INFO"],
+        isRead: true,
+      ),
+      Announcement(
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        message: "Lunch is ~~currently~~ being served",
+        tags: ["INFO"],
+        isRead: true,
+      ),      
     ];
   }
 
