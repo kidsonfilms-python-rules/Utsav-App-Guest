@@ -194,8 +194,22 @@ class WelcomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const AuthScreen(),
+                      PageRouteBuilder(
+                        pageBuilder:
+                            (context, animation, secondaryAnimation) =>
+                                const AuthScreen(),
+                        transitionsBuilder: (
+                          context,
+                          animation,
+                          secondaryAnimation,
+                          child,
+                        ) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: const Duration(milliseconds: 50),
                       ),
                     );
                   },
@@ -548,16 +562,26 @@ class _AuthScreenState extends State<AuthScreen> {
                           onPressed: () {
                             // Handle login or registration logic
                             HapticFeedback.heavyImpact();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) =>
-                                        _isLogin
-                                            ? EventsSelectionPage()
-                                            : LinkTicketsPage(),
-                              ),
-                            );
+                           Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder:
+                            (context, animation, secondaryAnimation) =>
+                                _isLogin ? EventsSelectionPage() : LinkTicketsPage(),
+                        transitionsBuilder: (
+                          context,
+                          animation,
+                          secondaryAnimation,
+                          child,
+                        ) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: const Duration(milliseconds: 50),
+                      ),
+                    );
                           },
                         ),
                         _isLogin
