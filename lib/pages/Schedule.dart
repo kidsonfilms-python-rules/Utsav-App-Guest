@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:utsav_app/models/scheduled_event_model.dart';
+import 'package:utsav_app/providers/schedule_provider.dart';
 import 'package:utsav_app/util/design_constants.dart';
+import 'package:utsav_app/widgets/announcement_skeleton.dart';
 import 'package:utsav_app/widgets/day_divider.dart';
+import 'package:utsav_app/widgets/no_announcements_card.dart';
+import 'package:utsav_app/widgets/no_schedule_card.dart';
 import 'package:utsav_app/widgets/schedule_card.dart';
 
-class SchedulePage extends StatefulWidget {
+class SchedulePage extends ConsumerStatefulWidget {
   final Function(int, {String? markerId}) navigateToPage;
   const SchedulePage({required this.navigateToPage, super.key});
 
   @override
-  State<SchedulePage> createState() => _SchedulePageState();
+  ConsumerState<SchedulePage> createState() => _SchedulePageState();
 }
 
-class _SchedulePageState extends State<SchedulePage>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
+class _SchedulePageState extends ConsumerState<SchedulePage>{
 
   final ScrollController _scrollController = ScrollController();
   final List<GlobalKey> _nowEventKeys = [];
@@ -25,11 +29,6 @@ class _SchedulePageState extends State<SchedulePage>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..repeat(reverse: true);
-    // _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
 
     _scrollController.addListener(_updateNowVisibility);
 
@@ -41,7 +40,6 @@ class _SchedulePageState extends State<SchedulePage>
 
   @override
   void dispose() {
-    _controller.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -139,20 +137,23 @@ class _SchedulePageState extends State<SchedulePage>
     },
   ];
 
-  Map<String, List<Map<String, dynamic>>> _groupEventsByDay(
-    List<Map<String, dynamic>> events,
+  Map<String, List<ScheduledEvent>> _groupEventsByDay(
+    List<ScheduledEvent> events,
   ) {
-    final Map<String, List<Map<String, dynamic>>> grouped = {};
+    final Map<String, List<ScheduledEvent>> grouped = {};
 
     for (final event in events) {
-      final day = event["day"] as String;
+      final day = event.day;
       grouped.putIfAbsent(day, () => []).add(event);
     }
 
     return grouped;
   }
 
-  List<Widget> _buildScheduleList(BuildContext context) {
+  List<Widget> _buildScheduleList(
+    BuildContext context,
+    List<ScheduledEvent> events,
+  ) {
     final groupedEvents = _groupEventsByDay(events);
     final List<Widget> widgets = [];
 
@@ -160,22 +161,18 @@ class _SchedulePageState extends State<SchedulePage>
 
     groupedEvents.forEach((day, dayEvents) {
       widgets.add(
-        DayDivider(
-          dayDate: day,
-          dayIndex: dayEvents.first["dayIndex"]?.toString() ?? "0",
-        ),
+        DayDivider(dayDate: day, dayIndex: dayEvents.first.dayIndex.toString()),
       );
 
       for (final event in dayEvents) {
-        final bool isNow = event["isNow"] == true;
+        final bool isNow = event.isNow == true;
 
         Widget card = ExpandableCard(
-          title: event["title"] ?? "",
-          time: event["time"] ?? "",
-          location: event["location"] ?? "",
-          description: event["description"] ?? "",
+          title: event.title,
+          time: event.time,
+          location: event.location,
+          description: event.description,
           isNow: isNow,
-          animationController: _controller,
           navigateToPage: widget.navigateToPage,
         );
 
@@ -237,26 +234,53 @@ class _SchedulePageState extends State<SchedulePage>
 
   @override
   Widget build(BuildContext context) {
+    final eventsAsync = ref.watch(eventsProvider);
+
     return Stack(
       children: [
-        SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            children: [
-              const SizedBox(height: 50),
-              Text(
-                "SCHEDULE",
-                style: GoogleFonts.robotoCondensed(
-                  color: DesignConstants.primaryTextColor,
-                  fontSize: 34,
+        RefreshIndicator(
+          backgroundColor: DesignConstants.primaryCardColorLight,
+          color: DesignConstants.accent,
+          displacement: 50,
+          onRefresh: () => ref.read(eventsProvider.notifier).refresh(),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: _scrollController,
+            child: Column(
+              children: [
+                const SizedBox(height: 50),
+                Text(
+                  "SCHEDULE",
+                  style: GoogleFonts.robotoCondensed(
+                    color: DesignConstants.primaryTextColor,
+                    fontSize: 34,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              ..._buildScheduleList(context),
+                eventsAsync.when(
+                  data:
+                      (events) =>
+                          events.isNotEmpty
+                              ? Column(
+                                children: _buildScheduleList(context, events),
+                              )
+                              : const NoScheduleWidget(),
+                  loading:
+                      () => Column(
+                        children: List.generate(
+                          5,
+                          (index) => const MediumCardSkeleton(),
+                        ),
+                      ),
+                  error:
+                      (err, stack) =>
+                          ErrorScheduleWidget(errorMessage: err.toString()),
+                ),
 
-              const SizedBox(height: 120),
-            ],
+                const SizedBox(height: 120),
+              ],
+            ),
           ),
         ),
 

@@ -13,7 +13,6 @@ class ExpandableCard extends StatefulWidget {
   final String description;
   final bool isNow;
   final bool expanded;
-  final AnimationController? animationController;
   final Function(int, {String? markerId}) navigateToPage;
 
   const ExpandableCard({
@@ -23,7 +22,6 @@ class ExpandableCard extends StatefulWidget {
     required this.location,
     required this.description,
     this.isNow = false,
-    this.animationController,
     required this.navigateToPage,
     this.expanded = false,
   });
@@ -33,10 +31,11 @@ class ExpandableCard extends StatefulWidget {
 }
 
 class _ExpandableCardState extends State<ExpandableCard>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   bool _isExpanded = false;
   late AnimationController _expandController;
   late Animation<double> _expandAnimation;
+  late AnimationController _animationController;
 
   @override
   bool get wantKeepAlive => true;
@@ -53,9 +52,14 @@ class _ExpandableCardState extends State<ExpandableCard>
       curve: Curves.easeInOut,
     );
 
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
+
     // Start the blinking animation if isNow is true and an external controller is not provided
-    if (widget.isNow && widget.animationController == null) {
-      widget.animationController?.repeat(reverse: true);
+    if (widget.isNow) {
+      _animationController.repeat(reverse: true);
     }
 
     setState(() {
@@ -74,7 +78,7 @@ class _ExpandableCardState extends State<ExpandableCard>
   void dispose() {
     if (!_isDisposed) {
       _expandController.dispose();
-      widget.animationController?.dispose();
+      _animationController.dispose();
       _isDisposed = true;
     }
     super.dispose();
@@ -274,7 +278,6 @@ class _ExpandableCardState extends State<ExpandableCard>
                               location: widget.location,
                               description: widget.description,
                               isNow: widget.isNow,
-                              animationController: widget.animationController,
                               navigateToPage: widget.navigateToPage,
                               expanded: true,
                             ),
@@ -333,7 +336,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                     BlinkingDot(
                       color: DesignConstants.green,
                       size: 8.0,
-                      animation: widget.animationController,
+                      animation: _animationController,
                     ),
                   ],
                 ),
@@ -424,7 +427,7 @@ class _ExpandableCardState extends State<ExpandableCard>
                             "Roboto Condensed",
                             textStyle: TextStyle(
                               color: DesignConstants.secondaryTextColor,
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),

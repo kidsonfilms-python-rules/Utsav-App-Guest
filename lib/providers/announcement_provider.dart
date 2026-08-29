@@ -1,172 +1,54 @@
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:utsav_app/models/announcement_model.dart';
+import 'package:utsav_app/providers/supabase_provider.dart';
 
-// 1. The Provider Definition
-final announcementsProvider = AsyncNotifierProvider<AnnouncementsNotifier, List<Announcement>>(() {
-  return AnnouncementsNotifier();
-});
+final announcementsProvider =
+    AsyncNotifierProvider<AnnouncementsNotifier, List<Announcement>>(
+  AnnouncementsNotifier.new,
+);
 
-// 2. The Notifier Logic
 class AnnouncementsNotifier extends AsyncNotifier<List<Announcement>> {
-  
-  // This replaces the old constructor/init logic. 
-  // It is called automatically when the provider is first read/watched.
   @override
-  FutureOr<List<Announcement>> build() async {
-    return _fetchDummyAnnouncements();
+  FutureOr<List<Announcement>> build() => _fetchAnnouncements();
+
+  Future<List<Announcement>> _fetchAnnouncements() async {
+    // This view joins each announcement with the signed-in user's read state.
+    final rows = await ref
+        .read(supabaseProvider)
+        .from('announcement_feed')
+        .select()
+        .order('published_at', ascending: false);
+    return (rows as List)
+        .map(
+          (row) => Announcement.fromJson(Map<String, dynamic>.from(row as Map)),
+        )
+        .toList();
   }
 
-  // Separated fetch logic for reuse in refresh()
-  Future<List<Announcement>> _fetchDummyAnnouncements() async {
-    await Future.delayed(const Duration(seconds: 1)); // Simulate network
-
-    return [
-      Announcement(
-        date: DateTime.now().subtract(const Duration(hours: 2)),
-        message: "Dinner is **currently** being served",
-        tags: ["URGENT", "SCHEDULE"],
-        isRead: false,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 1)),
-        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
-        tags: ["PROMO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "This is a really long announcement about someone *not* parking right!",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "Lunch is ~~currently~~ being served",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(hours: 2)),
-        message: "Dinner is **currently** being served",
-        tags: ["URGENT", "SCHEDULE"],
-        isRead: false,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 1)),
-        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
-        tags: ["PROMO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "This is a really long announcement about someone *not* parking right!",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "Lunch is ~~currently~~ being served",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(hours: 2)),
-        message: "Dinner is **currently** being served",
-        tags: ["URGENT", "SCHEDULE"],
-        isRead: false,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 1)),
-        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
-        tags: ["PROMO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "This is a really long announcement about someone *not* parking right!",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "Lunch is ~~currently~~ being served",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(hours: 2)),
-        message: "Dinner is **currently** being served",
-        tags: ["URGENT", "SCHEDULE"],
-        isRead: false,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 1)),
-        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
-        tags: ["PROMO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "This is a really long announcement about someone *not* parking right!",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "Lunch is ~~currently~~ being served",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(hours: 2)),
-        message: "Dinner is **currently** being served",
-        tags: ["URGENT", "SCHEDULE"],
-        isRead: false,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 1)),
-        message: "Come see the really new [artists](https://utsavsac.org) performing tonight!",
-        tags: ["PROMO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "This is a really long announcement about someone *not* parking right!",
-        tags: ["INFO"],
-        isRead: true,
-      ),
-      Announcement(
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        message: "Lunch is ~~currently~~ being served",
-        tags: ["INFO"],
-        isRead: true,
-      ),      
-    ];
-  }
-
-  // Mark a specific announcement as read
   Future<void> markAsRead(int index) async {
-    // We check state.value. If it's null (loading/error), we can't update anything.
-    final currentList = state.value;
-    if (currentList == null) return;
+    final current = state.value;
+    if (current == null || index < 0 || index >= current.length || current[index].isRead) {
+      return;
+    }
+    final announcement = current[index];
+    final client = ref.read(supabaseProvider);
+    final userId = client.auth.currentUser?.id;
+    if (userId == null) return;
 
-    // Create a new list references to trigger a UI rebuild
-    final updatedList = List<Announcement>.from(currentList);
-    
-    // Update the specific item safely using copyWith
-    updatedList[index] = updatedList[index].copyWith(isRead: true);
+    await client.from('announcement_reads').upsert({
+      'announcement_id': announcement.id,
+      'user_id': userId,
+    }, onConflict: 'announcement_id,user_id');
 
-    // Set the new state. usage of AsyncData keeps the UI in the 'data' state.
-    state = AsyncData(updatedList);
+    final updated = List<Announcement>.from(current);
+    updated[index] = announcement.copyWith(isRead: true);
+    state = AsyncData(updated);
   }
 
-  // Force a refresh from the "server"
   Future<void> refresh() async {
-    // 1. Set state to loading to trigger your Skeleton/Loading UI
     state = const AsyncLoading();
-    
-    // 2. Use AsyncValue.guard to handle try/catch logic automatically
-    state = await AsyncValue.guard(() => _fetchDummyAnnouncements());
+    state = await AsyncValue.guard(_fetchAnnouncements);
   }
 }

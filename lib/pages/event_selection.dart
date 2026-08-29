@@ -47,22 +47,22 @@ class EventsSelectionPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              
+
               // Added specific icons for the "vibe"
               const SelectionCard(
-                title: "SARASWATI PUJA", 
-                label: "SPRING 2026", 
-                bgIcon: FontAwesomeIcons.bookOpenReader
+                title: "SARASWATI PUJA",
+                label: "JANUARY 18, 2026",
+                bgIcon: FontAwesomeIcons.bookOpenReader,
               ),
               const SelectionCard(
-                title: "GBM ANNUAL PICNIC", 
-                label: "SUMMER 2026", 
-                bgIcon: Icons.wb_sunny 
+                title: "ANNUAL PICNIC",
+                label: "SUMMER 2026",
+                bgIcon: Icons.wb_sunny,
               ),
               const SelectionCard(
-                title: "DURGA PUJA", 
-                label: "AUTUMN 2026", 
-                bgIcon: Icons.temple_hindu_outlined
+                title: "DURGA PUJA",
+                label: "AUTUMN 2026",
+                bgIcon: Icons.temple_hindu_outlined,
               ),
 
               const SizedBox(height: 120),
@@ -80,10 +80,10 @@ class SelectionCard extends StatefulWidget {
   final IconData bgIcon; // New parameter for background graphic
 
   const SelectionCard({
-    super.key, 
-    required this.title, 
-    required this.label, 
-    required this.bgIcon
+    super.key,
+    required this.title,
+    required this.label,
+    required this.bgIcon,
   });
 
   @override
@@ -96,46 +96,62 @@ class _SelectionCardState extends State<SelectionCard> {
   void _handleTap() async {
     if (_isSelected) return;
     HapticFeedback.mediumImpact();
-    
+
     setState(() => _isSelected = true);
 
     await Future.delayed(const Duration(milliseconds: 500));
 
-    if (mounted) {
+    if (mounted && widget.title == "SARASWATI PUJA") {
       Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder:
-                            (context, animation, secondaryAnimation) =>
-                                const MainPage(),
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
-                        transitionDuration: const Duration(milliseconds: 50),
-                      ),
-                    );
+        context,
+        PageRouteBuilder(
+          pageBuilder:
+              (context, animation, secondaryAnimation) => const MainPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 50),
+        ),
+      );
+    } else if (mounted) {
+      SnackBar snackBar = SnackBar(
+        content: Text(
+          "${widget.title} is not available yet.",
+          style: GoogleFonts.getFont(
+            "Roboto Condensed",
+            textStyle: GoogleFonts.robotoCondensed(),
+          ),
+        ),
+        // backgroundColor: DesignConstants.primaryCardColor,
+        // behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // For other events, just revert the selection state
+    }
+
+    if (mounted) {
+      setState(() => _isSelected = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color textColor = _isSelected ? Colors.black : DesignConstants.primaryTextColor;
-    final Color labelColor = _isSelected ? Colors.black.withOpacity(0.7) : DesignConstants.accent;
-    final Color iconColor = _isSelected ? Colors.black.withOpacity(0.5) : DesignConstants.primaryTextColor.withOpacity(0.3);
-    
+    final Color textColor =
+        _isSelected ? Colors.black : DesignConstants.primaryTextColor;
+    final Color labelColor =
+        _isSelected ? Colors.black.withOpacity(0.7) : DesignConstants.accent;
+    final Color iconColor =
+        _isSelected
+            ? Colors.black.withOpacity(0.5)
+            : DesignConstants.primaryTextColor.withOpacity(0.3);
+
     // FIXED: Using very low opacities for the "barely visible" effect
     // 0.03 opacity is almost invisible, creating that subtle watermark vibe
-    final Color bgGraphicColor = _isSelected 
-        ? Colors.black.withOpacity(0.07) 
-        : Colors.white.withOpacity(0.03);
+    final Color bgGraphicColor =
+        _isSelected
+            ? Colors.black.withOpacity(0.07)
+            : Colors.white.withOpacity(0.03);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -148,7 +164,10 @@ class _SelectionCardState extends State<SelectionCard> {
               // 1. BASE BACKGROUND
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 24),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 30,
+                  horizontal: 24,
+                ),
                 color: DesignConstants.primaryCardColor,
                 child: Opacity(
                   opacity: 0,
@@ -163,7 +182,8 @@ class _SelectionCardState extends State<SelectionCard> {
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 400),
                       curve: Curves.easeInOutCubic,
-                      width: _isSelected ? MediaQuery.of(context).size.width : 0,
+                      width:
+                          _isSelected ? MediaQuery.of(context).size.width : 0,
                       color: DesignConstants.accent,
                     ),
                   ],
@@ -234,10 +254,7 @@ class _SelectionCardState extends State<SelectionCard> {
                   child: Text(widget.title),
                 ),
               ),
-              Icon(
-                Icons.arrow_forward,
-                color: iconColor,
-              ),
+              Icon(Icons.arrow_forward, color: iconColor),
             ],
           ),
         ],

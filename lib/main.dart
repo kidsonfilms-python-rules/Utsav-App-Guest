@@ -16,6 +16,7 @@ import 'package:utsav_app/util/design_constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utsav_app/widgets/connectivity_banner.dart';
 import 'dart:ui' as ui;
 
@@ -31,6 +32,15 @@ Future<void> main() async {
   // ignore: non_constant_identifier_names
   String MAPBOX_ACCESS_TOKEN = dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? 'CANT FIND';
   MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
+
+  final supabaseUrl = dotenv.env['SUPABASE_URL'];
+  final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'];
+  if (supabaseUrl == null || supabaseAnonKey == null) {
+    throw StateError(
+      'SUPABASE_URL and SUPABASE_ANON_KEY must be set in .env.',
+    );
+  }
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
 
   await GoogleFonts.pendingFonts([GoogleFonts.robotoCondensed()]);
 
@@ -58,19 +68,24 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           backgroundColor: DesignConstants.backgroundColor,
+          brightness:
+              DesignConstants.themeOptions[DesignConstants.chosenTheme].isDark
+                  ? Brightness.dark
+                  : Brightness.light,
         ),
       ),
       builder: (context, child) {
-    return Scaffold( // Provides a base background color
-      backgroundColor: DesignConstants.backgroundColor,
-      body: Column(
-        children: [
-          const ConnectivityBanner(), // This expands/collapses
-          Expanded(child: child!),   // This fills the rest of the space
-        ],
-      ),
-    );
-  },
+        return Scaffold(
+          // Provides a base background color
+          backgroundColor: DesignConstants.backgroundColor,
+          body: Column(
+            children: [
+              const ConnectivityBanner(), // This expands/collapses
+              Expanded(child: child!), // This fills the rest of the space
+            ],
+          ),
+        );
+      },
       home: !isSignedIn ? WelcomePage() : MainPage(),
     );
   }
@@ -99,21 +114,24 @@ class _MainPageState extends ConsumerState<MainPage> {
 
   bool _showNativeAppBar = false;
 
-// Call this from your sub-pages to toggle the visibility
-void updateAppBarVisibility(bool visible) {
-  if (_showNativeAppBar != visible) {
-    setState(() {
-      _showNativeAppBar = visible;
-    });
+  // Call this from your sub-pages to toggle the visibility
+  void updateAppBarVisibility(bool visible) {
+    if (_showNativeAppBar != visible) {
+      setState(() {
+        _showNativeAppBar = visible;
+      });
+    }
   }
-}
 
   @override
   void initState() {
     super.initState();
     _pages = {
       0: TicketsPage(key: const PageStorageKey('ticketsPage')),
-      1: AnnouncementsPage(key: const PageStorageKey('announcementsPage'), onScroll: updateAppBarVisibility),
+      1: AnnouncementsPage(
+        key: const PageStorageKey('announcementsPage'),
+        onScroll: updateAppBarVisibility,
+      ),
       2: HomePage(
         navigateToPage: _navigateToPage,
         key: const PageStorageKey('homePage'),
@@ -162,6 +180,7 @@ void updateAppBarVisibility(bool visible) {
       _pageStack.add(newPage);
       _navigationHistory.add(index);
       setState(() {
+        updateAppBarVisibility(false);
         _selectedTab = index;
         _currentPage = newPage;
       });
@@ -221,35 +240,41 @@ void updateAppBarVisibility(bool visible) {
   }
 
   // Helpers for dynamic content
-String _getTabTitle(int index) {
-  switch (index) {
-    case 1: return "ANNOUNCEMENTS";
-    case 2: return "HOME";
-    case 3: return "SCHEDULE";
-    default: return "";
+  String _getTabTitle(int index) {
+    switch (index) {
+      case 1:
+        return "ANNOUNCEMENTS";
+      case 2:
+        return "HOME";
+      case 3:
+        return "SCHEDULE";
+      default:
+        return "";
+    }
   }
-}
 
-List<Widget>? _getAppBarActions(int index) {
-  if (index == 1 && _showNativeAppBar) {
-    return [
-      IconButton(
-        icon: Icon(FontAwesomeIcons.magnifyingGlass, color: DesignConstants.primaryTextColor),
-        onPressed: () {},
-      )
-    ];
+  List<Widget>? _getAppBarActions(int index) {
+    if (index == 1 && _showNativeAppBar) {
+      return [
+        IconButton(
+          icon: Icon(
+            FontAwesomeIcons.magnifyingGlass,
+            color: DesignConstants.primaryTextColor,
+          ),
+          onPressed: () {},
+        ),
+      ];
+    }
+    return null;
   }
-  return null;
-}
 
   @override
   Widget build(BuildContext context) {
     // 1. Watch the announcements provider
-  final announcementsAsync = ref.watch(announcementsProvider);
-  final announcements = announcementsAsync.value ?? [];
-  final hasUnreadAnnouncements = announcements.any((a) => !a.isRead);
-  _hasUpdate[1] = hasUnreadAnnouncements;
-
+    final announcementsAsync = ref.watch(announcementsProvider);
+    final announcements = announcementsAsync.value ?? [];
+    final hasUnreadAnnouncements = announcements.any((a) => !a.isRead);
+    _hasUpdate[1] = hasUnreadAnnouncements;
 
     return PopScope(
       // onWillPop: _onWillPop,
@@ -268,30 +293,33 @@ List<Widget>? _getAppBarActions(int index) {
         backgroundColor: DesignConstants.backgroundColor,
         extendBodyBehindAppBar: true,
         appBar: PreferredSize(
-      preferredSize: ui.Size.fromHeight(kToolbarHeight),
-      child: AnimatedOpacity(
-        opacity: _showNativeAppBar ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 200),
-        child: _selectedTab != 0 || _selectedTab != 4 ? AppBar(
-          // If not showing, we disable hits so you can click "through" it to the content below
-          automaticallyImplyLeading: false, 
-          backgroundColor: DesignConstants.backgroundColor,
-          elevation: 4, // Adds a nice shadow over the content
-          centerTitle: true,
-          title: Text(
-            _getTabTitle(_selectedTab),
-            style: GoogleFonts.robotoCondensed(
-              textStyle: TextStyle(
-                color: DesignConstants.primaryTextColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
+          preferredSize: ui.Size.fromHeight(kToolbarHeight),
+          child: AnimatedOpacity(
+            opacity: _showNativeAppBar ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            child:
+                _selectedTab != 0 || _selectedTab != 4
+                    ? AppBar(
+                      // If not showing, we disable hits so you can click "through" it to the content below
+                      automaticallyImplyLeading: false,
+                      backgroundColor: DesignConstants.backgroundColor,
+                      elevation: 4, // Adds a nice shadow over the content
+                      centerTitle: true,
+                      title: Text(
+                        _getTabTitle(_selectedTab),
+                        style: GoogleFonts.robotoCondensed(
+                          textStyle: TextStyle(
+                            color: DesignConstants.primaryTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      actions: _getAppBarActions(_selectedTab),
+                    )
+                    : null,
           ),
-          actions: _getAppBarActions(_selectedTab),
-        ) : null,
-      ),
-    ),
+        ),
         bottomNavigationBar: GNav(
           key: const PageStorageKey('bottom_nav_bar'),
           padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),

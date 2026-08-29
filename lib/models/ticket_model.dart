@@ -18,17 +18,15 @@ class Ticket {
     this.venueInstructions,
   );
 
-  factory Ticket.fromJson(Map<String, Object?> json) {
+  factory Ticket.fromJson(Map<String, dynamic> json) {
     return Ticket(
-      json['firstName']! as String,
-      json['middleName']! as String,
-      json['lastName']! as String,
-      json['barcode']! as String,
-      json['tier']! as String,
-      json['venue']! as String,
-      json['venueInstructions']! as String,
+      json['first_name'] as String,
+      json['middle_name'] as String? ?? '',
+      json['last_name'] as String,
+      json['barcode'] as String,
+      json['tier'] as String,
+      json['venue'] as String,
+      json['venue_instructions'] as String? ?? '',
     );
   }
-
-  
 }

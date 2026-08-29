@@ -51,9 +51,9 @@ class _GradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color brandOrange = Color.fromARGB(255, 229, 67, 22);
+    const Color brandOrange = Color.fromARGB(255, 207, 44, 19);
     // A slightly brighter, more yellowish-orange for the gradient highlight
-    const Color brandOrangeLight = Color.fromARGB(255, 255, 107, 66);
+    const Color brandOrangeLight = Color.fromARGB(255, 255, 101, 66);
 
     return Container(
       decoration: BoxDecoration(
@@ -166,7 +166,7 @@ class WelcomePage extends StatelessWidget {
                 // Replace this with your 3D asset
                 SizedBox(
                   height: 500,
-                  child: Image.asset("assets/images/splash 2.png"),
+                  child: Image.asset("assets/images/splash 4.png"),
                 ),
                 // --- End Illustration Placeholder ---
                 const Spacer(flex: 1),
